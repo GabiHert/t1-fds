@@ -19,3 +19,4 @@ public interface RepositoryAdapter {
     SubscriptionEntity updateSubscriptionStartDateAndEndDateByCode(Date startDate,Date endDate,long subscriptionCode);
     SubscriptionEntity getSubscriptionEntityByCode(long subscriptionCode);
 }
+
