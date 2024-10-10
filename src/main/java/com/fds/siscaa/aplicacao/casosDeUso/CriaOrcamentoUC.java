@@ -33,6 +33,8 @@ public class CriaOrcamentoUC {
             pedido.addItem(itemPedido);
         }
         OrcamentoModel orcamento = servicoDeVendas.criaOrcamento(pedido);
+        
+        repository.save(orcamento);
         return OrcamentoDTO.fromModel(orcamento);
     }
 }

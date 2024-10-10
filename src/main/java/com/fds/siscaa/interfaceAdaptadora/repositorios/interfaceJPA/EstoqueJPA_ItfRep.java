@@ -9,5 +9,7 @@ import com.fds.siscaa.interfaceAdaptadora.repositorios.model.ItemDeEstoque;
 
 public interface EstoqueJPA_ItfRep extends CrudRepository<ItemDeEstoque,Long>{
     List<ItemDeEstoque> findAll();
+    
     Optional<ItemDeEstoque> findById(long id);
+
 }
