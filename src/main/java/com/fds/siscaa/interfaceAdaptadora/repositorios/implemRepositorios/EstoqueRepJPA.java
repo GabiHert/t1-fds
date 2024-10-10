@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import com.fds.siscaa.dominio.entidades.ProdutoModel;
 import com.fds.siscaa.dominio.interfRepositorios.IEstoqueRepositorio;
-import com.fds.siscaa.interfaceAdaptadora.repositorios.entidades.ItemDeEstoque;
-import com.fds.siscaa.interfaceAdaptadora.repositorios.entidades.Produto;
 import com.fds.siscaa.interfaceAdaptadora.repositorios.interfaceJPA.EstoqueJPA_ItfRep;
+import com.fds.siscaa.interfaceAdaptadora.repositorios.model.ItemDeEstoque;
+import com.fds.siscaa.interfaceAdaptadora.repositorios.model.Produto;
 
 
 @Repository

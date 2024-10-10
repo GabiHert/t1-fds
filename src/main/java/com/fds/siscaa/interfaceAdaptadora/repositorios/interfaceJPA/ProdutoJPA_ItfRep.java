@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.fds.siscaa.interfaceAdaptadora.repositorios.entidades.Produto;
+import com.fds.siscaa.interfaceAdaptadora.repositorios.model.Produto;
 
 public interface ProdutoJPA_ItfRep extends CrudRepository<Produto, Long>{
     List<Produto> findAll();
