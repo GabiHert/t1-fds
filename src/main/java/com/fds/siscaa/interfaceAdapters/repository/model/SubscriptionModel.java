@@ -2,6 +2,8 @@ package com.fds.siscaa.interfaceAdapters.repository.model;
 
 import java.util.Date;
 
+import com.fds.siscaa.domain.entity.ApplicationEntity;
+import com.fds.siscaa.domain.entity.ClientEntity;
 import com.fds.siscaa.domain.entity.SubscriptionEntity;
 
 import jakarta.persistence.CascadeType;
@@ -23,12 +25,16 @@ public class SubscriptionModel {
     protected SubscriptionModel() {
     }
 
-    public SubscriptionModel(SubscriptionEntity subscriptionEntity) {
+    public SubscriptionModel(SubscriptionEntity subscriptionEntity, ApplicationEntity applicationEntity, ClientEntity clientEntity) {
         this.code = subscriptionEntity.code;
         this.startDate = subscriptionEntity.startDate;
         this.endDate = subscriptionEntity.endDate;
+        this.client = new ClientModel(clientEntity);
+        this.application = new ApplicationModel(applicationEntity);
+    }
 
-        this.client = new ClientModel();
-        this.client.code = subscriptionEntity.clientCode;
+    public SubscriptionEntity toEntity() {
+        return new SubscriptionEntity(code, application.code, client.code, startDate, endDate);
     }
 }
+

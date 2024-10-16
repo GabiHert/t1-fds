@@ -9,8 +9,11 @@ public class SubscriptionEntity {
     public Date startDate;
     public Date endDate;
 
-    public SubscriptionEntity(long code, Date startDate, Date endDate, long applicationCode) {
+
+    public SubscriptionEntity(long code, long applicationCode, long clientCode, Date startDate, Date endDate) {
         this.code = code;
+        this.applicationCode = applicationCode;
+        this.clientCode = clientCode;
         this.startDate = startDate;
         this.endDate = endDate;
     }

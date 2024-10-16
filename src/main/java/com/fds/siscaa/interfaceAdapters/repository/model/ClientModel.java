@@ -1,5 +1,7 @@
 package com.fds.siscaa.interfaceAdapters.repository.model;
 
+import com.fds.siscaa.domain.entity.ClientEntity;
+
 import jakarta.persistence.Id;
 
 public class ClientModel {
@@ -15,5 +17,15 @@ public class ClientModel {
         this.code = code;
         this.name = name;
         this.email = email;
+    }
+    
+    public ClientModel(ClientEntity clientEntity) {
+        this.code = clientEntity.code;
+        this.name = clientEntity.name;
+        this.email = clientEntity.email;
+    }
+
+    public ClientEntity toEntity() {
+        return new ClientEntity(code, name, email);
     }
 }
