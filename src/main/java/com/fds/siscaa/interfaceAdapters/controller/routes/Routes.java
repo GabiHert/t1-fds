@@ -1,5 +1,6 @@
 package com.fds.siscaa.interfaceAdapters.controller.routes;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -51,11 +52,11 @@ public class Routes {
     @PostMapping("registrarpagamento")
     public CreatePaymentResponseDto postPayment(@RequestBody CreatePaymentDto createPaymentDto) {
         System.out.println("postPayment - STARTED - createPaymentDto" + createPaymentDto.toString());
-
         CreatePaymentResponse createPaymentResponse = this.createPaymentUseCase.create(
-                createPaymentDto.getDay(),
-                createPaymentDto.getMonth(),
-                createPaymentDto.getYear(),
+                LocalDate.of(
+                        createPaymentDto.getYear(),
+                        createPaymentDto.getMonth(),
+                        createPaymentDto.getDay()),
                 createPaymentDto.getCodass(),
                 createPaymentDto.getValorPago());
 
