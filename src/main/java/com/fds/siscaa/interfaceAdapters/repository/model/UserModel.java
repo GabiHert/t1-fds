@@ -2,24 +2,27 @@ package com.fds.siscaa.interfaceAdapters.repository.model;
 
 import com.fds.siscaa.domain.entity.UserEntity;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
+@Entity()
+@Getter()
+@Setter()
+@AllArgsConstructor()
 public class UserModel {
     @Id
-    public String username;
-    public String password;
+    private String username;
+    private String password;
 
     protected UserModel() {
     }
 
-    public UserModel(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
     public UserModel(UserEntity userEntity) {
-        this.username = userEntity.username;
-        this.password = userEntity.password;
+        this.username = userEntity.getUsername();
+        this.password = userEntity.getPassword();
     }
 
     public UserEntity toEntity() {

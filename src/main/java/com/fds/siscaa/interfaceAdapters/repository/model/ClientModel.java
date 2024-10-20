@@ -3,26 +3,26 @@ package com.fds.siscaa.interfaceAdapters.repository.model;
 import com.fds.siscaa.domain.entity.ClientEntity;
 
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter()
+@Setter()
+@AllArgsConstructor()
 public class ClientModel {
     @Id
-    public long code;
-    public String name;
-    public String email;
+    private long code;
+    private String name;
+    private String email;
 
     protected ClientModel() {
     }
-    
-    public ClientModel(long code, String name, String email) {
-        this.code = code;
-        this.name = name;
-        this.email = email;
-    }
-    
+
     public ClientModel(ClientEntity clientEntity) {
-        this.code = clientEntity.code;
-        this.name = clientEntity.name;
-        this.email = clientEntity.email;
+        this.code = clientEntity.getCode();
+        this.name = clientEntity.getName();
+        this.email = clientEntity.getEmail();
     }
 
     public ClientEntity toEntity() {

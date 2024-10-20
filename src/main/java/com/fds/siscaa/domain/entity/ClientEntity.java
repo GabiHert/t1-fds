@@ -1,13 +1,17 @@
 package com.fds.siscaa.domain.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter()
+@Setter()
+@AllArgsConstructor()
 public class ClientEntity {
-    public long code;
-    public String name;
-    public String email;
-    
-    public ClientEntity(long code, String name, String email) {
-        this.code = code;
-        this.name = name;
-        this.email = email;
+    private long code;
+    private String name;
+    private String email;
+
+    public ClientEntity() {
     }
 }

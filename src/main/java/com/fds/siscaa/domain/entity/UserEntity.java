@@ -1,11 +1,17 @@
 package com.fds.siscaa.domain.entity;
 
-public class UserEntity {
-    public String username;
-    public String password;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-    public UserEntity(String username, String password) {
-        this.username = username;
-        this.password = password;
+@Getter()
+@Setter()
+@AllArgsConstructor()
+public class UserEntity {
+    private String username;
+    private String password;
+
+    public UserEntity() {
     }
 }

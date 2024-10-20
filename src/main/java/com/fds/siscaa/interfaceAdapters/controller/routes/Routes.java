@@ -77,19 +77,19 @@ public class Routes {
     @GetMapping("clientes")
     public List<ClientDto> listClients() {
         List<ClientEntity> clientEntities = this.clientRepository.listClients();
-        return this.clientDtoParser.fromClientDtoEntities(clientEntities);
+        return this.clientDtoParser.parseClientEntitiesToDto(clientEntities);
 
     };
 
     @GetMapping("aplicativos")
     public List<ApplicationDto> listApplication() {
         List<ApplicationEntity> applicationEntities = this.applicationRepository.listApplications();
-        return this.applicationDtoParser.fromApplicationDtoEntities(applicationEntities);
+        return this.applicationDtoParser.parseApplicationEntitiesToDto(applicationEntities);
     }
 
     @GetMapping("assinaturas/{tipo}")
     public List<ApplicationDto> listApplication() {
         List<ApplicationEntity> applicationEntities = this.applicationRepository.listApplications();
-        return this.applicationDtoParser.fromApplicationDtoEntities(applicationEntities);
+        return this.applicationDtoParser.parseApplicationEntitiesToDto(applicationEntities);
     }
 }

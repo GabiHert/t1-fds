@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor()
 public class SubscriptionEntity {
     private long code;
-    private long clientCode;
+    private ClientEntity clientEntity;
     private Date startDate;
     private Date endDate;
     private ApplicationEntity application;
