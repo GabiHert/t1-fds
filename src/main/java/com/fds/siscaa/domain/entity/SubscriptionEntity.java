@@ -11,11 +11,10 @@ import lombok.Setter;
 @AllArgsConstructor()
 public class SubscriptionEntity {
     private long code;
-    private long applicationCode;
     private long clientCode;
     private Date startDate;
     private Date endDate;
-    private float monthlyFee;
+    private ApplicationEntity application;
 
     public SubscriptionEntity() {
     }

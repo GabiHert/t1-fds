@@ -9,6 +9,6 @@ A extensão do período de validade da assinatura se dá mediante o pagamento da
 
 public class CreateSubscriptionUseCase {
     public SubscriptionEntity create(long clientCode, long applicationCode) {
-        return new SubscriptionEntity(0, 0, 0, null, null, 0);
+        return null;
     }
 }

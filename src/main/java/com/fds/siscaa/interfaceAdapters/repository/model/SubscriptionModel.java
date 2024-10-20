@@ -35,6 +35,6 @@ public class SubscriptionModel {
     }
 
     public SubscriptionEntity toEntity() {
-        return new SubscriptionEntity(code, application.getCode(), client.code, startDate, endDate, application.);
+        return new SubscriptionEntity(code, client.code, startDate, endDate, application.toEntity());
     }
 }

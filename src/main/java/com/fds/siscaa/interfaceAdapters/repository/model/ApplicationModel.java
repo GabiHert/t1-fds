@@ -27,9 +27,9 @@ public class ApplicationModel {
     }
 
     public ApplicationModel(ApplicationEntity applicationEntity) {
-        this.code = applicationEntity.code;
-        this.name = applicationEntity.name;
-        this.monthlyFee = applicationEntity.monthlyFee;
+        this.code = applicationEntity.getCode();
+        this.name = applicationEntity.getName();
+        this.monthlyFee = applicationEntity.getMonthlyFee();
     }
 
     public ApplicationEntity toEntity() {

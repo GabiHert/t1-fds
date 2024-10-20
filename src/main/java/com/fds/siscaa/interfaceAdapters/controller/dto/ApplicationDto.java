@@ -1,16 +1,20 @@
 package com.fds.siscaa.interfaceAdapters.controller.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter()
+@Setter()
+@AllArgsConstructor()
 public class ApplicationDto {
-    
-    public long code;
-    public String name;
-    public long  monthlyPrice;
-    
-    public ApplicationDto(long code, String name, long monthlyPrice) {
-        this.code = code;
-        this.name = name;
-        this.monthlyPrice = monthlyPrice;
+
+    private long code;
+    private String name;
+    private float monthlyFee;
+
+    public ApplicationDto() {
+
     }
-    
-    
+
 }

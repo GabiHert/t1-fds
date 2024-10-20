@@ -1,16 +1,20 @@
 package com.fds.siscaa.interfaceAdapters.controller.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter()
+@Setter()
+@AllArgsConstructor()
 public class ClientDto {
-    
-    public long code;
-    public String name;
-    public String email;
-    
-    public ClientDto(long code, String name, String email) {
-        this.code = code;
-        this.name = name;
-        this.email = email;
+
+    private long code;
+    private String name;
+    private String email;
+
+    public ClientDto() {
+
     }
-    
-    
+
 }

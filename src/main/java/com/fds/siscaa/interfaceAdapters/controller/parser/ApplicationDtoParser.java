@@ -9,6 +9,7 @@ import com.fds.siscaa.interfaceAdapters.controller.dto.ApplicationDto;
 
 public class ApplicationDtoParser {
   public List<ApplicationDto> fromApplicationDtoEntities(List<ApplicationEntity> app) {
-    return app.stream().map(ap -> new ApplicationDto(ap.code, ap.name, ap.monthlyPrice)).collect(Collectors.toList());
+    return app.stream().map(ap -> new ApplicationDto(ap.getCode(), ap.getName(), ap.getMonthlyFee()))
+        .collect(Collectors.toList());
   }
 }
