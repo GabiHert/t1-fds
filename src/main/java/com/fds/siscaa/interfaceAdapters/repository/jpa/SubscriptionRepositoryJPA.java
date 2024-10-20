@@ -1,7 +1,6 @@
 package com.fds.siscaa.interfaceAdapters.repository.jpa;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -22,7 +21,7 @@ public interface SubscriptionRepositoryJPA extends JpaRepository<SubscriptionMod
     CustomList<SubscriptionModel> findByEndDateBefore(Date currentDate);
 
     @EntityGraph(attributePaths = { "application", "promotions" })
-    List<SubscriptionModel> findByClientCode(long clientCode);
+    CustomList<SubscriptionModel> findByClientCode(long clientCode);
 
     CustomList<SubscriptionModel> findByApplicationCode(long applicationCode);
 

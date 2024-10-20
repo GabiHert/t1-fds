@@ -1,8 +1,7 @@
 package com.fds.siscaa.useCases.adapters;
 
 import com.fds.siscaa.domain.enums.*;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
 
 import com.fds.siscaa.domain.entity.SubscriptionEntity;
 import com.fds.siscaa.domain.utils.CustomList;
@@ -12,7 +11,7 @@ public interface SubscriptionRepositoryAdapter {
 
     CustomList<SubscriptionEntity> listSubscriptions();
 
-    CustomList<SubscriptionEntity> listSubscriptionsByEndDate(long applicationCode, Date endDate);
+    CustomList<SubscriptionEntity> listSubscriptionsByEndDate(long applicationCode, LocalDate endDate);
 
     CustomList<SubscriptionEntity> listSubscriptionsByClientCode(long clientCode);
 
@@ -20,7 +19,8 @@ public interface SubscriptionRepositoryAdapter {
 
     CustomList<SubscriptionEntity> listSubscriptionByType(SubscriptionType subscriptionType);
 
-    SubscriptionEntity updateSubscriptionStartDateAndEndDateByCode(Date startDate, Date endDate, long subscriptionCode);
+    SubscriptionEntity updateSubscriptionStartDateAndEndDateByCode(LocalDate startDate, LocalDate endDate,
+            long subscriptionCode);
 
     SubscriptionEntity getSubscriptionEntityByCode(long subscriptionCode);
 

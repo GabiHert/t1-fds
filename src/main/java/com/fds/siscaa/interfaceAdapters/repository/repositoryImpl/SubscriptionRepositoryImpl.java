@@ -32,8 +32,8 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepositoryAdapter
     return subscriptionModels.toEntities(SubscriptionEntity.class);
   }
 
-  public CustomList<SubscriptionEntity> listSubscriptionsByEndDate(long applicationCode, Date endDate) {
-    java.sql.Date sqlEndDate = new java.sql.Date(endDate.getTime());
+  public CustomList<SubscriptionEntity> listSubscriptionsByEndDate(long applicationCode, LocalDate endDate) {
+    java.sql.Date sqlEndDate = new java.sql.Date(endDate.toEpochDay());
     CustomList<SubscriptionModel> subscriptionModels = subscriptionRepositoryJPA.findByEndDate(sqlEndDate);
     return subscriptionModels.toEntities(SubscriptionEntity.class);
   }
@@ -64,10 +64,10 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepositoryAdapter
     }
   }
 
-  public SubscriptionEntity updateSubscriptionStartDateAndEndDateByCode(Date startDate, Date endDate,
+  public SubscriptionEntity updateSubscriptionStartDateAndEndDateByCode(LocalDate startDate, LocalDate endDate,
       long subscriptionCode) {
-    java.sql.Date sqlEndDate = new java.sql.Date(endDate.getTime());
-    java.sql.Date sqlStartDate = new java.sql.Date(startDate.getTime());
+    java.sql.Date sqlEndDate = new java.sql.Date(endDate.toEpochDay());
+    java.sql.Date sqlStartDate = new java.sql.Date(startDate.toEpochDay());
     SubscriptionEntity subscriptionEntity = getSubscriptionEntityByCode(subscriptionCode);
     subscriptionEntity.setStartDate(sqlStartDate);
     subscriptionEntity.setEndDate(sqlEndDate);
@@ -78,5 +78,11 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepositoryAdapter
   public SubscriptionEntity getSubscriptionEntityByCode(long subscriptionCode) {
     SubscriptionModel subscriptionModel = subscriptionRepositoryJPA.findByCode(subscriptionCode);
     return subscriptionModel.toEntity();
+  }
+
+  @Override
+  public CustomList<SubscriptionEntity> listSubscriptionByType(SubscriptionType subscriptionType) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'listSubscriptionByType'");
   }
 }
