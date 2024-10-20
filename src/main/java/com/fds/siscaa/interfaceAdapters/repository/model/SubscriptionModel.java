@@ -4,11 +4,14 @@ import java.util.Date;
 
 import com.fds.siscaa.domain.entity.ApplicationEntity;
 import com.fds.siscaa.domain.entity.ClientEntity;
+import com.fds.siscaa.domain.entity.PromotionEntity;
 import com.fds.siscaa.domain.entity.SubscriptionEntity;
+import com.fds.siscaa.domain.utils.CustomList;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 public class SubscriptionModel {
     @Id
@@ -21,6 +24,9 @@ public class SubscriptionModel {
 
     @ManyToOne(cascade = CascadeType.REFRESH)
     public ApplicationModel application;
+
+    @OneToMany(cascade = CascadeType.REFRESH)
+    public CustomList<ApplicationModel> promotions;
 
     protected SubscriptionModel() {
     }
@@ -35,6 +41,10 @@ public class SubscriptionModel {
     }
 
     public SubscriptionEntity toEntity() {
-        return new SubscriptionEntity(code, client.toEntity(), startDate, endDate, application.toEntity());
+        return new SubscriptionEntity(
+                code, client.toEntity(),
+                startDate, endDate,
+                application.toEntity(),
+                promotions.toEntities(PromotionEntity.class));
     }
 }

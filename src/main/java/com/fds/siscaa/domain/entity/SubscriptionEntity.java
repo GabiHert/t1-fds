@@ -2,6 +2,8 @@ package com.fds.siscaa.domain.entity;
 
 import java.util.Date;
 
+import com.fds.siscaa.domain.utils.CustomList;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +17,7 @@ public class SubscriptionEntity {
     private Date startDate;
     private Date endDate;
     private ApplicationEntity application;
+    private CustomList<PromotionEntity> promotion;
 
     public SubscriptionEntity() {
     }

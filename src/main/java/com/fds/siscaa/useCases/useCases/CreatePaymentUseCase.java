@@ -31,6 +31,7 @@ uma e ganhe 45 dias etc) ou quanto ao valor pago pela mensalidade (descontos etc
 */
 
 import com.fds.siscaa.domain.entity.SubscriptionEntity;
+import com.fds.siscaa.domain.rules.PaymentRules;
 import com.fds.siscaa.useCases.adapters.SubscriptionRepositoryAdapter;
 
 import lombok.AllArgsConstructor;
@@ -39,9 +40,9 @@ import lombok.AllArgsConstructor;
 public class CreatePaymentUseCase {
     private final SubscriptionRepositoryAdapter subscriptionRepository;
 
-    public CreatePaymentResponse create(LocalDate paymentDate, int subscriptionCode, double valorPago) {
+    public CreatePaymentResponse create(LocalDate paymentDate, int subscriptionCode, float receivedAmount) {
         System.out.println("CreatePaymentUseCase - STARTED - paymentDate: " + paymentDate + " subscriptionCode: "
-                + subscriptionCode + " valorPago: " + valorPago);
+                + subscriptionCode + " valorPago: " + receivedAmount);
 
         /*
          * verificar o valor do pagament
@@ -57,9 +58,10 @@ public class CreatePaymentUseCase {
         // get subscription by subscriptionCode
         SubscriptionEntity subscriptionEntity = subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode);
 
+        
         // validar se da pra pagar assinatura (valores cheios) -> retorna quantos dias
         // devem ser somados a assinatura
-        // se não for válido verifica se existe promoção válida
+        // verifica se existe promoção válida
         // se não existir promoção válida retorna a data de validade atual e o valor
 
         CreatePaymentResponse createPaymentResultDto = new CreatePaymentResponse();
