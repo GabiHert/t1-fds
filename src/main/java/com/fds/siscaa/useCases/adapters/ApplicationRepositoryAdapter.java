@@ -7,4 +7,6 @@ import com.fds.siscaa.domain.utils.CustomList;
 
 public interface ApplicationRepositoryAdapter {
     CustomList<ApplicationEntity> listApplications();
+
+    ApplicationEntity getApplicationEntityByCode(long appCode);
 }
