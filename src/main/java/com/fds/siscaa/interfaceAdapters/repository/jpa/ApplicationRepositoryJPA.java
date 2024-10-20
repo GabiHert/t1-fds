@@ -9,4 +9,6 @@ import com.fds.siscaa.interfaceAdapters.repository.model.ApplicationModel;
 
 public interface ApplicationRepositoryJPA extends JpaRepository<ApplicationModel, Long> {
     CustomList<ApplicationModel> findAll();
+
+    ApplicationModel findByCode(long code);
 }

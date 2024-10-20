@@ -33,7 +33,7 @@ import com.fds.siscaa.domain.utils.CustomList;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("servcad")
+@RequestMapping("")
 public class Routes {
     ClientRepositoryAdapter clientRepository;
     ApplicationRepositoryAdapter applicationRepository;
@@ -44,7 +44,7 @@ public class Routes {
     public Routes() {
     }
 
-    @PostMapping("assinaturas")
+    @PostMapping("servcad/assinaturas")
     public SubscriptionDto postSubscription(@RequestBody CreateSubscriptionDto createSubscriptionDto) {
         System.out.println("postSubscription - STARTED - createSubscriptionDto: " + createSubscriptionDto.toString());
 
@@ -77,34 +77,42 @@ public class Routes {
         return createPaymentResponseDto;
     }
 
+    @PostMapping("servcad/aplicativos/atualizacusto/{idAplicativo}")
+    public ApplicationEntity updateCost (@RequestBody float cost, @PathVariable long id) {
 
+        ApplicationEntity applicationEntity = this.applicationRepository.getApplicationEntityByCode(id);
 
-    @GetMapping("clientes")
+        applicationEntity.setMonthlyFee(cost);
+
+        return applicationEntity;
+    }
+
+    @GetMapping("servcad/clientes")
     public List<ClientDto> listClients() {
         CustomList<ClientEntity> clientEntities = new CustomList<>(this.clientRepository.listClients());
         return clientEntities.toDtos(ClientDto.class);
 
     };
 
-    @GetMapping("aplicativos")
+    @GetMapping("servcad/aplicativos")
     public List<ApplicationDto> listApplication() {
         CustomList<ApplicationEntity> applicationEntities = new CustomList<>(this.applicationRepository.listApplications());
         return applicationEntities.toDtos(ApplicationDto.class);
     }
 
-    @GetMapping("assinaturas/{tipo}")
+    @GetMapping("servcad/assinaturas/{tipo}")
     public List<SubscriptionDto> ListSubscriptionsByType(@PathVariable SubscriptionType type) {
         CustomList<SubscriptionEntity> subscriptionEntities = new CustomList<>(this.subscriptionRepository.listSubscriptionByType(type));
         return subscriptionEntities.toDtos(SubscriptionDto.class);
     }
 
-    @GetMapping("asscli/{codcli}")
+    @GetMapping("servcad/asscli/{codcli}")
     public List<SubscriptionDto> ListSubscriptionsByClientCode(@PathVariable Long codcli) {
         CustomList<SubscriptionEntity> subscriptionEntities = new CustomList<>(this.subscriptionRepository.listSubscriptionsByClientCode(codcli));
         return subscriptionEntities.toDtos(SubscriptionDto.class);
     }
 
-    @GetMapping("assapp/{codapp}")
+    @GetMapping("servcad/assapp/{codapp}")
     public List<SubscriptionDto> ListSubscriptionsByAppCode(@PathVariable Long codapp) {
         CustomList<SubscriptionEntity> subscriptionEntities = new CustomList<>(this.subscriptionRepository.listSubscriptionEntityByApplicationCode(codapp));
         return subscriptionEntities.toDtos(SubscriptionDto.class);

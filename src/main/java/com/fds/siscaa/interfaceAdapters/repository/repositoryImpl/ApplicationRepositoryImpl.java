@@ -25,4 +25,10 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryAdapter {
 
   }
 
+  @Override
+  public ApplicationEntity getApplicationEntityByCode(long appCode) {
+    ApplicationModel applicationModel = applicationRepositoryJPA.findByCode(appCode);
+    return applicationModel.toEntity();
+  }
+
 }
