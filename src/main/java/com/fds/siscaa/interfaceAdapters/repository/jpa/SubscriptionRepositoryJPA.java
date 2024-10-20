@@ -15,9 +15,9 @@ public interface SubscriptionRepositoryJPA extends JpaRepository<SubscriptionMod
 
     List<SubscriptionModel> findByEndDate(Date endDate);
 
-    List<SubscriptionModel> findByEndDateAfter(LocalDate currentDate);
+    List<SubscriptionModel> findByEndDateAfter(Date currentDate);
 
-    List<SubscriptionModel> findByEndDateBefore(LocalDate currentDate);
+    List<SubscriptionModel> findByEndDateBefore(Date currentDate);
 
     List<SubscriptionModel> findByClientCode(long clientCode);
 
