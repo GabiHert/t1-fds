@@ -19,6 +19,8 @@ import com.fds.siscaa.interfaceAdapters.controller.dto.CreatePaymentResponseDto;
 import com.fds.siscaa.interfaceAdapters.controller.dto.ApplicationDto;
 import com.fds.siscaa.interfaceAdapters.controller.dto.CreateSubscriptionDto;
 import com.fds.siscaa.interfaceAdapters.controller.dto.SubscriptionDto;
+import com.fds.siscaa.interfaceAdapters.controller.parser.ApplicationDtoParser;
+import com.fds.siscaa.interfaceAdapters.controller.parser.ClientDtoParser;
 import com.fds.siscaa.useCases.adapters.ClientRepositoryAdapter;
 import com.fds.siscaa.useCases.useCases.CreatePaymentResponse;
 import com.fds.siscaa.useCases.useCases.CreatePaymentUseCase;
@@ -33,6 +35,8 @@ public class Routes {
     ApplicationRepositoryAdapter applicationRepository;
     CreateSubscriptionUseCase createSubscriptionUseCase;
     CreatePaymentUseCase createPaymentUseCase;
+    ClientDtoParser clientDtoParser;
+    ApplicationDtoParser applicationDtoParser;
 
     public Routes() {
     }
@@ -68,18 +72,19 @@ public class Routes {
     @GetMapping("clientes")
     public List<ClientDto> listClients() {
         List<ClientEntity> clientEntities = this.clientRepository.listClients();
-        List<ClientDto> clientDtos = null;
-
-        return clientDtos;
+        return this.clientDtoParser.fromClientDtoEntities(clientEntities);
 
     };
 
     @GetMapping("aplicativos")
     public List<ApplicationDto> listApplication() {
         List<ApplicationEntity> applicationEntities = this.applicationRepository.listApplications();
+        return this.applicationDtoParser.fromApplicationDtoEntities(applicationEntities);
+    }
 
-        List<ApplicationDto> applicationDtos = null;
-
-        return applicationDtos;
+    @GetMapping("assinaturas/{tipo}")
+    public List<ApplicationDto> listApplication() {
+        List<ApplicationEntity> applicationEntities = this.applicationRepository.listApplications();
+        return this.applicationDtoParser.fromApplicationDtoEntities(applicationEntities);
     }
 }
