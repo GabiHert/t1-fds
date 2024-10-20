@@ -33,7 +33,8 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepositoryAdapter
   }
 
   public CustomList<SubscriptionEntity> listSubscriptionsByEndDate(long applicationCode, Date endDate) {
-    CustomList<SubscriptionModel> subscriptionModels = subscriptionRepositoryJPA.findByEndDate(endDate);
+    java.sql.Date sqlEndDate = new java.sql.Date(endDate.getTime());
+    CustomList<SubscriptionModel> subscriptionModels = subscriptionRepositoryJPA.findByEndDate(sqlEndDate);
     return subscriptionModels.toEntities(SubscriptionEntity.class);
   }
 
@@ -48,7 +49,6 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepositoryAdapter
   }
 
   public CustomList<SubscriptionEntity> listSubscriptionsByType(SubscriptionType subscriptionType) {
-    LocalDate currentDate = LocalDate.now();
     switch (subscriptionType) {
       case ATIVAS:
         CustomList<SubscriptionModel> subscriptionModels_ativas = subscriptionRepositoryJPA.findByEndDateAfter(sqlDate);
@@ -66,9 +66,11 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepositoryAdapter
 
   public SubscriptionEntity updateSubscriptionStartDateAndEndDateByCode(Date startDate, Date endDate,
       long subscriptionCode) {
+    java.sql.Date sqlEndDate = new java.sql.Date(endDate.getTime());
+    java.sql.Date sqlStartDate = new java.sql.Date(startDate.getTime());
     SubscriptionEntity subscriptionEntity = getSubscriptionEntityByCode(subscriptionCode);
-    subscriptionEntity.setStartDate(startDate);
-    subscriptionEntity.setEndDate(endDate);
+    subscriptionEntity.setStartDate(sqlStartDate);
+    subscriptionEntity.setEndDate(sqlEndDate);
 
     return subscriptionEntity;
   }
