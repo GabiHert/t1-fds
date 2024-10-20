@@ -1,10 +1,12 @@
 package com.fds.siscaa.interfaceAdapters.controller.routes;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,13 +21,15 @@ import com.fds.siscaa.interfaceAdapters.controller.dto.CreatePaymentResponseDto;
 import com.fds.siscaa.interfaceAdapters.controller.dto.ApplicationDto;
 import com.fds.siscaa.interfaceAdapters.controller.dto.CreateSubscriptionDto;
 import com.fds.siscaa.interfaceAdapters.controller.dto.SubscriptionDto;
-import com.fds.siscaa.interfaceAdapters.controller.parser.ApplicationDtoParser;
-import com.fds.siscaa.interfaceAdapters.controller.parser.ClientDtoParser;
 import com.fds.siscaa.useCases.adapters.ClientRepositoryAdapter;
 import com.fds.siscaa.useCases.useCases.CreatePaymentResponse;
 import com.fds.siscaa.useCases.useCases.CreatePaymentUseCase;
 import com.fds.siscaa.useCases.useCases.CreateSubscriptionUseCase;
 import com.fds.siscaa.useCases.adapters.ApplicationRepositoryAdapter;
+import com.fds.siscaa.useCases.adapters.SubscriptionRepositoryAdapter;
+
+import com.fds.siscaa.domain.enums.SubscriptionType;
+import com.fds.siscaa.domain.utils.CustomList;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -35,8 +39,7 @@ public class Routes {
     ApplicationRepositoryAdapter applicationRepository;
     CreateSubscriptionUseCase createSubscriptionUseCase;
     CreatePaymentUseCase createPaymentUseCase;
-    ClientDtoParser clientDtoParser;
-    ApplicationDtoParser applicationDtoParser;
+    SubscriptionRepositoryAdapter subscriptionRepository;
 
     public Routes() {
     }
@@ -74,22 +77,49 @@ public class Routes {
         return createPaymentResponseDto;
     }
 
+
+
     @GetMapping("clientes")
     public List<ClientDto> listClients() {
-        List<ClientEntity> clientEntities = this.clientRepository.listClients();
-        return this.clientDtoParser.parseClientEntitiesToDto(clientEntities);
+        CustomList<ClientEntity> clientEntities = new CustomList<>(this.clientRepository.listClients());
+        return clientEntities.toDtos(ClientDto.class);
 
     };
 
     @GetMapping("aplicativos")
     public List<ApplicationDto> listApplication() {
-        List<ApplicationEntity> applicationEntities = this.applicationRepository.listApplications();
-        return this.applicationDtoParser.parseApplicationEntitiesToDto(applicationEntities);
+        CustomList<ApplicationEntity> applicationEntities = new CustomList<>(this.applicationRepository.listApplications());
+        return applicationEntities.toDtos(ApplicationDto.class);
     }
 
     @GetMapping("assinaturas/{tipo}")
-    public List<ApplicationDto> listApplication() {
-        List<ApplicationEntity> applicationEntities = this.applicationRepository.listApplications();
-        return this.applicationDtoParser.parseApplicationEntitiesToDto(applicationEntities);
+    public List<SubscriptionDto> ListSubscriptionsByType(@PathVariable SubscriptionType type) {
+        CustomList<SubscriptionEntity> subscriptionEntities = new CustomList<>(this.subscriptionRepository.listSubscriptionByType(type));
+        return subscriptionEntities.toDtos(SubscriptionDto.class);
     }
+
+    @GetMapping("asscli/{codcli}")
+    public List<SubscriptionDto> ListSubscriptionsByClientCode(@PathVariable Long codcli) {
+        CustomList<SubscriptionEntity> subscriptionEntities = new CustomList<>(this.subscriptionRepository.listSubscriptionsByClientCode(codcli));
+        return subscriptionEntities.toDtos(SubscriptionDto.class);
+    }
+
+    @GetMapping("assapp/{codapp}")
+    public List<SubscriptionDto> ListSubscriptionsByAppCode(@PathVariable Long codapp) {
+        CustomList<SubscriptionEntity> subscriptionEntities = new CustomList<>(this.subscriptionRepository.listSubscriptionEntityByApplicationCode(codapp));
+        return subscriptionEntities.toDtos(SubscriptionDto.class);
+    }
+
+
+
+
+    @GetMapping("assinvalida/{codass}")
+    public boolean SubscriptionIsValid(@PathVariable Long codsub) {
+        SubscriptionEntity sub = this.subscriptionRepository.getSubscriptionEntityByCode(codsub);
+        return sub != null;
+    }
+
+    
+
+    
 }

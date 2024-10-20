@@ -2,7 +2,8 @@ package com.fds.siscaa.useCases.adapters;
 
 import java.util.List;
 import com.fds.siscaa.domain.entity.ClientEntity;
+import com.fds.siscaa.domain.utils.CustomList;
 
 public interface ClientRepositoryAdapter {
-    List<ClientEntity> listClients();
+    CustomList<ClientEntity> listClients();
 }
