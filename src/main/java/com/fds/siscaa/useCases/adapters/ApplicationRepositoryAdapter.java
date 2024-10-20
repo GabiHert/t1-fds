@@ -3,7 +3,8 @@ package com.fds.siscaa.useCases.adapters;
 import java.util.List;
 
 import com.fds.siscaa.domain.entity.ApplicationEntity;
+import com.fds.siscaa.domain.utils.CustomList;
 
 public interface ApplicationRepositoryAdapter {
-    List<ApplicationEntity> listApplications();
+    CustomList<ApplicationEntity> listApplications();
 }

@@ -2,23 +2,26 @@ package com.fds.siscaa.interfaceAdapters.repository.repositoryImpl;
 
 import com.fds.siscaa.interfaceAdapters.repository.jpa.ApplicationRepositoryJPA;
 import com.fds.siscaa.useCases.adapters.ApplicationRepositoryAdapter;
+
+import lombok.AllArgsConstructor;
+
 import com.fds.siscaa.domain.entity.*;
+import com.fds.siscaa.domain.utils.CustomList;
+
 import java.util.List;
 import com.fds.siscaa.interfaceAdapters.repository.model.*;
-import com.fds.siscaa.interfaceAdapters.repository.repositoryImpl.parser.ApplicationModelParser;
 
+@AllArgsConstructor()
 public class ApplicationRepositoryImpl implements ApplicationRepositoryAdapter {
-  ApplicationRepositoryJPA applicationRepositoryJPA;
-  ApplicationModelParser applicationModelParser;
+  private ApplicationRepositoryJPA applicationRepositoryJPA;
+  CustomList customList;
 
-  public ApplicationRepositoryImpl(ApplicationRepositoryJPA applicationRepositoryJPA) {
-    this.applicationRepositoryJPA = applicationRepositoryJPA;
-    this.applicationModelParser = new ApplicationModelParser();
+  public ApplicationRepositoryImpl() {
   }
 
-  public List<ApplicationEntity> listApplications() {
-    List<ApplicationModel> appModels = applicationRepositoryJPA.findAll();
-    return applicationModelParser.parseApplicationModelToEntity(appModels);
+  public CustomList<ApplicationEntity> listApplications() {
+    CustomList<ApplicationModel> appModels = applicationRepositoryJPA.findAll();
+    return customList.toEntities(ApplicationEntity.class);
 
   }
 
