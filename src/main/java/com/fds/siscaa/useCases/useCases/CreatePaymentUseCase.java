@@ -23,7 +23,8 @@ public class CreatePaymentUseCase {
                 System.out.println(
                                 String.format("CreatePaymentUseCase - STARTED - paymentDate: %s subscriptionCode: %d receivedAmount: %.2f",
                                                 paymentDate, subscriptionCode, receivedAmount));
-                SubscriptionEntity subscription = getSubscription(subscriptionCode);
+                SubscriptionEntity subscription = subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode);
+
                 float monthlyFee = subscription.getApplication().getMonthlyFee();
 
                 int monthsToExtend = paymentRules.calculateMonthsToExtend(monthlyFee, receivedAmount);
@@ -40,10 +41,6 @@ public class CreatePaymentUseCase {
                 updateSubscriptionDates(subscriptionCode, monthsToExtend);
 
                 return new CreatePaymentResponse(paymentStatus, subscription.getEndDate(), refundValue);
-        }
-
-        private SubscriptionEntity getSubscription(int subscriptionCode) {
-                return subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode);
         }
 
         private int applyPromotionIfValid(SubscriptionEntity subscription, int monthsToExtend, float monthlyFee) {
