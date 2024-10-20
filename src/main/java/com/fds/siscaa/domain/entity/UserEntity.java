@@ -1,6 +1,5 @@
 package com.fds.siscaa.domain.entity;
 
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

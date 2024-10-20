@@ -10,8 +10,8 @@ import lombok.Setter;
 public class PromotionEntity {
     private long code;
     private float discountPercentage;
-    private float extraDays;
-    private int monthsRequired;
+    private int extraDays;
+    private int requiredMonths;
 
     public PromotionEntity() {
     }

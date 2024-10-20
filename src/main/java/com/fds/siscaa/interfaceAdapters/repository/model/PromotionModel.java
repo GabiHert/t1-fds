@@ -26,7 +26,7 @@ public class PromotionModel {
         this.code = promotionEntity.getCode();
         this.discountPercentage = promotionEntity.getDiscountPercentage();
         this.extraDays = promotionEntity.getExtraDays();
-        this.monthsRequired = promotionEntity.getMonthsRequired();
+        this.monthsRequired = promotionEntity.getRequiredMonths();
     }
 
     public PromotionEntity toEntity() {

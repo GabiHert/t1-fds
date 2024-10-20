@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,6 +20,7 @@ public interface SubscriptionRepositoryJPA extends JpaRepository<SubscriptionMod
 
     List<SubscriptionModel> findByEndDateBefore(Date currentDate);
 
+    @EntityGraph(attributePaths = { "application", "promotions" })
     List<SubscriptionModel> findByClientCode(long clientCode);
 
     List<SubscriptionModel> findByApplicationCode(long applicationCode);
