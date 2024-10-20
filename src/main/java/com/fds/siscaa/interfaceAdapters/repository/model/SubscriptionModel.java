@@ -25,16 +25,16 @@ public class SubscriptionModel {
     protected SubscriptionModel() {
     }
 
-    public SubscriptionModel(SubscriptionEntity subscriptionEntity, ApplicationEntity applicationEntity, ClientEntity clientEntity) {
-        this.code = subscriptionEntity.code;
-        this.startDate = subscriptionEntity.startDate;
-        this.endDate = subscriptionEntity.endDate;
+    public SubscriptionModel(SubscriptionEntity subscriptionEntity, ApplicationEntity applicationEntity,
+            ClientEntity clientEntity) {
+        this.code = subscriptionEntity.getCode();
+        this.startDate = subscriptionEntity.getStartDate();
+        this.endDate = subscriptionEntity.getEndDate();
         this.client = new ClientModel(clientEntity);
         this.application = new ApplicationModel(applicationEntity);
     }
 
     public SubscriptionEntity toEntity() {
-        return new SubscriptionEntity(code, application.code, client.code, startDate, endDate);
+        return new SubscriptionEntity(code, application.getCode(), client.code, startDate, endDate, application.);
     }
 }
-

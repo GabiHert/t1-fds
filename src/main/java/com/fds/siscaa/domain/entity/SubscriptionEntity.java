@@ -2,19 +2,21 @@ package com.fds.siscaa.domain.entity;
 
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter()
+@Setter()
+@AllArgsConstructor()
 public class SubscriptionEntity {
-    public long code;
-    public long applicationCode;
-    public long clientCode;
-    public Date startDate;
-    public Date endDate;
+    private long code;
+    private long applicationCode;
+    private long clientCode;
+    private Date startDate;
+    private Date endDate;
+    private float monthlyFee;
 
-
-    public SubscriptionEntity(long code, long applicationCode, long clientCode, Date startDate, Date endDate) {
-        this.code = code;
-        this.applicationCode = applicationCode;
-        this.clientCode = clientCode;
-        this.startDate = startDate;
-        this.endDate = endDate;
+    public SubscriptionEntity() {
     }
 }

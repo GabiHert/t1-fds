@@ -52,11 +52,16 @@ public class Routes {
     @PostMapping("registrarpagamento")
     public CreatePaymentResponseDto postPayment(@RequestBody CreatePaymentDto createPaymentDto) {
         System.out.println("postPayment - STARTED - createPaymentDto" + createPaymentDto.toString());
+
+        // todo: validação de payload
+
+        LocalDate paymentDate = LocalDate.of(
+                createPaymentDto.getYear(),
+                createPaymentDto.getMonth(),
+                createPaymentDto.getDay());
+
         CreatePaymentResponse createPaymentResponse = this.createPaymentUseCase.create(
-                LocalDate.of(
-                        createPaymentDto.getYear(),
-                        createPaymentDto.getMonth(),
-                        createPaymentDto.getDay()),
+                paymentDate,
                 createPaymentDto.getCodass(),
                 createPaymentDto.getValorPago());
 

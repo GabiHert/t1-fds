@@ -6,13 +6,19 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter()
+@Setter()
+@AllArgsConstructor()
 public class ApplicationModel {
     @Id
-    public long code;
-    public String name;
-    public long  monthlyPrice;
+    private long code;
+    private String name;
+    private float monthlyFee;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
     public SubscriptionModel subscription;
@@ -20,19 +26,13 @@ public class ApplicationModel {
     protected ApplicationModel() {
     }
 
-    public ApplicationModel(long code, String name, long monthlyPrice) {
-        this.code = code;
-        this.name = name;
-        this.monthlyPrice = monthlyPrice;
-    }
-    
     public ApplicationModel(ApplicationEntity applicationEntity) {
         this.code = applicationEntity.code;
         this.name = applicationEntity.name;
-        this.monthlyPrice = applicationEntity.monthlyPrice;
+        this.monthlyFee = applicationEntity.monthlyFee;
     }
 
     public ApplicationEntity toEntity() {
-        return new ApplicationEntity(code, name, monthlyPrice);
+        return new ApplicationEntity(code, name, monthlyFee);
     }
 }
