@@ -1,7 +1,6 @@
 package com.fds.siscaa.interfaceAdapters.repository.jpa;
 
 import java.sql.Date;
-import java.util.List;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,5 +29,7 @@ public interface SubscriptionRepositoryJPA extends JpaRepository<SubscriptionMod
     @Modifying()
     @Query("update SubscriptionModel s set s.startDate = startDate, s.endDate = endDate where s.code = subscriptionCode")
     int updateSubscriptionStartDateAndEndDateByCode(Date startDate, Date endDate, long subscriptionCode);
+
+    SubscriptionModel save(SubscriptionModel subscriptionModel);
 
 }

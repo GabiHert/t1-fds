@@ -1,6 +1,6 @@
 package com.fds.siscaa.interfaceAdapters.controller.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.fds.siscaa.domain.entity.ApplicationEntity;
 import com.fds.siscaa.domain.entity.ClientEntity;
@@ -16,19 +16,20 @@ import lombok.Setter;
 public class SubscriptionDto {
 
         private long code;
-    private ClientEntity clientEntity;
-    private Date startDate;
-    private Date endDate;
-    private ApplicationEntity application;
+        private ClientEntity clientEntity;
+        private LocalDate startDate;
+        private LocalDate endDate;
+        private ApplicationEntity application;
 
-    public SubscriptionDto(){}
+        public SubscriptionDto() {
+        }
 
-        public SubscriptionDto(SubscriptionEntity subscriptionEntity){
+        public SubscriptionDto(SubscriptionEntity subscriptionEntity) {
                 this.code = clientEntity.getCode();
-                this.clientEntity = subscriptionEntity.getClientEntity();
+                this.clientEntity = subscriptionEntity.getClient();
                 this.startDate = subscriptionEntity.getStartDate();
                 this.endDate = subscriptionEntity.getEndDate();
                 this.application = subscriptionEntity.getApplication();
         }
-        
-}   
+
+}

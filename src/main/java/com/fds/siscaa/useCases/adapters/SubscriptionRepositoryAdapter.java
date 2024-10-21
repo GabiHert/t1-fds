@@ -19,9 +19,11 @@ public interface SubscriptionRepositoryAdapter {
 
     CustomList<SubscriptionEntity> listSubscriptionByType(SubscriptionType subscriptionType);
 
-    SubscriptionEntity updateSubscriptionStartDateAndEndDateByCode(LocalDate startDate, LocalDate endDate,
+    int updateSubscriptionStartDateAndEndDateByCode(LocalDate startDate, LocalDate endDate,
             long subscriptionCode);
 
     SubscriptionEntity getSubscriptionEntityByCode(long subscriptionCode);
+
+    SubscriptionEntity create(SubscriptionEntity subscriptionEntity);
 
 }

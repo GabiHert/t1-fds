@@ -14,4 +14,8 @@ public class ClientEntity {
 
     public ClientEntity() {
     }
+
+    public ClientEntity(long code) {
+        this.code = code;
+    }
 }

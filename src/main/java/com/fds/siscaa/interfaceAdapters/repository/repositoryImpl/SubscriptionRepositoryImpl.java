@@ -1,7 +1,6 @@
 package com.fds.siscaa.interfaceAdapters.repository.repositoryImpl;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.sql.Date;
 
 import com.fds.siscaa.domain.enums.*;
@@ -48,7 +47,8 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepositoryAdapter
     return subscriptionModels.toEntities(SubscriptionEntity.class);
   }
 
-  public CustomList<SubscriptionEntity> listSubscriptionsByType(SubscriptionType subscriptionType) {
+  @Override
+  public CustomList<SubscriptionEntity> listSubscriptionByType(SubscriptionType subscriptionType) {
     switch (subscriptionType) {
       case ATIVAS:
         CustomList<SubscriptionModel> subscriptionModels_ativas = subscriptionRepositoryJPA.findByEndDateAfter(sqlDate);
@@ -64,15 +64,12 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepositoryAdapter
     }
   }
 
-  public SubscriptionEntity updateSubscriptionStartDateAndEndDateByCode(LocalDate startDate, LocalDate endDate,
+  public int updateSubscriptionStartDateAndEndDateByCode(LocalDate startDate, LocalDate endDate,
       long subscriptionCode) {
     java.sql.Date sqlEndDate = new java.sql.Date(endDate.toEpochDay());
     java.sql.Date sqlStartDate = new java.sql.Date(startDate.toEpochDay());
-    SubscriptionEntity subscriptionEntity = getSubscriptionEntityByCode(subscriptionCode);
-    subscriptionEntity.setStartDate(sqlStartDate);
-    subscriptionEntity.setEndDate(sqlEndDate);
-
-    return subscriptionEntity;
+    return this.subscriptionRepositoryJPA
+        .updateSubscriptionStartDateAndEndDateByCode(sqlStartDate, sqlEndDate, subscriptionCode);
   }
 
   public SubscriptionEntity getSubscriptionEntityByCode(long subscriptionCode) {
@@ -81,8 +78,8 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepositoryAdapter
   }
 
   @Override
-  public CustomList<SubscriptionEntity> listSubscriptionByType(SubscriptionType subscriptionType) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'listSubscriptionByType'");
+  public SubscriptionEntity create(SubscriptionEntity subscriptionEntity) {
+    return this.subscriptionRepositoryJPA.save(new SubscriptionModel(subscriptionEntity)).toEntity();
   }
+
 }

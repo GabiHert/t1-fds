@@ -15,4 +15,8 @@ public class ApplicationEntity {
     public ApplicationEntity() {
     }
 
+    public ApplicationEntity(long code) {
+        this.code = code;
+    }
+
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fds.siscaa.domain.entity.ClientEntity;
+import com.fds.siscaa.domain.entity.CreatePaymentResponseEntity;
 import com.fds.siscaa.domain.entity.ApplicationEntity;
 import com.fds.siscaa.domain.entity.SubscriptionEntity;
 import com.fds.siscaa.interfaceAdapters.controller.dto.ClientDto;
@@ -22,7 +23,6 @@ import com.fds.siscaa.interfaceAdapters.controller.dto.ApplicationDto;
 import com.fds.siscaa.interfaceAdapters.controller.dto.CreateSubscriptionDto;
 import com.fds.siscaa.interfaceAdapters.controller.dto.SubscriptionDto;
 import com.fds.siscaa.useCases.adapters.ClientRepositoryAdapter;
-import com.fds.siscaa.useCases.useCases.CreatePaymentResponse;
 import com.fds.siscaa.useCases.useCases.CreatePaymentUseCase;
 import com.fds.siscaa.useCases.useCases.CreateSubscriptionUseCase;
 import com.fds.siscaa.useCases.adapters.ApplicationRepositoryAdapter;
@@ -67,7 +67,7 @@ public class Routes {
                 createPaymentDto.getMonth(),
                 createPaymentDto.getDay());
 
-        CreatePaymentResponse createPaymentResponse = this.createPaymentUseCase.create(
+        CreatePaymentResponseEntity createPaymentResponse = this.createPaymentUseCase.create(
                 paymentDate,
                 createPaymentDto.getCodass(),
                 createPaymentDto.getValorPago());

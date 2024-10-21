@@ -1,6 +1,6 @@
 package com.fds.siscaa.domain.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.fds.siscaa.domain.utils.CustomList;
 
@@ -13,21 +13,26 @@ import lombok.Setter;
 @AllArgsConstructor()
 public class SubscriptionEntity {
     private long code;
-    private ClientEntity clientEntity;
-    private Date startDate;
-    private Date endDate;
+    private ClientEntity client;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private ApplicationEntity application;
     private CustomList<PromotionEntity> promotions;
 
     public SubscriptionEntity() {
     }
 
-    public SubscriptionEntity(long code, ClientEntity clientEntity, Date sDate, Date eDate,
+    public SubscriptionEntity(long code, ClientEntity clientEntity, LocalDate sDate, LocalDate eDate,
             ApplicationEntity applicationEntity) {
         this.code = code;
-        this.clientEntity = clientEntity;
+        this.client = clientEntity;
         this.startDate = sDate;
         this.endDate = eDate;
         this.application = applicationEntity;
+    }
+
+    public SubscriptionEntity(long clientCode, long applicationCode, LocalDate startDate, LocalDate endDate) {
+        this.client = new ClientEntity(clientCode);
+        this.application = new ApplicationEntity(applicationCode);
     }
 }

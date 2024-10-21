@@ -1,6 +1,6 @@
 package com.fds.siscaa.interfaceAdapters.repository.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.fds.siscaa.domain.entity.ApplicationEntity;
 import com.fds.siscaa.domain.entity.ClientEntity;
@@ -16,8 +16,8 @@ import jakarta.persistence.OneToMany;
 public class SubscriptionModel {
     @Id
     public long code;
-    public Date startDate;
-    public Date endDate;
+    public LocalDate startDate;
+    public LocalDate endDate;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
     public ClientModel client;
@@ -31,13 +31,12 @@ public class SubscriptionModel {
     protected SubscriptionModel() {
     }
 
-    public SubscriptionModel(SubscriptionEntity subscriptionEntity, ApplicationEntity applicationEntity,
-            ClientEntity clientEntity) {
+    public SubscriptionModel(SubscriptionEntity subscriptionEntity) {
         this.code = subscriptionEntity.getCode();
         this.startDate = subscriptionEntity.getStartDate();
         this.endDate = subscriptionEntity.getEndDate();
-        this.client = new ClientModel(clientEntity);
-        this.application = new ApplicationModel(applicationEntity);
+        this.client = new ClientModel(subscriptionEntity.getClient());
+        this.application = new ApplicationModel(subscriptionEntity.getApplication());
     }
 
     public SubscriptionEntity toEntity() {
