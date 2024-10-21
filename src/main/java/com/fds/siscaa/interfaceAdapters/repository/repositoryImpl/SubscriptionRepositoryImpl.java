@@ -16,7 +16,6 @@ import com.fds.siscaa.interfaceAdapters.repository.model.SubscriptionModel;
 @AllArgsConstructor()
 public class SubscriptionRepositoryImpl implements SubscriptionRepositoryAdapter {
   private SubscriptionRepositoryJPA subscriptionRepositoryJPA;
-  Date sqlDate = Date.valueOf(LocalDate.now());
 
   public SubscriptionRepositoryImpl() {
   }
@@ -32,8 +31,7 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepositoryAdapter
   }
 
   public CustomList<SubscriptionEntity> listSubscriptionsByEndDate(long applicationCode, LocalDate endDate) {
-    java.sql.Date sqlEndDate = new java.sql.Date(endDate.toEpochDay());
-    CustomList<SubscriptionModel> subscriptionModels = subscriptionRepositoryJPA.findByEndDate(sqlEndDate);
+    CustomList<SubscriptionModel> subscriptionModels = subscriptionRepositoryJPA.findByEndDate(endDate);
     return subscriptionModels.toEntities(SubscriptionEntity.class);
   }
 
@@ -51,11 +49,12 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepositoryAdapter
   public CustomList<SubscriptionEntity> listSubscriptionByType(SubscriptionType subscriptionType) {
     switch (subscriptionType) {
       case ATIVAS:
-        CustomList<SubscriptionModel> subscriptionModels_ativas = subscriptionRepositoryJPA.findByEndDateAfter(sqlDate);
+        CustomList<SubscriptionModel> subscriptionModels_ativas = subscriptionRepositoryJPA
+            .findByEndDateAfter(LocalDate.now());
         return subscriptionModels_ativas.toEntities(SubscriptionEntity.class);
       case CANCELADAS:
         CustomList<SubscriptionModel> subscriptionModels_canceladas = subscriptionRepositoryJPA
-            .findByEndDateBefore(sqlDate);
+            .findByEndDateBefore(LocalDate.now());
         return subscriptionModels_canceladas.toEntities(SubscriptionEntity.class);
       case TODAS:
       default:
@@ -66,10 +65,8 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepositoryAdapter
 
   public int updateSubscriptionStartDateAndEndDateByCode(LocalDate startDate, LocalDate endDate,
       long subscriptionCode) {
-    java.sql.Date sqlEndDate = new java.sql.Date(endDate.toEpochDay());
-    java.sql.Date sqlStartDate = new java.sql.Date(startDate.toEpochDay());
     return this.subscriptionRepositoryJPA
-        .updateSubscriptionStartDateAndEndDateByCode(sqlStartDate, sqlEndDate, subscriptionCode);
+        .updateSubscriptionStartDateAndEndDateByCode(startDate, endDate, subscriptionCode);
   }
 
   public SubscriptionEntity getSubscriptionEntityByCode(long subscriptionCode) {

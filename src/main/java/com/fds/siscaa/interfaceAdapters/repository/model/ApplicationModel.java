@@ -3,7 +3,6 @@ package com.fds.siscaa.interfaceAdapters.repository.model;
 import com.fds.siscaa.domain.entity.ApplicationEntity;
 
 import jakarta.persistence.CascadeType;
-import com.fds.siscaa.interfaceAdapters.repository.model.SubscriptionModel;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;

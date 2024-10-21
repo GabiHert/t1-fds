@@ -1,7 +1,6 @@
 package com.fds.siscaa.domain.service;
 
 import java.util.Optional;
-import java.time.LocalDate;
 
 import com.fds.siscaa.domain.entity.CreatePaymentResponseEntity;
 import com.fds.siscaa.domain.entity.PromotionEntity;
