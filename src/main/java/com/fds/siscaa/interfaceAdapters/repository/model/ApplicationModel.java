@@ -3,6 +3,7 @@ package com.fds.siscaa.interfaceAdapters.repository.model;
 import com.fds.siscaa.domain.entity.ApplicationEntity;
 
 import jakarta.persistence.CascadeType;
+import com.fds.siscaa.interfaceAdapters.repository.model.SubscriptionModel;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
@@ -21,7 +22,7 @@ public class ApplicationModel {
     private float monthlyFee;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
-    public SubscriptionModel subscription;
+    private SubscriptionModel subscription;
 
     protected ApplicationModel() {
     }
