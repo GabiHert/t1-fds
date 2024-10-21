@@ -2,11 +2,14 @@ package com.fds.siscaa.interfaceAdapters.repository.model;
 
 import com.fds.siscaa.domain.entity.ClientEntity;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+
+@Entity()
 @Getter()
 @Setter()
 @AllArgsConstructor()

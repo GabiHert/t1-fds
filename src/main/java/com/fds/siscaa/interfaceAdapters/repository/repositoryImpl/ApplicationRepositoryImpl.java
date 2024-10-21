@@ -31,4 +31,11 @@ public class ApplicationRepositoryImpl implements ApplicationRepositoryAdapter {
     return applicationModel.toEntity();
   }
 
+  public ApplicationEntity UpdateApplicationCostByCode(long appCode, float cost){
+    ApplicationModel applicationModel = applicationRepositoryJPA.findByCode(appCode);
+    applicationModel.setMonthlyFee(cost);
+    return applicationModel.toEntity();
+  }
+
+
 }

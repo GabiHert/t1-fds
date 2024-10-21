@@ -79,11 +79,7 @@ public class Routes {
 
     @PostMapping("servcad/aplicativos/atualizacusto/{idAplicativo}")
     public ApplicationEntity updateCost(@RequestBody float cost, @PathVariable long id) {
-
-        ApplicationEntity applicationEntity = this.applicationRepository.getApplicationEntityByCode(id);
-
-        applicationEntity.setMonthlyFee(cost);
-
+        ApplicationEntity applicationEntity = this.applicationRepository.UpdateApplicationCostByCode(id, cost);
         return applicationEntity;
     }
 
@@ -91,8 +87,7 @@ public class Routes {
     public List<ClientDto> listClients() {
         CustomList<ClientEntity> clientEntities = new CustomList<>(this.clientRepository.listClients());
         return clientEntities.toDtos(ClientDto.class);
-
-    };
+    }
 
     @GetMapping("servcad/aplicativos")
     public List<ApplicationDto> listApplication() {
@@ -124,8 +119,8 @@ public class Routes {
 
     @GetMapping("assinvalida/{codass}")
     public boolean SubscriptionIsValid(@PathVariable Long codsub) {
-        SubscriptionEntity sub = this.subscriptionRepository.getSubscriptionEntityByCode(codsub);
-        return sub != null;
+        SubscriptionEntity subcriptionEntity = this.subscriptionRepository.getSubscriptionEntityByCode(codsub);
+        return subcriptionEntity != null;
     }
 
 }
