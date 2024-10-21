@@ -34,16 +34,6 @@ public class CreatePaymentUseCase {
                         return new CreatePaymentResponse(paymentStatus, subscription.getEndDate(), receivedAmount);
                 }
 
-                monthsToExtend = applyPromotionIfValid(subscription, monthsToExtend, monthlyFee);
-
-                float refundValue = paymentRules.calculateRefund(monthlyFee, receivedAmount);
-
-                updateSubscriptionDates(subscriptionCode, monthsToExtend);
-
-                return new CreatePaymentResponse(paymentStatus, subscription.getEndDate(), refundValue);
-        }
-
-        private int applyPromotionIfValid(SubscriptionEntity subscription, int monthsToExtend, float monthlyFee) {
                 Optional<PromotionEntity> validPromotion = promotionRules.getValidPromotion(monthsToExtend,
                                 subscription.getPromotions());
 
@@ -54,7 +44,11 @@ public class CreatePaymentUseCase {
                                         validPromotion.get().getDiscountPercentage());
                 }
 
-                return monthsToExtend;
+                float refundValue = paymentRules.calculateRefund(monthlyFee, receivedAmount);
+
+                updateSubscriptionDates(subscriptionCode, monthsToExtend);
+
+                return new CreatePaymentResponse(paymentStatus, subscription.getEndDate(), refundValue);
         }
 
         private void updateSubscriptionDates(int subscriptionCode, int monthsToExtend) {
