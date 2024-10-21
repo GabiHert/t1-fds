@@ -1,7 +1,6 @@
 package com.fds.siscaa.interfaceAdapters.controller.routes;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;

@@ -2,8 +2,6 @@ package com.fds.siscaa.interfaceAdapters.repository.model;
 
 import java.time.LocalDate;
 
-import com.fds.siscaa.domain.entity.ApplicationEntity;
-import com.fds.siscaa.domain.entity.ClientEntity;
 import com.fds.siscaa.domain.entity.PromotionEntity;
 import com.fds.siscaa.domain.entity.SubscriptionEntity;
 import com.fds.siscaa.domain.utils.CustomList;

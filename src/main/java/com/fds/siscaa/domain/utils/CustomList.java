@@ -7,8 +7,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.ListIterator;
 
-public class CustomList<E> implements List<E> {
+public class CustomList<E> implements List<E>, Iterator<E> {
     private List<E> list;
+    private int currentIndex = 0;
 
     private <T> T parse(Class<T> clazz, E element, String methodName) {
         try {
@@ -163,5 +164,20 @@ public class CustomList<E> implements List<E> {
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
         return list.subList(fromIndex, toIndex);
+    }
+
+    @Override
+    public boolean hasNext() {
+        // Check if the current index is less than the size of the list
+        return currentIndex < list.size();
+    }
+
+    @Override
+    public E next() {
+        // Return the next element and increment the index
+        if (!hasNext()) {
+            throw new IllegalStateException("No more elements");
+        }
+        return list.get(currentIndex++);
     }
 }
