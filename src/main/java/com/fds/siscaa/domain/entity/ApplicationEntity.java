@@ -15,4 +15,10 @@ public class ApplicationEntity {
     public ApplicationEntity() {
     }
 
+    public ApplicationEntity(long code, String name, float monthlyFee) {
+        this.code = code;
+        this.name = name;
+        this.monthlyFee = monthlyFee;
+    }
+
 }

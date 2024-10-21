@@ -9,4 +9,6 @@ public interface ApplicationRepositoryAdapter {
     CustomList<ApplicationEntity> listApplications();
 
     ApplicationEntity getApplicationEntityByCode(long appCode);
+
+    ApplicationEntity UpdateApplicationCostByCode(long appCode, float cost);
 }
