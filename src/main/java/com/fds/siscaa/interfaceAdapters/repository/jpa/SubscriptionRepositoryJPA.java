@@ -5,9 +5,12 @@ import java.time.LocalDate;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import com.fds.siscaa.domain.utils.CustomList;
 import com.fds.siscaa.interfaceAdapters.repository.model.SubscriptionModel;
+
+import jakarta.transaction.Transactional;
 
 public interface SubscriptionRepositoryJPA extends CrudRepository<SubscriptionModel, Long> {
     CustomList<SubscriptionModel> findByApplicationCode(long applicationCode);
@@ -24,9 +27,13 @@ public interface SubscriptionRepositoryJPA extends CrudRepository<SubscriptionMo
 
     SubscriptionModel findByCode(long code);
 
-    @Modifying()
-    @Query("update SubscriptionModel s set s.startDate = startDate, s.endDate = endDate where s.code = subscriptionCode")
-    int updateSubscriptionStartDateAndEndDateByCode(LocalDate startDate, LocalDate endDate, long subscriptionCode);
+    @Modifying
+    @Transactional
+    @Query("update SubscriptionModel s set s.startDate = :startDate, s.endDate = :endDate where s.code = :subscriptionCode")
+    int updateSubscriptionStartDateAndEndDateByCode(
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate,
+            @Param("subscriptionCode") long subscriptionCode);
 
     SubscriptionModel save(SubscriptionModel subscriptionModel);
 
