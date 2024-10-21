@@ -78,7 +78,7 @@ public class Routes {
     }
 
     @PostMapping("servcad/aplicativos/atualizacusto/{idAplicativo}")
-    public ApplicationEntity updateCost (@RequestBody float cost, @PathVariable long id) {
+    public ApplicationEntity updateCost(@RequestBody float cost, @PathVariable long id) {
 
         ApplicationEntity applicationEntity = this.applicationRepository.getApplicationEntityByCode(id);
 
@@ -96,30 +96,31 @@ public class Routes {
 
     @GetMapping("servcad/aplicativos")
     public List<ApplicationDto> listApplication() {
-        CustomList<ApplicationEntity> applicationEntities = new CustomList<>(this.applicationRepository.listApplications());
+        CustomList<ApplicationEntity> applicationEntities = new CustomList<>(
+                this.applicationRepository.listApplications());
         return applicationEntities.toDtos(ApplicationDto.class);
     }
 
     @GetMapping("servcad/assinaturas/{tipo}")
     public List<SubscriptionDto> ListSubscriptionsByType(@PathVariable SubscriptionType type) {
-        CustomList<SubscriptionEntity> subscriptionEntities = new CustomList<>(this.subscriptionRepository.listSubscriptionByType(type));
+        CustomList<SubscriptionEntity> subscriptionEntities = new CustomList<>(
+                this.subscriptionRepository.listSubscriptionByType(type));
         return subscriptionEntities.toDtos(SubscriptionDto.class);
     }
 
     @GetMapping("servcad/asscli/{codcli}")
     public List<SubscriptionDto> ListSubscriptionsByClientCode(@PathVariable Long codcli) {
-        CustomList<SubscriptionEntity> subscriptionEntities = new CustomList<>(this.subscriptionRepository.listSubscriptionsByClientCode(codcli));
+        CustomList<SubscriptionEntity> subscriptionEntities = new CustomList<>(
+                this.subscriptionRepository.listSubscriptionsByClientCode(codcli));
         return subscriptionEntities.toDtos(SubscriptionDto.class);
     }
 
     @GetMapping("servcad/assapp/{codapp}")
     public List<SubscriptionDto> ListSubscriptionsByAppCode(@PathVariable Long codapp) {
-        CustomList<SubscriptionEntity> subscriptionEntities = new CustomList<>(this.subscriptionRepository.listSubscriptionEntityByApplicationCode(codapp));
+        CustomList<SubscriptionEntity> subscriptionEntities = new CustomList<>(
+                this.subscriptionRepository.listSubscriptionEntityByApplicationCode(codapp));
         return subscriptionEntities.toDtos(SubscriptionDto.class);
     }
-
-
-
 
     @GetMapping("assinvalida/{codass}")
     public boolean SubscriptionIsValid(@PathVariable Long codsub) {
@@ -127,7 +128,4 @@ public class Routes {
         return sub != null;
     }
 
-    
-
-    
 }

@@ -16,7 +16,7 @@ public class PromotionModel {
     @Id
     private long code;
     private float discountPercentage;
-    private float extraDays;
+    private int extraDays;
     private int monthsRequired;
 
     protected PromotionModel() {

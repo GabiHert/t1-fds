@@ -12,7 +12,7 @@ public class CreatePaymentDto {
     private int month;
     private int year;
     private int codass;
-    private double valorPago;
+    private float valorPago;
 
     public CreatePaymentDto() {
     }
