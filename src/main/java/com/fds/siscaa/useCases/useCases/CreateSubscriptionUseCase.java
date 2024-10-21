@@ -37,7 +37,7 @@ public class CreateSubscriptionUseCase {
         Date endDateConverted = Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         CustomList<PromotionEntity> promotionList = new CustomList<>();
 
-        return new SubscriptionEntity(client, startDateConverted, endDateConverted, app, promotionList);
+        return new SubscriptionEntity(clientCode, client, startDateConverted, endDateConverted, app, promotionList);
 
     }
 
