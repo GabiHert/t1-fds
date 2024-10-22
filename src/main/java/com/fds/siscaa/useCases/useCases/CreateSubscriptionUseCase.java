@@ -2,12 +2,15 @@ package com.fds.siscaa.useCases.useCases;
 
 import java.time.LocalDate;
 
+import org.springframework.stereotype.Service;
+
 import com.fds.siscaa.domain.entity.SubscriptionEntity;
 import com.fds.siscaa.useCases.adapters.SubscriptionRepositoryAdapter;
 
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor()
+@Service
 public class CreateSubscriptionUseCase {
     private final int daysToExtend = 7;
     private final SubscriptionRepositoryAdapter subscriptionRepository;

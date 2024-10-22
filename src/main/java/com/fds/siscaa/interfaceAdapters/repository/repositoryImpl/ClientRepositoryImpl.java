@@ -5,18 +5,17 @@ import com.fds.siscaa.useCases.adapters.ClientRepositoryAdapter;
 
 import lombok.AllArgsConstructor;
 
+import org.springframework.stereotype.Repository;
+
 import com.fds.siscaa.domain.entity.ClientEntity;
 import com.fds.siscaa.domain.utils.CustomList;
 
 import com.fds.siscaa.interfaceAdapters.repository.model.ClientModel;
 
+@Repository
 @AllArgsConstructor()
 public class ClientRepositoryImpl implements ClientRepositoryAdapter {
   private ClientRepositoryJPA clientRepositoryJPA;
-
-  public ClientRepositoryImpl() {
-
-  }
 
   public CustomList<ClientEntity> listClients() {
     CustomList<ClientModel> cliModels = clientRepositoryJPA.findAll();

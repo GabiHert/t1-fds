@@ -8,8 +8,10 @@ import com.fds.siscaa.domain.service.CreatePaymentService;
 import com.fds.siscaa.useCases.adapters.SubscriptionRepositoryAdapter;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
+@Service
 public class CreatePaymentUseCase {
 
         private final SubscriptionRepositoryAdapter subscriptionRepository;

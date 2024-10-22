@@ -5,6 +5,8 @@ import java.time.LocalDate;
 
 import com.fds.siscaa.domain.entity.SubscriptionEntity;
 import com.fds.siscaa.domain.utils.CustomList;
+import org.springframework.stereotype.Repository;
+
 
 public interface SubscriptionRepositoryAdapter {
     CustomList<SubscriptionEntity> listSubscriptions(long applicationCode);

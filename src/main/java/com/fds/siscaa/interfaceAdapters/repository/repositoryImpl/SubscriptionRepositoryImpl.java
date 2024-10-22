@@ -12,13 +12,12 @@ import lombok.AllArgsConstructor;
 
 import com.fds.siscaa.domain.entity.SubscriptionEntity;
 import com.fds.siscaa.interfaceAdapters.repository.model.SubscriptionModel;
+import org.springframework.stereotype.Repository;
 
 @AllArgsConstructor()
+@Repository
 public class SubscriptionRepositoryImpl implements SubscriptionRepositoryAdapter {
   private SubscriptionRepositoryJPA subscriptionRepositoryJPA;
-
-  public SubscriptionRepositoryImpl() {
-  }
 
   public CustomList<SubscriptionEntity> listSubscriptions(long applicationCode) {
     CustomList<SubscriptionModel> subscriptionModels = subscriptionRepositoryJPA.findByApplicationCode(applicationCode);

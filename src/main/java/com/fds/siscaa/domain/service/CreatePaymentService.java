@@ -10,8 +10,10 @@ import com.fds.siscaa.domain.rules.PaymentRules;
 import com.fds.siscaa.domain.rules.PromotionRules;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @AllArgsConstructor()
+@Service
 public class CreatePaymentService {
     private final PaymentRules paymentRules;
     private final PromotionRules promotionRules;

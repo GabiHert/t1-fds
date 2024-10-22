@@ -2,6 +2,8 @@ package com.fds.siscaa.useCases.adapters;
 
 import com.fds.siscaa.domain.entity.ApplicationEntity;
 import com.fds.siscaa.domain.utils.CustomList;
+import org.springframework.stereotype.Repository;
+
 
 public interface ApplicationRepositoryAdapter {
     CustomList<ApplicationEntity> listApplications();
