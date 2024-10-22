@@ -12,7 +12,7 @@ import com.fds.siscaa.interfaceAdapters.repository.model.PaymentModel;
 
 @Repository
 @AllArgsConstructor()
-public class PaymenRepositoryImpl implements PaymentRepositoryAdapter {
+public class PaymentRepositoryImpl implements PaymentRepositoryAdapter {
   private final PaymentRepositoryJPA paymentRepositoryJPA;
 
   @Override

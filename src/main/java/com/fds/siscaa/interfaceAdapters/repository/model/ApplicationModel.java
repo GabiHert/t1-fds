@@ -24,12 +24,6 @@ public class ApplicationModel {
     @Column(name = "monthlyFee")
     private float monthlyFee;
 
-    @OneToMany(mappedBy = "application", cascade = CascadeType.REFRESH)
-    private CustomList<SubscriptionModel> subscriptions;
-
-    @OneToMany(mappedBy = "application", cascade = CascadeType.REFRESH)
-    private CustomList<PromotionModel> promotions;
-
     protected ApplicationModel() {
     }
 
@@ -40,6 +34,6 @@ public class ApplicationModel {
     }
 
     public ApplicationEntity toEntity() {
-        return new ApplicationEntity(code, name, monthlyFee, promotions.toEntities(PromotionEntity.class));
+        return new ApplicationEntity(code, name, monthlyFee);
     }
 }

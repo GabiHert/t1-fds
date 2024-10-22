@@ -8,6 +8,7 @@ import com.fds.siscaa.domain.entity.SubscriptionEntity;
 import com.fds.siscaa.domain.enums.PaymentStatus;
 import com.fds.siscaa.domain.rules.PaymentRules;
 import com.fds.siscaa.domain.rules.PromotionRules;
+import com.fds.siscaa.domain.utils.CustomList;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,8 @@ public class CalculatePaymentService {
         private final PaymentRules paymentRules;
         private final PromotionRules promotionRules;
 
-        public CalculatePaymentResponseEntity calculate(SubscriptionEntity subscription, float receivedAmount) {
+        public CalculatePaymentResponseEntity calculate(SubscriptionEntity subscription,
+                        CustomList<PromotionEntity> promotionEntities, float receivedAmount) {
                 float monthlyFee = subscription.getApplication().getMonthlyFee();
 
                 int monthsToExtend = paymentRules.calculateMonthsToExtend(monthlyFee, receivedAmount);
@@ -34,8 +36,9 @@ public class CalculatePaymentService {
                                         Optional.empty());
                 }
 
-                Optional<PromotionEntity> validPromotion = promotionRules.getValidPromotion(monthsToExtend,
-                                subscription.getApplication().getPromotions());
+                Optional<PromotionEntity> validPromotion = promotionRules.getValidPromotion(
+                                monthsToExtend,
+                                promotionEntities);
 
                 if (validPromotion.isPresent()) {
                         monthsToExtend = promotionRules.applyExtraDays(monthsToExtend,

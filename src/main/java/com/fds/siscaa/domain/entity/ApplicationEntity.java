@@ -12,7 +12,6 @@ public class ApplicationEntity {
     private long code;
     private String name;
     private float monthlyFee;
-    private CustomList<PromotionEntity> promotions;
 
     public ApplicationEntity() {
     }

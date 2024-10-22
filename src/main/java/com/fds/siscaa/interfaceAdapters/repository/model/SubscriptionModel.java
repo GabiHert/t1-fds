@@ -28,15 +28,12 @@ public class SubscriptionModel {
     public LocalDate endDate;
 
     @ManyToOne
-    @JoinColumn(name = "client_code", referencedColumnName = "code")
+    @JoinColumn(name = "clientCode", referencedColumnName = "code")
     private ClientModel client;
 
-    @JoinColumn(name = "application_code", referencedColumnName = "code")
+    @JoinColumn(name = "applicationCode", referencedColumnName = "code")
     @ManyToOne(cascade = CascadeType.REFRESH)
     private ApplicationModel application;
-
-    @OneToMany(mappedBy = "subscription", cascade = CascadeType.ALL)
-    private CustomList<PaymentModel> payments;
 
     protected SubscriptionModel() {
     }

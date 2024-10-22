@@ -3,8 +3,6 @@ package com.fds.siscaa.interfaceAdapters.controller.dto;
 import com.fds.siscaa.domain.entity.CalculatePaymentResponseEntity;
 import com.fds.siscaa.domain.enums.PaymentStatus;
 
-import java.text.SimpleDateFormat;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,8 +18,8 @@ public class CreatePaymentResponseDto {
 
     public CreatePaymentResponseDto(CalculatePaymentResponseEntity createPaymentResponse) {
         this.status = createPaymentResponse.getStatus();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        this.date = dateFormat.format(createPaymentResponse.getDate());
+        // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        this.date = createPaymentResponse.getDate().toString();
         this.refundedValue = createPaymentResponse.getRefundedValue();
 
     }

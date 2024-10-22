@@ -23,7 +23,7 @@ public class PromotionModel {
     @Column(name = "monthsRequired")
     private int monthsRequired;
 
-    @JoinColumn(name = "application_code", referencedColumnName = "code")
+    @JoinColumn(name = "applicationCode", referencedColumnName = "code")
     @ManyToOne(cascade = CascadeType.REFRESH)
     private ApplicationModel application;
 

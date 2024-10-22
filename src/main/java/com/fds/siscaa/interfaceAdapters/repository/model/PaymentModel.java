@@ -16,15 +16,16 @@ import lombok.Setter;
 @AllArgsConstructor()
 public class PaymentModel {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_seq")
+    @SequenceGenerator(name = "client_seq", sequenceName = "client_sequence", allocationSize = 1)
     private long code;
 
-    @Column(name = "amount")
     private double amount;
     private LocalDate paymentDate;
     private String dealCode;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "subscription_code", referencedColumnName = "code")
+    @JoinColumn(name = "subscriptionCode", referencedColumnName = "code")
     public SubscriptionModel subscription;
 
     protected PaymentModel() {

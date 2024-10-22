@@ -4,10 +4,14 @@ import java.time.LocalDate;
 
 import com.fds.siscaa.domain.entity.CalculatePaymentResponseEntity;
 import com.fds.siscaa.domain.entity.PaymentEntity;
+import com.fds.siscaa.domain.entity.PromotionEntity;
 import com.fds.siscaa.domain.entity.SubscriptionEntity;
+import com.fds.siscaa.domain.enums.PaymentStatus;
 import com.fds.siscaa.domain.service.CalculatePaymentService;
+import com.fds.siscaa.domain.utils.CustomList;
 import com.fds.siscaa.useCases.adapters.SubscriptionRepositoryAdapter;
 import com.fds.siscaa.useCases.adapters.PaymentRepositoryAdapter;
+import com.fds.siscaa.useCases.adapters.PromotionRepositoryAdapter;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,21 +23,28 @@ public class CreatePaymentUseCase {
         private final SubscriptionRepositoryAdapter subscriptionRepository;
         private final CalculatePaymentService calculatePaymentService;
         private final PaymentRepositoryAdapter paymentRepository;
+        private final PromotionRepositoryAdapter promotionRepositoryAdapter;
 
         public CalculatePaymentResponseEntity create(LocalDate paymentDate, int subscriptionCode,
                         float receivedAmount) {
                 System.out.println(
                                 String.format("CreatePaymentUseCase - STARTED - paymentDate: %s subscriptionCode: %d receivedAmount: %.2f",
                                                 paymentDate, subscriptionCode, receivedAmount));
+
                 SubscriptionEntity subscription = subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode);
+
+                CustomList<PromotionEntity> promotionEntities = promotionRepositoryAdapter
+                                .listByApplicationCode(subscription.getApplication().getCode());
 
                 CalculatePaymentResponseEntity calculatePaymentResponseEntity = this.calculatePaymentService.calculate(
                                 subscription,
+                                promotionEntities,
                                 receivedAmount);
 
-                persistPayment(subscriptionCode, calculatePaymentResponseEntity);
-
-                updateSubscriptionDates(calculatePaymentResponseEntity, subscriptionCode);
+                if (calculatePaymentResponseEntity.getStatus().equals(PaymentStatus.PAGAMENTO_OK)) {
+                        persistPayment(subscriptionCode, calculatePaymentResponseEntity);
+                        updateSubscriptionDates(calculatePaymentResponseEntity, subscriptionCode);
+                }
 
                 return calculatePaymentResponseEntity;
         }
