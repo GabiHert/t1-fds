@@ -18,20 +18,10 @@ public class SubscriptionEntity {
     private LocalDate endDate;
     private ApplicationEntity application;
 
-    public SubscriptionEntity() {
-    }
-
-    public SubscriptionEntity(long code, ClientEntity clientEntity, LocalDate sDate, LocalDate eDate,
-            ApplicationEntity applicationEntity) {
-        this.code = code;
-        this.client = clientEntity;
-        this.startDate = sDate;
-        this.endDate = eDate;
-        this.application = applicationEntity;
-    }
-
     public SubscriptionEntity(long clientCode, long applicationCode, LocalDate startDate, LocalDate endDate) {
         this.client = new ClientEntity(clientCode);
         this.application = new ApplicationEntity(applicationCode);
     }
+
+
 }

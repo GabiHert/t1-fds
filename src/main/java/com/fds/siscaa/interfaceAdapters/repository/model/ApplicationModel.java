@@ -2,6 +2,7 @@ package com.fds.siscaa.interfaceAdapters.repository.model;
 
 import com.fds.siscaa.domain.entity.ApplicationEntity;
 
+import com.fds.siscaa.domain.entity.PromotionEntity;
 import com.fds.siscaa.domain.utils.CustomList;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ public class ApplicationModel {
     @OneToMany(mappedBy = "application", cascade = CascadeType.REFRESH)
     private CustomList<SubscriptionModel> subscriptions;
 
-    @OneToMany(mappedBy = "promotion", cascade = CascadeType.REFRESH)
+    @OneToMany(mappedBy = "application", cascade = CascadeType.REFRESH)
     private CustomList<PromotionModel> promotions;
 
     protected ApplicationModel() {
@@ -37,6 +38,6 @@ public class ApplicationModel {
     }
 
     public ApplicationEntity toEntity() {
-        return new ApplicationEntity(code, name, monthlyFee);
+        return new ApplicationEntity(code, name, monthlyFee, promotions.toEntities(PromotionEntity.class));
     }
 }

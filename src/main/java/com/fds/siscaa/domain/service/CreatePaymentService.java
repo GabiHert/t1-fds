@@ -29,7 +29,7 @@ public class CreatePaymentService {
         }
 
         Optional<PromotionEntity> validPromotion = promotionRules.getValidPromotion(monthsToExtend,
-                subscription.getPromotions());
+                subscription.getApplication().getPromotions());
 
         if (validPromotion.isPresent()) {
             monthsToExtend = promotionRules.applyExtraDays(monthsToExtend,
