@@ -26,6 +26,7 @@ import com.fds.siscaa.interfaceAdapters.controller.dto.SubscriptionDto;
 import com.fds.siscaa.useCases.adapters.ClientRepositoryAdapter;
 import com.fds.siscaa.useCases.useCases.CreatePaymentUseCase;
 import com.fds.siscaa.useCases.useCases.CreateSubscriptionUseCase;
+import com.fds.siscaa.useCases.useCases.InvalidSubscriptionUseCase;
 
 import lombok.AllArgsConstructor;
 
@@ -50,6 +51,8 @@ public class Routes {
     private final CreatePaymentUseCase createPaymentUseCase;
 
     private final SubscriptionRepositoryAdapter subscriptionRepository;
+
+    private final InvalidSubscriptionUseCase invalidSubscriptionUseCase;
 
     @PostMapping("servcad/assinaturas")
     public ResponseEntity<SubscriptionDto> postSubscription(@RequestBody CreateSubscriptionDto createSubscriptionDto) {
@@ -129,8 +132,7 @@ public class Routes {
 
     @GetMapping("assinvalida/{codass}")
     public boolean subscriptionIsValid(@PathVariable Long codass) {
-        SubscriptionEntity subcriptionEntity = this.subscriptionRepository.getSubscriptionEntityByCode(codass);
-        return subcriptionEntity != null;
+        return this.invalidSubscriptionUseCase.isInvalid(codass);
     }
 
 }

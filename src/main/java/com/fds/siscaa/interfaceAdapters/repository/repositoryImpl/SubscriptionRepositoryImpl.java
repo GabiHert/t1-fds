@@ -3,6 +3,7 @@ package com.fds.siscaa.interfaceAdapters.repository.repositoryImpl;
 import java.time.LocalDate;
 
 import com.fds.siscaa.domain.enums.*;
+import com.fds.siscaa.domain.exception.CustomException;
 import com.fds.siscaa.domain.utils.CustomList;
 import com.fds.siscaa.interfaceAdapters.repository.jpa.SubscriptionRepositoryJPA;
 import com.fds.siscaa.useCases.adapters.SubscriptionRepositoryAdapter;
@@ -69,6 +70,10 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepositoryAdapter
 
   public SubscriptionEntity getSubscriptionEntityByCode(long subscriptionCode) {
     SubscriptionModel subscriptionModel = subscriptionRepositoryJPA.findByCode(subscriptionCode);
+    if (subscriptionModel == null) {
+      throw CustomException.NotFound("Subscription with code " + subscriptionCode + " not found");
+    }
+
     return subscriptionModel.toEntity();
   }
 
