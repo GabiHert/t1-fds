@@ -2,9 +2,12 @@ package com.fds.siscaa.domain.rules;
 
 import java.util.Optional;
 
+import org.springframework.stereotype.Component;
+
 import com.fds.siscaa.domain.entity.PromotionEntity;
 import com.fds.siscaa.domain.utils.CustomList;
 
+@Component
 public class PromotionRules {
     public float applyDiscount(float monthlyFee, float discountPercentage) {
         return monthlyFee - (monthlyFee * discountPercentage / 100);

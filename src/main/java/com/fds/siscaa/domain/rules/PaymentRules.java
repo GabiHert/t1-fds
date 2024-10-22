@@ -1,7 +1,10 @@
 package com.fds.siscaa.domain.rules;
 
+import org.springframework.stereotype.Component;
+
 import com.fds.siscaa.domain.enums.PaymentStatus;
 
+@Component
 public class PaymentRules {
 
     public float calculateRefund(float monthlyFee, float receivedAmount) {

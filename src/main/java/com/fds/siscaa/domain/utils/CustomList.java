@@ -7,6 +7,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.ListIterator;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class CustomList<E> implements List<E>, Iterator<E> {
     private List<E> list;
     private int currentIndex = 0;

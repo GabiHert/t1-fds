@@ -3,6 +3,7 @@ package com.fds.siscaa.interfaceAdapters.controller.routes;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,8 @@ import com.fds.siscaa.useCases.adapters.ClientRepositoryAdapter;
 import com.fds.siscaa.useCases.useCases.CreatePaymentUseCase;
 import com.fds.siscaa.useCases.useCases.CreateSubscriptionUseCase;
 
+import lombok.AllArgsConstructor;
+
 import com.fds.siscaa.useCases.adapters.ApplicationRepositoryAdapter;
 import com.fds.siscaa.useCases.adapters.SubscriptionRepositoryAdapter;
 
@@ -35,15 +38,18 @@ import com.fds.siscaa.domain.utils.CustomList;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("")
+@AllArgsConstructor
 public class Routes {
-    ClientRepositoryAdapter clientRepository;
-    ApplicationRepositoryAdapter applicationRepository;
-    CreateSubscriptionUseCase createSubscriptionUseCase;
-    CreatePaymentUseCase createPaymentUseCase;
-    SubscriptionRepositoryAdapter subscriptionRepository;
 
-    public Routes() {
-    }
+    private final ClientRepositoryAdapter clientRepository;
+
+    private final ApplicationRepositoryAdapter applicationRepository;
+
+    private final CreateSubscriptionUseCase createSubscriptionUseCase;
+
+    private final CreatePaymentUseCase createPaymentUseCase;
+
+    private final SubscriptionRepositoryAdapter subscriptionRepository;
 
     @PostMapping("servcad/assinaturas")
     public ResponseEntity<SubscriptionDto> postSubscription(@RequestBody CreateSubscriptionDto createSubscriptionDto) {
@@ -99,28 +105,30 @@ public class Routes {
     }
 
     @GetMapping("servcad/assinaturas/{tipo}")
-    public ResponseEntity<List<SubscriptionDto>> ListSubscriptionsByType(@PathVariable SubscriptionType type) {
+    public ResponseEntity<List<SubscriptionDto>> listSubscriptionsByType(@PathVariable("tipo") String tipo) {
+        SubscriptionType type;
+        type = SubscriptionType.valueOf(tipo);
         CustomList<SubscriptionEntity> subscriptionEntities = new CustomList<>(
                 this.subscriptionRepository.listSubscriptionByType(type));
         return ResponseEntity.ok(subscriptionEntities.toDtos(SubscriptionDto.class));
     }
 
     @GetMapping("servcad/asscli/{codcli}")
-    public ResponseEntity<List<SubscriptionDto>> ListSubscriptionsByClientCode(@PathVariable Long codcli) {
+    public ResponseEntity<List<SubscriptionDto>> listSubscriptionsByClientCode(@PathVariable Long codcli) {
         CustomList<SubscriptionEntity> subscriptionEntities = new CustomList<>(
                 this.subscriptionRepository.listSubscriptionsByClientCode(codcli));
         return ResponseEntity.ok(subscriptionEntities.toDtos(SubscriptionDto.class));
     }
 
     @GetMapping("servcad/assapp/{codapp}")
-    public ResponseEntity<List<SubscriptionDto>> ListSubscriptionsByAppCode(@PathVariable Long codapp) {
+    public ResponseEntity<List<SubscriptionDto>> listSubscriptionsByAppCode(@PathVariable Long codapp) {
         CustomList<SubscriptionEntity> subscriptionEntities = new CustomList<>(
                 this.subscriptionRepository.listSubscriptionEntityByApplicationCode(codapp));
         return ResponseEntity.ok(subscriptionEntities.toDtos(SubscriptionDto.class));
     }
 
     @GetMapping("assinvalida/{codass}")
-    public boolean SubscriptionIsValid(@PathVariable Long codsub) {
+    public boolean subscriptionIsValid(@PathVariable Long codsub) {
         SubscriptionEntity subcriptionEntity = this.subscriptionRepository.getSubscriptionEntityByCode(codsub);
         return subcriptionEntity != null;
     }
