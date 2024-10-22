@@ -12,21 +12,18 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Entity()
 @Table(name = "Subscription")
 @Getter()
 @Setter()
 @AllArgsConstructor()
-
-
 public class SubscriptionModel {
     @Id
     public long code;
     public LocalDate startDate;
     public LocalDate endDate;
 
-    @ManyToOne(cascade = CascadeType.REFRESH)
+    @ManyToOne
     @JoinColumn(name = "client_code", referencedColumnName = "code")
     private ClientModel client;
 

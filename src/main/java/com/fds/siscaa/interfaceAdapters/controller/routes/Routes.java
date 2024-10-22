@@ -93,7 +93,7 @@ public class Routes {
 
     @GetMapping("servcad/clientes")
     public ResponseEntity<List<ClientDto>> listClients() {
-        CustomList<ClientEntity> clientEntities = new CustomList<>(this.clientRepository.listClients());
+        CustomList<ClientEntity> clientEntities = this.clientRepository.listClients();
         return ResponseEntity.ok(clientEntities.toDtos(ClientDto.class));
     }
 

@@ -8,9 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
-
 @Entity()
 @Table(name = "Client")
 @Getter()
@@ -24,9 +21,6 @@ public class ClientModel {
 
     protected ClientModel() {
     }
-
-    @OneToMany(mappedBy = "client", cascade = CascadeType.REFRESH)
-    private CustomList<SubscriptionModel> subscriptions;
 
     public ClientModel(ClientEntity clientEntity) {
         this.code = clientEntity.getCode();
