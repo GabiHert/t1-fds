@@ -22,6 +22,7 @@ public class PaymentModel {
     private String dealCode;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "subscription_code", referencedColumnName = "code")
     public SubscriptionModel subscription;
 
     protected PaymentModel() {

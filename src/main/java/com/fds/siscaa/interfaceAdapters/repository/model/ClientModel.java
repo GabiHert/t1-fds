@@ -2,12 +2,13 @@ package com.fds.siscaa.interfaceAdapters.repository.model;
 
 import com.fds.siscaa.domain.entity.ClientEntity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fds.siscaa.domain.utils.CustomList;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 
 @Entity()
@@ -23,6 +24,9 @@ public class ClientModel {
 
     protected ClientModel() {
     }
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.REFRESH)
+    private CustomList<SubscriptionModel> subscriptions;
 
     public ClientModel(ClientEntity clientEntity) {
         this.code = clientEntity.getCode();

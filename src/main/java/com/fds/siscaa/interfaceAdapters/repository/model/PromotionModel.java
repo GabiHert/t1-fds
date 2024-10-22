@@ -2,9 +2,8 @@ package com.fds.siscaa.interfaceAdapters.repository.model;
 
 import com.fds.siscaa.domain.entity.PromotionEntity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fds.siscaa.domain.utils.CustomList;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +19,10 @@ public class PromotionModel {
     private float discountPercentage;
     private int extraDays;
     private int monthsRequired;
+
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "subscription_code", referencedColumnName = "code")
+    public SubscriptionModel subscription;
 
     protected PromotionModel() {
     }

@@ -2,10 +2,13 @@ package com.fds.siscaa.interfaceAdapters.repository.model;
 
 import com.fds.siscaa.domain.entity.ApplicationEntity;
 
+import com.fds.siscaa.domain.utils.CustomList;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "Application")
@@ -18,8 +21,8 @@ public class ApplicationModel {
     private String name;
     private float monthlyFee;
 
-    @ManyToOne(cascade = CascadeType.REFRESH)
-    private SubscriptionModel subscription;
+    @OneToMany(mappedBy = "application", cascade = CascadeType.REFRESH)
+    private CustomList<SubscriptionModel> subscriptions;
 
     protected ApplicationModel() {
     }

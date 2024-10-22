@@ -1,103 +1,53 @@
--- Inserindo 10 clientes
-INSERT INTO Client (code, name, email)
-VALUES (1, 'João Silva', 'joao.silva@example.com');
+-- Inserindo Clientes
+INSERT INTO Client (code, name, email) VALUES
+(1, 'Alice Silva', 'alice.silva@example.com'),
+(2, 'Bruno Costa', 'bruno.costa@example.com'),
+(3, 'Carla Mendes', 'carla.mendes@example.com'),
+(4, 'Diego Oliveira', 'diego.oliveira@example.com'),
+(5, 'Eduarda Santos', 'eduarda.santos@example.com'),
+(6, 'Felipe Almeida', 'felipe.almeida@example.com'),
+(7, 'Gabriela Lima', 'gabriela.lima@example.com'),
+(8, 'Henrique Rocha', 'henrique.rocha@example.com'),
+(9, 'Isabela Ferreira', 'isabela.ferreira@example.com'),
+(10, 'João Pereira', 'joao.pereira@example.com')
+ON CONFLICT (code) DO NOTHING;
 
-INSERT INTO Client (code, name, email)
-VALUES (2, 'Maria Souza', 'maria.souza@example.com');
+-- Inserindo Aplicativos
+INSERT INTO Application (code, name, monthlyFee) VALUES
+(1, 'App A', 9.99),
+(2, 'App B', 19.99),
+(3, 'App C', 29.99),
+(4, 'App D', 15.99),
+(5, 'App E', 24.99)
+ON CONFLICT (code) DO NOTHING;
 
-INSERT INTO Client (code, name, email)
-VALUES (3, 'Carlos Pereira', 'carlos.pereira@example.com');
+-- Inserindo Assinaturas
+-- Assinaturas válidas
+INSERT INTO Subscription (code, startDate, endDate, client_code, application_code) VALUES
+(1, '2024-10-01', '2025-10-01', 1, 1),  -- Alice Silva - App A (válida)
+(2, '2024-10-15', '2025-04-15', 2, 2),  -- Bruno Costa - App B (válida)
+(3, '2024-10-05', '2025-10-05', 3, 3)  -- Carla Mendes - App C (válida)
+ON CONFLICT (code) DO NOTHING;
 
-INSERT INTO Client (code, name, email)
-VALUES (4, 'Ana Oliveira', 'ana.oliveira@example.com');
+-- Assinaturas inválidas
+INSERT INTO Subscription (code, startDate, endDate, client_code, application_code) VALUES
+(4, '2024-10-01', '2024-09-30', 4, 4),  -- Diego Oliveira - App D (inválida)
+(5, '2024-10-01', '2024-10-01', 5, 5)  -- Eduarda Santos - App E (inválida)
+ON CONFLICT (code) DO NOTHING;
 
-INSERT INTO Client (code, name, email)
-VALUES (5, 'Pedro Santos', 'pedro.santos@example.com');
-
-INSERT INTO Client (code, name, email)
-VALUES (6, 'Julia Costa', 'julia.costa@example.com');
-
-INSERT INTO Client (code, name, email)
-VALUES (7, 'Rafael Lima', 'rafael.lima@example.com');
-
-INSERT INTO Client (code, name, email)
-VALUES (8, 'Mariana Barbosa', 'mariana.barbosa@example.com');
-
-INSERT INTO Client (code, name, email)
-VALUES (9, 'Lucas Alves', 'lucas.alves@example.com');
-
-INSERT INTO Client (code, name, email)
-VALUES (10, 'Fernanda Rocha', 'fernanda.rocha@example.com');
-
--- Inserindo 5 aplicativos
-INSERT INTO Application (code, name, monthlyFee)
-VALUES (1, 'App Gestão Financeira', 29.99);
-
-INSERT INTO Application (code, name, monthlyFee)
-VALUES (2, 'App Monitoramento de Saúde', 49.99);
-
-INSERT INTO Application (code, name, monthlyFee)
-VALUES (3, 'App Treinamento Físico', 19.99);
-
-INSERT INTO Application (code, name, monthlyFee)
-VALUES (4, 'App Controle de Tarefas', 14.99);
-
-INSERT INTO Application (code, name, monthlyFee)
-VALUES (5, 'App Nutrição', 24.99);
-
--- Inserindo promoções com base nos exemplos fornecidos
--- Promoção 1: Pagamento anual com 40% de desconto
-INSERT INTO Promotion (code, discountPercentage, extraDays, monthsRequired)
-VALUES (1, 40.0, 0, 12);
-
--- Promoção 2: Pague 30 dias e ganhe 45 dias (15 dias extras)
-INSERT INTO Promotion (code, discountPercentage, extraDays, monthsRequired)
-VALUES (2, 0.0, 15, 1);
-
--- Assinaturas ativas no dia 15 de outubro de 2024
--- Vamos considerar que cada assinatura tem 1 mês de validade a partir da data de início
-
--- Assinatura 1 (começa em 10 de outubro de 2024, válida até 10 de novembro de 2024)
-INSERT INTO Subscription (code, startDate, endDate, client_Code, application_Code)
-VALUES (1, '2024-10-10', '2024-11-10', 1, 1);
-
--- Assinatura 2 (começa em 12 de outubro de 2024, válida até 12 de novembro de 2024)
-INSERT INTO Subscription (code, startDate, endDate, client_Code, application_Code)
-VALUES (2, '2024-10-12', '2024-11-12', 2, 2);
-
--- Assinatura 3 (começa hoje, 15 de outubro de 2024, válida até 15 de novembro de 2024)
-INSERT INTO Subscription (code, startDate, endDate, client_Code, application_Code)
-VALUES (3, '2024-10-15', '2024-11-15', 3, 3);
-
--- Assinatura 4 (começa em 13 de outubro de 2024, válida até 13 de novembro de 2024)
-INSERT INTO Subscription (code, startDate, endDate, client_Code, application_Code)
-VALUES (4, '2024-10-13', '2024-11-13', 4, 4);
-
--- Assinatura 5 (começa em 14 de outubro de 2024, válida até 14 de novembro de 2024)
-INSERT INTO Subscription (code, startDate, endDate, client_Code, application_Code)
-VALUES (5, '2024-10-14', '2024-11-14', 5, 5);
+-- Inserindo Promoções
+INSERT INTO Promotion (code, discountPercentage, extraDays, monthsRequired, subscription_code) VALUES
+(1, 40, 0, 12, 1),  -- Promoção de 40% de desconto para pagamento anual (Assinatura 1)
+(2, 0, 45, 0, 2)   -- Pague 30 e ganhe 45 dias (Assinatura 2)
+ON CONFLICT (code) DO NOTHING;
 
 
+-- Inserindo Pagamentos
+INSERT INTO Payment (code, amount, paymentDate, dealCode, subscription_code) VALUES
+(1, 9.99, '2024-10-01', 'DEAL001', 1),  -- Pagamento válido para assinatura de Alice Silva
+(2, 19.99, '2024-10-15', 'DEAL002', 2), -- Pagamento válido para assinatura de Bruno Costa
+(3, 29.99, '2024-10-05', 'DEAL003', 3), -- Pagamento válido para assinatura de Carla Mendes
+(4, 15.99, '2024-10-01', 'DEAL004', 4), -- Pagamento inválido para assinatura de Diego Oliveira
+(5, 24.99, '2024-10-01', 'DEAL005', 5) -- Pagamento inválido para assinatura de Eduarda Santos
+ON CONFLICT (code) DO NOTHING;
 
--- Inserindo pagamentos para as assinaturas ativas
--- Vamos supor que cada pagamento é feito na data de início da assinatura e cobre o período até a data de término.
-
--- Pagamento para Assinatura 1 (10 de outubro de 2024)
-INSERT INTO Payment (code, amount, paymentDate, subscription_Code)
-VALUES (1, 29.99, '2024-10-10', 1);
-
--- Pagamento para Assinatura 2 (12 de outubro de 2024)
-INSERT INTO Payment (code, amount, paymentDate, subscription_Code)
-VALUES (2, 49.99, '2024-10-12', 2);
-
--- Pagamento para Assinatura 3 (15 de outubro de 2024)
-INSERT INTO Payment (code, amount, paymentDate, subscription_Code)
-VALUES (3, 19.99, '2024-10-15', 3);
-
--- Pagamento para Assinatura 4 (13 de outubro de 2024)
-INSERT INTO Payment (code, amount, paymentDate, subscription_Code)
-VALUES (4, 14.99, '2024-10-13', 4);
-
--- Pagamento para Assinatura 5 (14 de outubro de 2024)
-INSERT INTO Payment (code, amount, paymentDate, subscription_Code)
-VALUES (5, 24.99, '2024-10-14', 5);

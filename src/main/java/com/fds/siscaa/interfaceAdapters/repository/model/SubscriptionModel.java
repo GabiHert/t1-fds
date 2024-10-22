@@ -1,6 +1,7 @@
 package com.fds.siscaa.interfaceAdapters.repository.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.fds.siscaa.domain.entity.PromotionEntity;
 import com.fds.siscaa.domain.entity.SubscriptionEntity;
@@ -26,13 +27,18 @@ public class SubscriptionModel {
     public LocalDate endDate;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
-    public ClientModel client;
+    @JoinColumn(name = "client_code", referencedColumnName = "code")
+    private ClientModel client;
 
+    @JoinColumn(name = "application_code", referencedColumnName = "code")
     @ManyToOne(cascade = CascadeType.REFRESH)
-    public ApplicationModel application;
+    private ApplicationModel application;
 
-    @OneToMany(cascade = CascadeType.REFRESH)
-    public CustomList<ApplicationModel> promotions;
+    @OneToMany(mappedBy = "subscription", cascade = CascadeType.REFRESH)
+    private CustomList<ApplicationModel> promotions;
+
+    @OneToMany(mappedBy = "subscription", cascade = CascadeType.ALL)
+    private CustomList<PaymentModel> payments;
 
     protected SubscriptionModel() {
     }
@@ -50,6 +56,7 @@ public class SubscriptionModel {
                 code, client.toEntity(),
                 startDate, endDate,
                 application.toEntity(),
+
                 promotions.toEntities(PromotionEntity.class));
     }
 }
