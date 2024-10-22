@@ -17,8 +17,14 @@ import lombok.Setter;
 public class PaymentModel {
     @Id
     private long code;
+
+    @Column(name = "amount")
     private double amount;
+
+    @Column(name = "paymentDate")
     private Date paymentDate;
+
+    @Column(name = "dealCode")
     private String dealCode;
 
     @ManyToOne(cascade = CascadeType.REFRESH)

@@ -20,7 +20,11 @@ import lombok.Setter;
 public class SubscriptionModel {
     @Id
     public long code;
+
+    @Column(name = "startDate")
     public LocalDate startDate;
+
+    @Column(name = "endDate")
     public LocalDate endDate;
 
     @ManyToOne

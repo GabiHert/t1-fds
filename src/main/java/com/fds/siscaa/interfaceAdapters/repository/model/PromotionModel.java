@@ -16,8 +16,14 @@ import lombok.Setter;
 public class PromotionModel {
     @Id
     private long code;
+
+    @Column(name = "discountPercentage")
     private float discountPercentage;
+
+    @Column(name = "extraDays")
     private int extraDays;
+
+    @Column(name = "monthsRequired")
     private int monthsRequired;
 
 
