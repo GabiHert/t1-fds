@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity()
-@Table(name = "payment")
+@Table(name = "Payment")
 @Getter()
 @Setter()
 @AllArgsConstructor()

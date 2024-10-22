@@ -11,7 +11,7 @@ import lombok.Setter;
 
 
 @Entity()
-@Table(name = "client")
+@Table(name = "Client")
 @Getter()
 @Setter()
 @AllArgsConstructor()
