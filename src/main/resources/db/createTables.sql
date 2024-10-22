@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS Promotion (
                            discountPercentage FLOAT NOT NULL,
                            extraDays INT NOT NULL,
                            monthsRequired INT NOT NULL,
-                           subscription_code BIGINT,
-                           FOREIGN KEY (subscription_code) REFERENCES Subscription(code)
+                           application_code BIGINT,
+                           FOREIGN KEY (application_code) REFERENCES Application(code)
 );
 
 

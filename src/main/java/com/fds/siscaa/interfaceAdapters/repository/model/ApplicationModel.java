@@ -24,6 +24,9 @@ public class ApplicationModel {
     @OneToMany(mappedBy = "application", cascade = CascadeType.REFRESH)
     private CustomList<SubscriptionModel> subscriptions;
 
+    @OneToMany(mappedBy = "promotion", cascade = CascadeType.REFRESH)
+    private CustomList<PromotionModel> promotions;
+
     protected ApplicationModel() {
     }
 

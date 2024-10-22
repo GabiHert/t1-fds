@@ -20,9 +20,10 @@ public class PromotionModel {
     private int extraDays;
     private int monthsRequired;
 
+
+    @JoinColumn(name = "application_code", referencedColumnName = "code")
     @ManyToOne(cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "subscription_code", referencedColumnName = "code")
-    public SubscriptionModel subscription;
+    private ApplicationModel application;
 
     protected PromotionModel() {
     }

@@ -34,9 +34,6 @@ public class SubscriptionModel {
     @ManyToOne(cascade = CascadeType.REFRESH)
     private ApplicationModel application;
 
-    @OneToMany(mappedBy = "subscription", cascade = CascadeType.REFRESH)
-    private CustomList<ApplicationModel> promotions;
-
     @OneToMany(mappedBy = "subscription", cascade = CascadeType.ALL)
     private CustomList<PaymentModel> payments;
 
@@ -55,8 +52,6 @@ public class SubscriptionModel {
         return new SubscriptionEntity(
                 code, client.toEntity(),
                 startDate, endDate,
-                application.toEntity(),
-
-                promotions.toEntities(PromotionEntity.class));
+                application.toEntity());
     }
 }

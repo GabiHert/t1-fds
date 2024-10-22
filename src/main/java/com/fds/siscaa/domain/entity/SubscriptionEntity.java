@@ -17,7 +17,6 @@ public class SubscriptionEntity {
     private LocalDate startDate;
     private LocalDate endDate;
     private ApplicationEntity application;
-    private CustomList<PromotionEntity> promotions;
 
     public SubscriptionEntity() {
     }

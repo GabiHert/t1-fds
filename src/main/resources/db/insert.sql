@@ -24,7 +24,7 @@ ON CONFLICT (code) DO NOTHING;
 -- Inserindo Assinaturas
 -- Assinaturas válidas
 INSERT INTO Subscription (code, startDate, endDate, client_code, application_code) VALUES
-(1, '2024-10-01', '2025-10-01', 1, 1),  -- Alice Silva - App A (válida)
+ (1, '2024-10-01', '2025-10-01', 1, 1),  -- Alice Silva - App A (válida)
 (2, '2024-10-15', '2025-04-15', 2, 2),  -- Bruno Costa - App B (válida)
 (3, '2024-10-05', '2025-10-05', 3, 3)  -- Carla Mendes - App C (válida)
 ON CONFLICT (code) DO NOTHING;
@@ -36,11 +36,10 @@ INSERT INTO Subscription (code, startDate, endDate, client_code, application_cod
 ON CONFLICT (code) DO NOTHING;
 
 -- Inserindo Promoções
-INSERT INTO Promotion (code, discountPercentage, extraDays, monthsRequired, subscription_code) VALUES
-(1, 40, 0, 12, 1),  -- Promoção de 40% de desconto para pagamento anual (Assinatura 1)
-(2, 0, 45, 0, 2)   -- Pague 30 e ganhe 45 dias (Assinatura 2)
+INSERT INTO Promotion (code, discountPercentage, extraDays, monthsRequired, application_code) VALUES
+(1, 40, 0, 12, 1),  -- Promoção de 40% de desconto para App A
+(2, 0, 45, 0, 2)   -- Pague 30 e ganhe 45 dias para App B
 ON CONFLICT (code) DO NOTHING;
-
 
 -- Inserindo Pagamentos
 INSERT INTO Payment (code, amount, paymentDate, dealCode, subscription_code) VALUES
@@ -50,4 +49,3 @@ INSERT INTO Payment (code, amount, paymentDate, dealCode, subscription_code) VAL
 (4, 15.99, '2024-10-01', 'DEAL004', 4), -- Pagamento inválido para assinatura de Diego Oliveira
 (5, 24.99, '2024-10-01', 'DEAL005', 5) -- Pagamento inválido para assinatura de Eduarda Santos
 ON CONFLICT (code) DO NOTHING;
-
