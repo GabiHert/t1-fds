@@ -2,7 +2,6 @@ package com.fds.siscaa.interfaceAdapters.repository.model;
 
 import com.fds.siscaa.domain.entity.PromotionEntity;
 
-import com.fds.siscaa.domain.utils.CustomList;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,11 +14,10 @@ import lombok.Setter;
 @AllArgsConstructor()
 public class PromotionModel {
     @Id
-    private long code;
+    private String code;
     private float discountPercentage;
     private int extraDays;
     private int monthsRequired;
-
 
     @JoinColumn(name = "application_code", referencedColumnName = "code")
     @ManyToOne(cascade = CascadeType.REFRESH)

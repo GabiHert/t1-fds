@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fds.siscaa.domain.entity.ClientEntity;
-import com.fds.siscaa.domain.entity.CreatePaymentResponseEntity;
+import com.fds.siscaa.domain.entity.CalculatePaymentResponseEntity;
 import com.fds.siscaa.domain.entity.ApplicationEntity;
 import com.fds.siscaa.domain.entity.SubscriptionEntity;
 import com.fds.siscaa.interfaceAdapters.controller.dto.ClientDto;
@@ -74,7 +74,7 @@ public class Routes {
                 createPaymentDto.getMonth(),
                 createPaymentDto.getDay());
 
-        CreatePaymentResponseEntity createPaymentResponse = this.createPaymentUseCase.create(
+        CalculatePaymentResponseEntity createPaymentResponse = this.createPaymentUseCase.create(
                 paymentDate,
                 createPaymentDto.getCodass(),
                 createPaymentDto.getValorPago());

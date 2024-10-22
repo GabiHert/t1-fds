@@ -2,7 +2,7 @@ package com.fds.siscaa.interfaceAdapters.repository.model;
 
 import com.fds.siscaa.domain.entity.PaymentEntity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ public class PaymentModel {
     @Id
     private long code;
     private double amount;
-    private Date paymentDate;
+    private LocalDate paymentDate;
     private String dealCode;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
@@ -32,7 +32,7 @@ public class PaymentModel {
         this.code = paymentEntity.getCode();
         this.amount = paymentEntity.getAmount();
         this.paymentDate = paymentEntity.getPaymentDate();
-        this.dealCode = paymentEntity.getDealCode();
+        this.dealCode = paymentEntity.getPromotionCode();
         this.subscription = new SubscriptionModel();
         this.subscription.code = paymentEntity.getSubscriptionCode();
     }

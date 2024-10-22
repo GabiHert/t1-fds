@@ -1,6 +1,6 @@
 package com.fds.siscaa.interfaceAdapters.controller.dto;
 
-import com.fds.siscaa.domain.entity.CreatePaymentResponseEntity;
+import com.fds.siscaa.domain.entity.CalculatePaymentResponseEntity;
 import com.fds.siscaa.domain.enums.PaymentStatus;
 
 import java.text.SimpleDateFormat;
@@ -18,7 +18,7 @@ public class CreatePaymentResponseDto {
     public CreatePaymentResponseDto() {
     }
 
-    public CreatePaymentResponseDto(CreatePaymentResponseEntity createPaymentResponse) {
+    public CreatePaymentResponseDto(CalculatePaymentResponseEntity createPaymentResponse) {
         this.status = createPaymentResponse.getStatus();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         this.date = dateFormat.format(createPaymentResponse.getDate());

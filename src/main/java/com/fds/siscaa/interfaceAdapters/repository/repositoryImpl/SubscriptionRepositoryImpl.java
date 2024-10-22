@@ -1,7 +1,6 @@
 package com.fds.siscaa.interfaceAdapters.repository.repositoryImpl;
 
 import java.time.LocalDate;
-import java.sql.Date;
 
 import com.fds.siscaa.domain.enums.*;
 import com.fds.siscaa.domain.utils.CustomList;

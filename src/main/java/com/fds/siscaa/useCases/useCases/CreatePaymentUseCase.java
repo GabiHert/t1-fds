@@ -2,10 +2,12 @@ package com.fds.siscaa.useCases.useCases;
 
 import java.time.LocalDate;
 
-import com.fds.siscaa.domain.entity.CreatePaymentResponseEntity;
+import com.fds.siscaa.domain.entity.CalculatePaymentResponseEntity;
+import com.fds.siscaa.domain.entity.PaymentEntity;
 import com.fds.siscaa.domain.entity.SubscriptionEntity;
-import com.fds.siscaa.domain.service.CreatePaymentService;
+import com.fds.siscaa.domain.service.CalculatePaymentService;
 import com.fds.siscaa.useCases.adapters.SubscriptionRepositoryAdapter;
+import com.fds.siscaa.useCases.adapters.PaymentRepositoryAdapter;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,23 +17,44 @@ import org.springframework.stereotype.Service;
 public class CreatePaymentUseCase {
 
         private final SubscriptionRepositoryAdapter subscriptionRepository;
-        private final CreatePaymentService createPaymentService;
+        private final CalculatePaymentService calculatePaymentService;
+        private final PaymentRepositoryAdapter paymentRepository;
 
-        public CreatePaymentResponseEntity create(LocalDate paymentDate, int subscriptionCode, float receivedAmount) {
+        public CalculatePaymentResponseEntity create(LocalDate paymentDate, int subscriptionCode,
+                        float receivedAmount) {
                 System.out.println(
                                 String.format("CreatePaymentUseCase - STARTED - paymentDate: %s subscriptionCode: %d receivedAmount: %.2f",
                                                 paymentDate, subscriptionCode, receivedAmount));
                 SubscriptionEntity subscription = subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode);
 
-                CreatePaymentResponseEntity createPaymentResponseEntity = this.createPaymentService.create(subscription,
+                CalculatePaymentResponseEntity calculatePaymentResponseEntity = this.calculatePaymentService.calculate(
+                                subscription,
                                 receivedAmount);
 
-                updateSubscriptionDates(createPaymentResponseEntity, subscriptionCode);
+                persistPayment(subscriptionCode, calculatePaymentResponseEntity);
 
-                return createPaymentResponseEntity;
+                updateSubscriptionDates(calculatePaymentResponseEntity, subscriptionCode);
+
+                return calculatePaymentResponseEntity;
         }
 
-        private void updateSubscriptionDates(CreatePaymentResponseEntity createPaymentResponseEntity,
+        private void persistPayment(long subscriptionCode,
+                        CalculatePaymentResponseEntity calculatePaymentResponseEntity) {
+                PaymentEntity paymentEntity = createPaymentEntity(subscriptionCode, calculatePaymentResponseEntity);
+                paymentRepository.create(paymentEntity);
+
+        }
+
+        private PaymentEntity createPaymentEntity(
+                        long subscriptionCode,
+                        CalculatePaymentResponseEntity createPaymentResponseEntity) {
+                return new PaymentEntity(subscriptionCode, createPaymentResponseEntity.getPaidValue(),
+                                LocalDate.now(), createPaymentResponseEntity.getPromotion().isPresent()
+                                                ? createPaymentResponseEntity.getPromotion().get().getCode()
+                                                : null);
+        }
+
+        private void updateSubscriptionDates(CalculatePaymentResponseEntity createPaymentResponseEntity,
                         long subscriptionCode) {
                 LocalDate currentDate = LocalDate.now();
                 subscriptionRepository.updateSubscriptionStartDateAndEndDateByCode(

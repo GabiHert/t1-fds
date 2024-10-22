@@ -1,6 +1,7 @@
 package com.fds.siscaa.domain.entity;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import com.fds.siscaa.domain.enums.PaymentStatus;
 
@@ -11,13 +12,15 @@ import lombok.Setter;
 @Getter()
 @Setter()
 @AllArgsConstructor()
-public class CreatePaymentResponseEntity {
+public class CalculatePaymentResponseEntity {
     private PaymentStatus status;
     private LocalDate date;
     private float refundedValue;
+    private float paidValue;
     private int daysToExtend;
+    private Optional<PromotionEntity> promotion;
 
-    public CreatePaymentResponseEntity() {
+    public CalculatePaymentResponseEntity() {
     }
 
 }
