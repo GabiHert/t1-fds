@@ -25,7 +25,7 @@ public class SubscriptionDto {
         }
 
         public SubscriptionDto(SubscriptionEntity subscriptionEntity) {
-                this.code = clientEntity.getCode();
+                this.code = subscriptionEntity.getCode();
                 this.clientEntity = subscriptionEntity.getClient();
                 this.startDate = subscriptionEntity.getStartDate();
                 this.endDate = subscriptionEntity.getEndDate();

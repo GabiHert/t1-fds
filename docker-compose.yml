@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:10.5
+    container_name: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+      - ./src/main/resources/db/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      - ./src/main/resources/db/insert.sql:/docker-entrypoint-initdb.d/insert.sql

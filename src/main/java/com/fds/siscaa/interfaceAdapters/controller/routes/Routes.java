@@ -128,8 +128,8 @@ public class Routes {
     }
 
     @GetMapping("assinvalida/{codass}")
-    public boolean subscriptionIsValid(@PathVariable Long codsub) {
-        SubscriptionEntity subcriptionEntity = this.subscriptionRepository.getSubscriptionEntityByCode(codsub);
+    public boolean subscriptionIsValid(@PathVariable Long codass) {
+        SubscriptionEntity subcriptionEntity = this.subscriptionRepository.getSubscriptionEntityByCode(codass);
         return subcriptionEntity != null;
     }
 

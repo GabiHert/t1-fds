@@ -47,6 +47,12 @@ public class SubscriptionModel {
     }
 
     public SubscriptionEntity toEntity() {
+        if(client == null ){
+            return new SubscriptionEntity(
+                    code, null,
+                    startDate, endDate,
+                    application.toEntity());
+        }
         return new SubscriptionEntity(
                 code, client.toEntity(),
                 startDate, endDate,
