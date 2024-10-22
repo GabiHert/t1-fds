@@ -17,6 +17,8 @@ import lombok.Setter;
 public class PaymentModel {
     @Id
     private long code;
+
+    @Column(name = "amount")
     private double amount;
     private LocalDate paymentDate;
     private String dealCode;

@@ -17,7 +17,11 @@ import lombok.Setter;
 public class ApplicationModel {
     @Id
     private long code;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "monthlyFee")
     private float monthlyFee;
 
     @OneToMany(mappedBy = "application", cascade = CascadeType.REFRESH)

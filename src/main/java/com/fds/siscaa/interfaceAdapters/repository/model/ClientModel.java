@@ -16,7 +16,11 @@ import lombok.Setter;
 public class ClientModel {
     @Id
     private long code;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "email")
     private String email;
 
     protected ClientModel() {

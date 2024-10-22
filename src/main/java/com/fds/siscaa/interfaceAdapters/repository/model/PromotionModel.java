@@ -16,7 +16,11 @@ public class PromotionModel {
     @Id
     private String code;
     private float discountPercentage;
+
+    @Column(name = "extraDays")
     private int extraDays;
+
+    @Column(name = "monthsRequired")
     private int monthsRequired;
 
     @JoinColumn(name = "application_code", referencedColumnName = "code")
