@@ -4,15 +4,13 @@ import com.fds.siscaa.domain.entity.PaymentEntity;
 
 import java.util.Date;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity()
+@Table(name = "payment")
 @Getter()
 @Setter()
 @AllArgsConstructor()

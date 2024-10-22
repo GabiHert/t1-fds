@@ -13,6 +13,7 @@ import lombok.Setter;
 
 
 @Entity()
+@Table(name = "subscription")
 @Getter()
 @Setter()
 @AllArgsConstructor()
