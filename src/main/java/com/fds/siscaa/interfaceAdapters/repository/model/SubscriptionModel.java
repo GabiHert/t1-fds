@@ -1,12 +1,9 @@
 package com.fds.siscaa.interfaceAdapters.repository.model;
 
 import java.time.LocalDate;
-import java.util.List;
 
-import com.fds.siscaa.domain.enums.SubscriptionType;
-import com.fds.siscaa.domain.entity.PromotionEntity;
 import com.fds.siscaa.domain.entity.SubscriptionEntity;
-import com.fds.siscaa.domain.utils.CustomList;
+
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

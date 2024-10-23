@@ -2,7 +2,6 @@ package com.fds.siscaa.interfaceAdapters.repository.model;
 
 import com.fds.siscaa.domain.entity.ClientEntity;
 
-import com.fds.siscaa.domain.utils.CustomList;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

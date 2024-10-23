@@ -3,7 +3,7 @@ package com.fds.siscaa.interfaceAdapters.controller.dto;
 import java.time.LocalDate;
 
 import com.fds.siscaa.domain.entity.SubscriptionEntity;
-import com.fds.siscaa.domain.enums.SubscriptionType;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,6 +1,5 @@
 package com.fds.siscaa.domain.entity;
 
-import com.fds.siscaa.domain.utils.CustomList;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
