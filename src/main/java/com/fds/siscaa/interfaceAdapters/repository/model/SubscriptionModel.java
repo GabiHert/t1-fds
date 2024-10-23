@@ -20,8 +20,7 @@ import lombok.Setter;
 @AllArgsConstructor()
 public class SubscriptionModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subscription_seq")
-    @SequenceGenerator(name = "subscription_seq", sequenceName = "subscription_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long code;
 
     public LocalDate startDate;

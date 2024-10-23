@@ -16,6 +16,7 @@ import lombok.Setter;
 @AllArgsConstructor()
 public class ApplicationModel {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long code;
 
     @Column(name = "name")

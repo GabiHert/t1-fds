@@ -16,8 +16,7 @@ import lombok.Setter;
 @AllArgsConstructor()
 public class PaymentModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_seq")
-    @SequenceGenerator(name = "client_seq", sequenceName = "client_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long code;
 
     private double amount;

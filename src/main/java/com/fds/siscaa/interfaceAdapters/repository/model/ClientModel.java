@@ -15,6 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor()
 public class ClientModel {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long code;
 
     @Column(name = "name")
