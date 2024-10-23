@@ -16,7 +16,7 @@ public class InvalidSubscriptionUseCase {
 
     public boolean isInvalid(long subscriptionCode) {
         SubscriptionEntity subscriptionEntity = subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode);
-        if (subscriptionEntity.getEndDate().isBefore(LocalDate.now())) {
+        if (subscriptionEntity.getEndDate().isAfter(LocalDate.now())) {
             return true;
         }
         return false;

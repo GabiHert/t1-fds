@@ -3,6 +3,7 @@ package com.fds.siscaa.interfaceAdapters.controller.routes;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,7 +56,7 @@ public class Routes {
     private final InvalidSubscriptionUseCase invalidSubscriptionUseCase;
 
     @PostMapping("servcad/assinaturas")
-    public ResponseEntity<SubscriptionDto> postSubscription(@RequestBody CreateSubscriptionDto createSubscriptionDto) {
+    public ResponseEntity<SubscriptionDto> postSubscription( @Valid @RequestBody CreateSubscriptionDto createSubscriptionDto) {
         System.out.println("postSubscription - STARTED - createSubscriptionDto: " + createSubscriptionDto.toString());
 
         SubscriptionEntity subscriptionEntity = this.createSubscriptionUseCase
@@ -67,7 +68,7 @@ public class Routes {
     }
 
     @PostMapping("registrarpagamento")
-    public ResponseEntity<CreatePaymentResponseDto> postPayment(@RequestBody CreatePaymentDto createPaymentDto) {
+    public ResponseEntity<CreatePaymentResponseDto> postPayment( @Valid @RequestBody CreatePaymentDto createPaymentDto) {
         System.out.println("postPayment - STARTED - createPaymentDto" + createPaymentDto.toString());
 
         // todo: validação de payload
@@ -89,7 +90,7 @@ public class Routes {
     }
 
     @PostMapping("servcad/aplicativos/atualizacusto/{idAplicativo}")
-    public ResponseEntity<ApplicationDto> updateCost(@RequestBody UpdateCostDto cost,
+    public ResponseEntity<ApplicationDto> updateCost(@Valid @RequestBody UpdateCostDto cost,
             @PathVariable long idAplicativo) {
         ApplicationEntity applicationEntity = this.applicationRepository.UpdateApplicationCostByCode(idAplicativo,
                 cost.getCusto());
