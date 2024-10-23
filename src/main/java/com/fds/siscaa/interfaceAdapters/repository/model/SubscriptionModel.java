@@ -3,6 +3,7 @@ package com.fds.siscaa.interfaceAdapters.repository.model;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fds.siscaa.domain.enums.SubscriptionType;
 import com.fds.siscaa.domain.entity.PromotionEntity;
 import com.fds.siscaa.domain.entity.SubscriptionEntity;
 import com.fds.siscaa.domain.utils.CustomList;
@@ -19,6 +20,8 @@ import lombok.Setter;
 @AllArgsConstructor()
 public class SubscriptionModel {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subscription_seq")
+    @SequenceGenerator(name = "subscription_seq", sequenceName = "subscription_sequence", allocationSize = 1)
     public long code;
 
     public LocalDate startDate;
@@ -45,15 +48,17 @@ public class SubscriptionModel {
     }
 
     public SubscriptionEntity toEntity() {
-        if (client == null) {
-            return new SubscriptionEntity(
-                    code, null,
-                    startDate, endDate,
-                    application.toEntity());
+        String status = null;
+
+        if (endDate.isBefore(LocalDate.now())) {
+            status = "CANCELADA";
+        } else {
+            status = "ATIVA";
         }
+
         return new SubscriptionEntity(
                 code, client.toEntity(),
                 startDate, endDate,
-                application.toEntity());
+                application.toEntity(), status);
     }
 }

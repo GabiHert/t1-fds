@@ -11,18 +11,18 @@ import lombok.Setter;
 @AllArgsConstructor()
 public class ApplicationDto {
 
-    private long code;
-    private String name;
-    private float monthlyFee;
+    private long codigoAplicativo;
+    private String nome;
+    private float custoMensal;
 
     public ApplicationDto() {
 
     }
 
     public ApplicationDto(ApplicationEntity applicationEntity) {
-        this.code = applicationEntity.getCode();
-        this.name = applicationEntity.getName();
-        this.monthlyFee = applicationEntity.getMonthlyFee();
+        this.codigoAplicativo = applicationEntity.getCode();
+        this.nome = applicationEntity.getName();
+        this.custoMensal = applicationEntity.getMonthlyFee();
     }
 
 }

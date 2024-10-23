@@ -3,7 +3,6 @@ package com.fds.siscaa.interfaceAdapters.controller.routes;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +22,7 @@ import com.fds.siscaa.interfaceAdapters.controller.dto.CreatePaymentResponseDto;
 import com.fds.siscaa.interfaceAdapters.controller.dto.ApplicationDto;
 import com.fds.siscaa.interfaceAdapters.controller.dto.CreateSubscriptionDto;
 import com.fds.siscaa.interfaceAdapters.controller.dto.SubscriptionDto;
+import com.fds.siscaa.interfaceAdapters.controller.dto.UpdateCostDto;
 import com.fds.siscaa.useCases.adapters.ClientRepositoryAdapter;
 import com.fds.siscaa.useCases.useCases.CreatePaymentUseCase;
 import com.fds.siscaa.useCases.useCases.CreateSubscriptionUseCase;
@@ -59,7 +59,7 @@ public class Routes {
         System.out.println("postSubscription - STARTED - createSubscriptionDto: " + createSubscriptionDto.toString());
 
         SubscriptionEntity subscriptionEntity = this.createSubscriptionUseCase
-                .create(createSubscriptionDto.getClientCode(), createSubscriptionDto.getApplicationCode());
+                .create(createSubscriptionDto.getCodigoDoCliente(), createSubscriptionDto.getCodigoDoAplicativo());
 
         SubscriptionDto subscriptionDto = new SubscriptionDto(subscriptionEntity);
         System.out.println("postSubscription - FINISHED - subscriptionDto: " + subscriptionDto.toString());
@@ -89,9 +89,11 @@ public class Routes {
     }
 
     @PostMapping("servcad/aplicativos/atualizacusto/{idAplicativo}")
-    public ResponseEntity<ApplicationEntity> updateCost(@RequestBody float cost, @PathVariable long id) {
-        ApplicationEntity applicationEntity = this.applicationRepository.UpdateApplicationCostByCode(id, cost);
-        return ResponseEntity.ok(applicationEntity);
+    public ResponseEntity<ApplicationDto> updateCost(@RequestBody UpdateCostDto cost,
+            @PathVariable long idAplicativo) {
+        ApplicationEntity applicationEntity = this.applicationRepository.UpdateApplicationCostByCode(idAplicativo,
+                cost.getCusto());
+        return ResponseEntity.ok(new ApplicationDto(applicationEntity));
     }
 
     @GetMapping("servcad/clientes")
@@ -111,9 +113,11 @@ public class Routes {
     public ResponseEntity<List<SubscriptionDto>> listSubscriptionsByType(@PathVariable("tipo") String tipo) {
         SubscriptionType type;
         type = SubscriptionType.valueOf(tipo);
-        CustomList<SubscriptionEntity> subscriptionEntities = new CustomList<>(
-                this.subscriptionRepository.listSubscriptionByType(type));
-        return ResponseEntity.ok(subscriptionEntities.toDtos(SubscriptionDto.class));
+        CustomList<SubscriptionEntity> subscriptionEntities = this.subscriptionRepository.listSubscriptionByType(type);
+
+        List<SubscriptionDto> subscriptionDtos = subscriptionEntities.toDtos(SubscriptionDto.class);
+
+        return ResponseEntity.ok(subscriptionDtos);
     }
 
     @GetMapping("servcad/asscli/{codcli}")

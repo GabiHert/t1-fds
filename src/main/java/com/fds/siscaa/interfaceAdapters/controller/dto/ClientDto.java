@@ -11,16 +11,16 @@ import lombok.Setter;
 @AllArgsConstructor()
 public class ClientDto {
 
-    private long code;
-    private String name;
+    private long codigo;
+    private String nome;
     private String email;
 
     public ClientDto() {
     }
 
     public ClientDto(ClientEntity clientEntity) {
-        this.code = clientEntity.getCode();
-        this.name = clientEntity.getName();
+        this.codigo = clientEntity.getCode();
+        this.nome = clientEntity.getName();
         this.email = clientEntity.getEmail();
     }
 

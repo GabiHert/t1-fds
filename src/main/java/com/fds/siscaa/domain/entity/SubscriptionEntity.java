@@ -15,6 +15,7 @@ public class SubscriptionEntity {
     private LocalDate startDate;
     private LocalDate endDate;
     private ApplicationEntity application;
+    private String status;
 
     public SubscriptionEntity(long clientCode, long applicationCode, LocalDate startDate, LocalDate endDate) {
         this.client = new ClientEntity(clientCode);

@@ -7,11 +7,10 @@ import lombok.Setter;
 @AllArgsConstructor()
 @Getter()
 @Setter()
-public class CreateSubscriptionDto {
-    private long codigoDoCliente;
-    private long codigoDoAplicativo;
+public class UpdateCostDto {
+    private float custo;
 
-    public CreateSubscriptionDto() {
+    public UpdateCostDto() {
     }
 
 }
