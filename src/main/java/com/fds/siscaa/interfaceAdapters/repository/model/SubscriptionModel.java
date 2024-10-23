@@ -21,10 +21,8 @@ public class SubscriptionModel {
     @Id
     public long code;
 
-    @Column(name = "startDate")
     public LocalDate startDate;
 
-    @Column(name = "endDate")
     public LocalDate endDate;
 
     @ManyToOne
@@ -47,7 +45,7 @@ public class SubscriptionModel {
     }
 
     public SubscriptionEntity toEntity() {
-        if(client == null ){
+        if (client == null) {
             return new SubscriptionEntity(
                     code, null,
                     startDate, endDate,

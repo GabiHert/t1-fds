@@ -18,10 +18,8 @@ public class CreatePaymentResponseDto {
 
     public CreatePaymentResponseDto(CalculatePaymentResponseEntity createPaymentResponse) {
         this.status = createPaymentResponse.getStatus();
-        // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         this.date = createPaymentResponse.getDate().toString();
         this.refundedValue = createPaymentResponse.getRefundedValue();
-
     }
 
 }
