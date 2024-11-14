@@ -1,5 +1,7 @@
 package com.fds.siscaa.interfaceAdapters.controller.dto;
 
+import java.util.Optional;
+
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -18,7 +20,6 @@ public class CreatePaymentDto {
     @Min(value = 1, message = "O dia deve ser no mínimo 1")
     @Max(value = 31, message = "O dia deve ser no máximo 31")
     private int day;
-
 
     @Min(value = 1, message = "O mês deve ser no mínimo 1")
     @Max(value = 12, message = "O mês deve ser no máximo 12")
@@ -39,6 +40,9 @@ public class CreatePaymentDto {
     @NotNull(message = "'valorPago' não pode ser nulo")
     @Positive(message = "'valorPago' deve ser positivo")
     private float valorPago;
+
+    @Positive(message = "'codpromo' deve ser positivo")
+    private Optional<Integer> codpromo;
 
     public CreatePaymentDto() {
     }
