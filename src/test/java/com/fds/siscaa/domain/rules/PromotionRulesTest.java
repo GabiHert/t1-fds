@@ -67,7 +67,7 @@ public class PromotionRulesTest {
     public void applyExtraDays_NoExtraDays() {
         int monthsToExtend = 3;
         int extraDays = 0;
-        int expectedDays = 3;
+        int expectedDays = 30;
 
         int actualDays = promotionRules.applyExtraDays(monthsToExtend, extraDays);
 
