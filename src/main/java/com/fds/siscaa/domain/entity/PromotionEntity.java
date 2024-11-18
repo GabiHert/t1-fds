@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter()
 @AllArgsConstructor()
 public class PromotionEntity {
-    private String code;
+    private Long code;
     private float discountPercentage;
     private int extraDays;
     private int requiredMonths;

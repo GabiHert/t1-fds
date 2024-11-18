@@ -1,6 +1,7 @@
 package com.fds.siscaa.useCases.useCases;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import com.fds.siscaa.domain.entity.CalculatePaymentResponseEntity;
 import com.fds.siscaa.domain.entity.PaymentEntity;
@@ -9,6 +10,7 @@ import com.fds.siscaa.domain.entity.SubscriptionEntity;
 import com.fds.siscaa.domain.enums.PaymentStatus;
 import com.fds.siscaa.domain.service.CalculatePaymentService;
 import com.fds.siscaa.domain.utils.CustomList;
+import com.fds.siscaa.domain.utils.CustomLocalDate;
 import com.fds.siscaa.useCases.adapters.SubscriptionRepositoryAdapter;
 import com.fds.siscaa.useCases.adapters.PaymentRepositoryAdapter;
 import com.fds.siscaa.useCases.adapters.PromotionRepositoryAdapter;
@@ -26,15 +28,20 @@ public class CreatePaymentUseCase {
         private final PromotionRepositoryAdapter promotionRepositoryAdapter;
 
         public CalculatePaymentResponseEntity create(LocalDate paymentDate, int subscriptionCode,
-                        float receivedAmount) {
+                        float receivedAmount, Optional<Long> promotionCode) {
                 System.out.println(
                                 String.format("CreatePaymentUseCase - STARTED - paymentDate: %s subscriptionCode: %d receivedAmount: %.2f",
                                                 paymentDate, subscriptionCode, receivedAmount));
 
                 SubscriptionEntity subscription = subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode);
 
-                CustomList<PromotionEntity> promotionEntities = promotionRepositoryAdapter
-                                .listByApplicationCode(subscription.getApplication().getCode());
+                CustomList<PromotionEntity> promotionEntities = new CustomList<>();
+                if (promotionCode.isPresent()) {
+                        promotionEntities.add(promotionRepositoryAdapter.getByCode(promotionCode.get()));
+                } else {
+                        promotionEntities = promotionRepositoryAdapter
+                                        .listByApplicationCode(subscription.getApplication().getCode());
+                }
 
                 CalculatePaymentResponseEntity calculatePaymentResponseEntity = this.calculatePaymentService.calculate(
                                 subscription,
@@ -60,17 +67,17 @@ public class CreatePaymentUseCase {
                         long subscriptionCode,
                         CalculatePaymentResponseEntity createPaymentResponseEntity) {
                 return new PaymentEntity(subscriptionCode, createPaymentResponseEntity.getPaidValue(),
-                                LocalDate.now(), createPaymentResponseEntity.getPromotion().isPresent()
-                                                ? createPaymentResponseEntity.getPromotion().get().getCode()
-                                                : null);
+                                CustomLocalDate.now(), createPaymentResponseEntity.getPromotion().isPresent()
+                                                ? Optional.of(createPaymentResponseEntity.getPromotion().get()
+                                                                .getCode())
+                                                : Optional.empty());
         }
 
         private void updateSubscriptionDates(CalculatePaymentResponseEntity createPaymentResponseEntity,
                         long subscriptionCode) {
-                LocalDate currentDate = LocalDate.now();
                 subscriptionRepository.updateSubscriptionStartDateAndEndDateByCode(
-                                currentDate,
-                                currentDate.plusDays(createPaymentResponseEntity.getDaysToExtend()),
+                                CustomLocalDate.now(),
+                                createPaymentResponseEntity.getNewEndDate(),
                                 subscriptionCode);
         }
 }

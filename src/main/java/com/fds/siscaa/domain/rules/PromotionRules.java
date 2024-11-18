@@ -9,12 +9,12 @@ import com.fds.siscaa.domain.utils.CustomList;
 
 @Component
 public class PromotionRules {
-    public float applyDiscount(float monthlyFee, float discountPercentage) {
-        return monthlyFee - (monthlyFee * discountPercentage / 100);
+    public float applyDiscount(int monthsToExtend, float monthlyFee, float discountPercentage) {
+        return (monthlyFee * monthsToExtend) - ((monthlyFee * monthsToExtend) * discountPercentage / 100);
     }
 
-    public int applyExtraDays(int monthsToExtend, int extraDays) {
-        return monthsToExtend + extraDays;
+    public int applyExtraDays(int daysToExtend, int extraDays) {
+        return daysToExtend + extraDays;
     }
 
     public Optional<PromotionEntity> getValidPromotion(int monthsToExtend,

@@ -14,10 +14,9 @@ import lombok.Setter;
 @AllArgsConstructor()
 public class CalculatePaymentResponseEntity {
     private PaymentStatus status;
-    private LocalDate date;
+    private LocalDate newEndDate;
     private float refundedValue;
     private float paidValue;
-    private int daysToExtend;
     private Optional<PromotionEntity> promotion;
 
     public CalculatePaymentResponseEntity() {

@@ -33,7 +33,7 @@ import lombok.AllArgsConstructor;
 
 import com.fds.siscaa.useCases.adapters.ApplicationRepositoryAdapter;
 import com.fds.siscaa.useCases.adapters.SubscriptionRepositoryAdapter;
-
+import com.fds.siscaa.domain.enums.PaymentStatus;
 import com.fds.siscaa.domain.enums.SubscriptionType;
 import com.fds.siscaa.domain.utils.CustomList;
 
@@ -56,7 +56,8 @@ public class Routes {
     private final InvalidSubscriptionUseCase invalidSubscriptionUseCase;
 
     @PostMapping("servcad/assinaturas")
-    public ResponseEntity<SubscriptionDto> postSubscription( @Valid @RequestBody CreateSubscriptionDto createSubscriptionDto) {
+    public ResponseEntity<SubscriptionDto> postSubscription(
+            @Valid @RequestBody CreateSubscriptionDto createSubscriptionDto) {
         System.out.println("postSubscription - STARTED - createSubscriptionDto: " + createSubscriptionDto.toString());
 
         SubscriptionEntity subscriptionEntity = this.createSubscriptionUseCase
@@ -68,10 +69,8 @@ public class Routes {
     }
 
     @PostMapping("registrarpagamento")
-    public ResponseEntity<CreatePaymentResponseDto> postPayment( @Valid @RequestBody CreatePaymentDto createPaymentDto) {
+    public ResponseEntity<CreatePaymentResponseDto> postPayment(@Valid @RequestBody CreatePaymentDto createPaymentDto) {
         System.out.println("postPayment - STARTED - createPaymentDto" + createPaymentDto.toString());
-
-        // todo: validação de payload
 
         LocalDate paymentDate = LocalDate.of(
                 createPaymentDto.getYear(),
@@ -81,10 +80,14 @@ public class Routes {
         CalculatePaymentResponseEntity createPaymentResponse = this.createPaymentUseCase.create(
                 paymentDate,
                 createPaymentDto.getCodass(),
-                createPaymentDto.getValorPago());
+                createPaymentDto.getValorPago(),
+                createPaymentDto.getCodpromo());
 
         CreatePaymentResponseDto createPaymentResponseDto = new CreatePaymentResponseDto(createPaymentResponse);
         System.out.println("postPayment - FINISHED - createPaymentResponseDto" + createPaymentResponseDto.toString());
+        if (createPaymentResponse.getStatus().equals(PaymentStatus.VALOR_INCORRETO)) {
+            return ResponseEntity.status(400).body(createPaymentResponseDto);
+        }
         return ResponseEntity.status(201).body(createPaymentResponseDto);
 
     }

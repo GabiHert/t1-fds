@@ -18,7 +18,7 @@ public class CreatePaymentResponseDto {
 
     public CreatePaymentResponseDto(CalculatePaymentResponseEntity createPaymentResponse) {
         this.status = createPaymentResponse.getStatus();
-        this.date = createPaymentResponse.getDate().toString();
+        this.date = createPaymentResponse.getNewEndDate().toString();
         this.refundedValue = createPaymentResponse.getRefundedValue();
     }
 

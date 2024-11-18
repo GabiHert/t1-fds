@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import org.springframework.stereotype.Service;
 
 import com.fds.siscaa.domain.entity.SubscriptionEntity;
+import com.fds.siscaa.domain.utils.CustomLocalDate;
 import com.fds.siscaa.useCases.adapters.SubscriptionRepositoryAdapter;
 
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ public class CreateSubscriptionUseCase {
     private final SubscriptionRepositoryAdapter subscriptionRepository;
 
     public SubscriptionEntity create(long clientCode, long applicationCode) {
-        LocalDate startDate = LocalDate.now();
+        LocalDate startDate = CustomLocalDate.now();
         LocalDate endDate = startDate.plusDays(daysToExtend);
 
         SubscriptionEntity subscriptionEntity = new SubscriptionEntity(

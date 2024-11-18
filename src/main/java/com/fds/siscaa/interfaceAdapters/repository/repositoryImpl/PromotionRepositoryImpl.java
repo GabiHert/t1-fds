@@ -22,4 +22,10 @@ public class PromotionRepositoryImpl implements PromotionRepositoryAdapter {
     return promotionModels.toEntities(PromotionEntity.class);
   }
 
+  @Override
+  public PromotionEntity getByCode(long code) {
+    PromotionModel promotionModel = promotionRepositoryJPA.findByCode(code);
+    return promotionModel.toEntity();
+  }
+
 }

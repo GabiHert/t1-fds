@@ -5,4 +5,6 @@ import com.fds.siscaa.domain.utils.CustomList;
 
 public interface PromotionRepositoryAdapter {
     CustomList<PromotionEntity> listByApplicationCode(long applicationCode);
+
+    PromotionEntity getByCode(long code);
 }

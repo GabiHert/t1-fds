@@ -3,7 +3,7 @@ package com.fds.siscaa.interfaceAdapters.repository.model;
 import java.time.LocalDate;
 
 import com.fds.siscaa.domain.entity.SubscriptionEntity;
-
+import com.fds.siscaa.domain.utils.CustomLocalDate;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -46,7 +46,7 @@ public class SubscriptionModel {
     public SubscriptionEntity toEntity() {
         String status = null;
 
-        if (endDate.isBefore(LocalDate.now())) {
+        if (endDate.isBefore(CustomLocalDate.now())) {
             status = "CANCELADA";
         } else {
             status = "ATIVA";

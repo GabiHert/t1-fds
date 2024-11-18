@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import com.fds.siscaa.domain.enums.*;
 import com.fds.siscaa.domain.exception.CustomException;
 import com.fds.siscaa.domain.utils.CustomList;
+import com.fds.siscaa.domain.utils.CustomLocalDate;
 import com.fds.siscaa.interfaceAdapters.repository.jpa.SubscriptionRepositoryJPA;
 import com.fds.siscaa.useCases.adapters.SubscriptionRepositoryAdapter;
 
@@ -49,11 +50,11 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepositoryAdapter
     switch (subscriptionType) {
       case ATIVAS:
         CustomList<SubscriptionModel> subscriptionModels_ativas = subscriptionRepositoryJPA
-            .findByEndDateAfter(LocalDate.now());
+            .findByEndDateAfter(CustomLocalDate.now());
         return subscriptionModels_ativas.toEntities(SubscriptionEntity.class);
       case CANCELADAS:
         CustomList<SubscriptionModel> subscriptionModels_canceladas = subscriptionRepositoryJPA
-            .findByEndDateBefore(LocalDate.now());
+            .findByEndDateBefore(CustomLocalDate.now());
         return subscriptionModels_canceladas.toEntities(SubscriptionEntity.class);
       case TODAS:
       default:

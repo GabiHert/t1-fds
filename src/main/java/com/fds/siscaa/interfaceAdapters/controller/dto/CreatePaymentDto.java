@@ -1,5 +1,6 @@
 package com.fds.siscaa.interfaceAdapters.controller.dto;
 
+import java.util.List;
 import java.util.Optional;
 
 import jakarta.validation.constraints.Max;
@@ -41,8 +42,7 @@ public class CreatePaymentDto {
     @Positive(message = "'valorPago' deve ser positivo")
     private float valorPago;
 
-    @Positive(message = "'codpromo' deve ser positivo")
-    private Optional<Integer> codpromo;
+    private Optional<Long> codpromo;
 
     public CreatePaymentDto() {
     }

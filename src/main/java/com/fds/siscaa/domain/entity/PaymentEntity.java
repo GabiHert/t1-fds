@@ -1,6 +1,7 @@
 package com.fds.siscaa.domain.entity;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,12 +15,12 @@ public class PaymentEntity {
     private long subscriptionCode;
     private double amount;
     private LocalDate paymentDate;
-    private String promotionCode;
+    private Optional<Long> promotionCode;
 
     public PaymentEntity() {
     }
 
-    public PaymentEntity(long subscriptionCode, double amount, LocalDate paymentDate, String promotionCode) {
+    public PaymentEntity(long subscriptionCode, double amount, LocalDate paymentDate, Optional<Long> promotionCode) {
         this.subscriptionCode = subscriptionCode;
         this.amount = amount;
         this.paymentDate = paymentDate;

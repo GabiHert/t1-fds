@@ -24,6 +24,7 @@ public class CalculatePaymentService {
                 float monthlyFee = subscription.getApplication().getMonthlyFee();
 
                 int monthsToExtend = paymentRules.calculateMonthsToExtend(monthlyFee, receivedAmount);
+                int daysToExtend = monthsToExtend * 30;
                 PaymentStatus paymentStatus = paymentRules.calculatePaymentStatus(monthlyFee, receivedAmount);
 
                 if (paymentStatus == PaymentStatus.VALOR_INCORRETO) {
@@ -31,7 +32,6 @@ public class CalculatePaymentService {
                                         paymentStatus,
                                         subscription.getEndDate(),
                                         receivedAmount,
-                                        0,
                                         0,
                                         Optional.empty());
                 }
@@ -41,9 +41,9 @@ public class CalculatePaymentService {
                                 promotionEntities);
 
                 if (validPromotion.isPresent()) {
-                        monthsToExtend = promotionRules.applyExtraDays(monthsToExtend,
+                        daysToExtend = promotionRules.applyExtraDays(daysToExtend,
                                         validPromotion.get().getExtraDays());
-                        monthlyFee = promotionRules.applyDiscount(monthlyFee,
+                        monthlyFee = promotionRules.applyDiscount(monthsToExtend, monthlyFee,
                                         validPromotion.get().getDiscountPercentage());
                 }
 
@@ -51,10 +51,9 @@ public class CalculatePaymentService {
 
                 return new CalculatePaymentResponseEntity(
                                 paymentStatus,
-                                subscription.getEndDate(),
+                                subscription.getEndDate().plusDays(daysToExtend),
                                 refundValue,
                                 receivedAmount - refundValue,
-                                monthsToExtend * 30,
                                 validPromotion);
         }
 

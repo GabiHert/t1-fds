@@ -15,7 +15,7 @@ import lombok.Setter;
 public class PromotionModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String code;
+    private Long code;
     private float discountPercentage;
 
     @Column(name = "extraDays")
