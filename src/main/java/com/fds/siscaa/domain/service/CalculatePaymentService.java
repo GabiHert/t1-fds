@@ -23,8 +23,7 @@ public class CalculatePaymentService {
                         CustomList<PromotionEntity> promotionEntities, float receivedAmount) {
                 float monthlyFee = subscription.getApplication().getMonthlyFee();
 
-                int monthsToExtend = paymentRules.calculateMonthsToExtend(monthlyFee, receivedAmount);
-                int daysToExtend = monthsToExtend * 30;
+                int daysToExtend = paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount);
                 PaymentStatus paymentStatus = paymentRules.calculatePaymentStatus(monthlyFee, receivedAmount);
 
                 if (paymentStatus == PaymentStatus.VALOR_INCORRETO) {
@@ -37,13 +36,13 @@ public class CalculatePaymentService {
                 }
 
                 Optional<PromotionEntity> validPromotion = promotionRules.getValidPromotion(
-                                monthsToExtend,
+                                daysToExtend,
                                 promotionEntities);
 
                 if (validPromotion.isPresent()) {
                         daysToExtend = promotionRules.applyExtraDays(daysToExtend,
                                         validPromotion.get().getExtraDays());
-                        monthlyFee = promotionRules.applyDiscount(monthsToExtend, monthlyFee,
+                        monthlyFee = promotionRules.applyDiscount(daysToExtend, monthlyFee,
                                         validPromotion.get().getDiscountPercentage());
                 }
 

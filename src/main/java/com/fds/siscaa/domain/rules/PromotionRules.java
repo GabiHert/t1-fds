@@ -9,8 +9,8 @@ import com.fds.siscaa.domain.utils.CustomList;
 
 @Component
 public class PromotionRules {
-    public float applyDiscount(int monthsToExtend, float monthlyFee, float discountPercentage) {
-        return (monthlyFee * monthsToExtend) - ((monthlyFee * monthsToExtend) * discountPercentage / 100);
+    public float applyDiscount(int daysToExtend, float monthlyFee, float discountPercentage) {
+        return (monthlyFee * (daysToExtend / 30)) - ((monthlyFee * (daysToExtend / 30)) * discountPercentage / 100);
     }
 
     public int applyExtraDays(int daysToExtend, int extraDays) {
@@ -20,7 +20,7 @@ public class PromotionRules {
     public Optional<PromotionEntity> getValidPromotion(int monthsToExtend,
             CustomList<PromotionEntity> promotions) {
         for (PromotionEntity promotion : promotions) {
-            if (promotion.getRequiredMonths() == monthsToExtend) {
+            if (promotion.getRequiredDays() == monthsToExtend) {
                 return Optional.of(promotion);
             }
         }

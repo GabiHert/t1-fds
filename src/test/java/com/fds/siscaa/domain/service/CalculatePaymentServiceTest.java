@@ -52,14 +52,16 @@ public class CalculatePaymentServiceTest {
         PaymentStatus paymentStatus = PaymentStatus.PAGAMENTO_OK;
 
         when(application.getMonthlyFee()).thenReturn(monthlyFee);
-        when(paymentRules.calculateMonthsToExtend(monthlyFee, receivedAmount)).thenReturn(monthsToExtend);
+        when(paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount)).thenReturn(monthsToExtend);
         when(paymentRules.calculatePaymentStatus(monthlyFee, receivedAmount)).thenReturn(paymentStatus);
         when(promotionRules.getValidPromotion(monthsToExtend, promotions)).thenReturn(Optional.of(promotion));
-        when(promotionRules.applyExtraDays(monthsToExtend, promotion.getExtraDays())).thenReturn((monthsToExtend * 30) + promotion.getExtraDays());
+        when(promotionRules.applyExtraDays(monthsToExtend, promotion.getExtraDays()))
+                .thenReturn((monthsToExtend * 30) + promotion.getExtraDays());
         when(promotionRules.applyDiscount(monthlyFee, promotion.getDiscountPercentage())).thenReturn(180.0f);
         when(paymentRules.calculateRefund(180.0f, receivedAmount)).thenReturn(40.0f);
 
-        CalculatePaymentResponseEntity response = calculatePaymentService.calculate(subscription, promotions, receivedAmount);
+        CalculatePaymentResponseEntity response = calculatePaymentService.calculate(subscription, promotions,
+                receivedAmount);
 
         assertEquals(paymentStatus, response.getStatus());
         assertEquals(40.0f, response.getRefundedValue());
@@ -68,7 +70,6 @@ public class CalculatePaymentServiceTest {
         assertEquals(Optional.of(promotion), response.getPromotion());
     }
 
-    
     @Test
     public void invalidPayment_Status() {
         SubscriptionEntity subscription = mock(SubscriptionEntity.class);
@@ -81,10 +82,11 @@ public class CalculatePaymentServiceTest {
         PaymentStatus paymentStatus = PaymentStatus.VALOR_INCORRETO;
 
         when(application.getMonthlyFee()).thenReturn(monthlyFee);
-        when(paymentRules.calculateMonthsToExtend(monthlyFee, receivedAmount)).thenReturn(monthsToExtend);
+        when(paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount)).thenReturn(monthsToExtend);
         when(paymentRules.calculatePaymentStatus(monthlyFee, receivedAmount)).thenReturn(paymentStatus);
 
-        CalculatePaymentResponseEntity response = calculatePaymentService.calculate(subscription, promotions, receivedAmount);
+        CalculatePaymentResponseEntity response = calculatePaymentService.calculate(subscription, promotions,
+                receivedAmount);
 
         assertEquals(paymentStatus, response.getStatus());
         assertEquals(receivedAmount, response.getRefundedValue());
@@ -92,7 +94,6 @@ public class CalculatePaymentServiceTest {
         assertEquals(0, response.getDaysToExtend());
         assertEquals(Optional.empty(), response.getPromotion());
     }
-
 
     @Test
     public void validPaymentWithoutPromotion_Status() {
@@ -106,12 +107,13 @@ public class CalculatePaymentServiceTest {
         PaymentStatus paymentStatus = PaymentStatus.PAGAMENTO_OK;
 
         when(application.getMonthlyFee()).thenReturn(monthlyFee);
-        when(paymentRules.calculateMonthsToExtend(monthlyFee, receivedAmount)).thenReturn(monthsToExtend);
+        when(paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount)).thenReturn(monthsToExtend);
         when(paymentRules.calculatePaymentStatus(monthlyFee, receivedAmount)).thenReturn(paymentStatus);
         when(promotionRules.getValidPromotion(monthsToExtend, promotions)).thenReturn(Optional.empty());
         when(paymentRules.calculateRefund(monthlyFee, receivedAmount)).thenReturn(0.0f);
 
-        CalculatePaymentResponseEntity response = calculatePaymentService.calculate(subscription, promotions, receivedAmount);
+        CalculatePaymentResponseEntity response = calculatePaymentService.calculate(subscription, promotions,
+                receivedAmount);
 
         assertEquals(paymentStatus, response.getStatus());
         assertEquals(0.0f, response.getRefundedValue());

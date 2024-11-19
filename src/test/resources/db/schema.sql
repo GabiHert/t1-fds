@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS Promotion (
   code BIGSERIAL PRIMARY KEY, 
   discount_percentage FLOAT NOT NULL, 
   extra_days INT NOT NULL, 
-  months_required INT NOT NULL, 
+  days_required INT NOT NULL, 
   application_code BIGINT NOT NULL, 
   FOREIGN KEY (application_code) REFERENCES Application(code)
 );

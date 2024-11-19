@@ -11,7 +11,7 @@ public class PromotionEntity {
     private Long code;
     private float discountPercentage;
     private int extraDays;
-    private int requiredMonths;
+    private int requiredDays;
 
     public PromotionEntity() {
     }

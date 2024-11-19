@@ -21,8 +21,8 @@ public class PromotionModel {
     @Column(name = "extraDays")
     private int extraDays;
 
-    @Column(name = "monthsRequired")
-    private int monthsRequired;
+    @Column(name = "daysRequired")
+    private int daysRequired;
 
     @JoinColumn(name = "applicationCode", referencedColumnName = "code")
     @ManyToOne(cascade = CascadeType.REFRESH)
@@ -35,11 +35,11 @@ public class PromotionModel {
         this.code = promotionEntity.getCode();
         this.discountPercentage = promotionEntity.getDiscountPercentage();
         this.extraDays = promotionEntity.getExtraDays();
-        this.monthsRequired = promotionEntity.getRequiredMonths();
+        this.daysRequired = promotionEntity.getRequiredDays();
     }
 
     public PromotionEntity toEntity() {
-        return new PromotionEntity(code, discountPercentage, extraDays, monthsRequired);
+        return new PromotionEntity(code, discountPercentage, extraDays, daysRequired);
     }
 
 }

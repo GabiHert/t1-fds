@@ -22,7 +22,7 @@ public class PaymentRulesTest {
         float receivedAmount = 300.0f;
         int expectedMonths = 3;
 
-        int actualMonths = paymentRules.calculateMonthsToExtend(monthlyFee, receivedAmount);
+        int actualMonths = paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount);
 
         assertEquals(expectedMonths, actualMonths);
     }
@@ -33,7 +33,7 @@ public class PaymentRulesTest {
         float receivedAmount = 350.0f;
         int expectedMonths = 3;
 
-        int actualMonths = paymentRules.calculateMonthsToExtend(monthlyFee, receivedAmount);
+        int actualMonths = paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount);
 
         assertEquals(expectedMonths, actualMonths);
     }
@@ -44,7 +44,7 @@ public class PaymentRulesTest {
         float receivedAmount = 0.0f;
         int expectedMonths = 0;
 
-        int actualMonths = paymentRules.calculateMonthsToExtend(monthlyFee, receivedAmount);
+        int actualMonths = paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount);
 
         assertEquals(expectedMonths, actualMonths);
     }
@@ -55,7 +55,7 @@ public class PaymentRulesTest {
         float receivedAmount = 50.0f;
         int expectedMonths = 0;
 
-        int actualMonths = paymentRules.calculateMonthsToExtend(monthlyFee, receivedAmount);
+        int actualMonths = paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount);
 
         assertEquals(expectedMonths, actualMonths);
     }

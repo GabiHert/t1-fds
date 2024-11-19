@@ -15,12 +15,12 @@ public class PaymentRules {
         return monthlyFee * monthsToExtend;
     }
 
-    public int calculateMonthsToExtend(
+    public int calculateDaysToExtend(
             float monthlyFee, float receivedAmount) {
 
         int monthsToExtend = (int) (receivedAmount / monthlyFee);
 
-        return monthsToExtend;
+        return monthsToExtend * 30;
     }
 
     public PaymentStatus calculatePaymentStatus(float monthlyFee, float receivedAmount) {
