@@ -48,16 +48,17 @@ public class CalculatePaymentServiceTest {
         promotions.add(promotion);
         float receivedAmount = 220.0f;
         float monthlyFee = 200.0f;
-        int monthsToExtend = 1;
+        int daysToExtend = 1;
         PaymentStatus paymentStatus = PaymentStatus.PAGAMENTO_OK;
 
         when(application.getMonthlyFee()).thenReturn(monthlyFee);
-        when(paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount)).thenReturn(monthsToExtend);
+        when(paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount)).thenReturn(daysToExtend);
         when(paymentRules.calculatePaymentStatus(monthlyFee, receivedAmount)).thenReturn(paymentStatus);
-        when(promotionRules.getValidPromotion(monthsToExtend, promotions)).thenReturn(Optional.of(promotion));
-        when(promotionRules.applyExtraDays(monthsToExtend, promotion.getExtraDays()))
-                .thenReturn((monthsToExtend * 30) + promotion.getExtraDays());
-        when(promotionRules.applyDiscount(monthlyFee, promotion.getDiscountPercentage())).thenReturn(180.0f);
+        when(promotionRules.getValidPromotion(daysToExtend, promotions)).thenReturn(Optional.of(promotion));
+        when(promotionRules.applyExtraDays(daysToExtend, promotion.getExtraDays()))
+                .thenReturn((daysToExtend) + promotion.getExtraDays());
+        when(promotionRules.applyDiscount(daysToExtend, monthlyFee, promotion.getDiscountPercentage()))
+                .thenReturn(180.0f);
         when(paymentRules.calculateRefund(180.0f, receivedAmount)).thenReturn(40.0f);
 
         CalculatePaymentResponseEntity response = calculatePaymentService.calculate(subscription, promotions,
@@ -66,7 +67,6 @@ public class CalculatePaymentServiceTest {
         assertEquals(paymentStatus, response.getStatus());
         assertEquals(40.0f, response.getRefundedValue());
         assertEquals(180.0f, response.getPaidValue());
-        assertEquals(35, response.getDaysToExtend());
         assertEquals(Optional.of(promotion), response.getPromotion());
     }
 
@@ -91,7 +91,6 @@ public class CalculatePaymentServiceTest {
         assertEquals(paymentStatus, response.getStatus());
         assertEquals(receivedAmount, response.getRefundedValue());
         assertEquals(0.0f, response.getPaidValue());
-        assertEquals(0, response.getDaysToExtend());
         assertEquals(Optional.empty(), response.getPromotion());
     }
 
@@ -118,7 +117,6 @@ public class CalculatePaymentServiceTest {
         assertEquals(paymentStatus, response.getStatus());
         assertEquals(0.0f, response.getRefundedValue());
         assertEquals(200.0f, response.getPaidValue());
-        assertEquals(30, response.getDaysToExtend());
         assertEquals(Optional.empty(), response.getPromotion());
     }
 

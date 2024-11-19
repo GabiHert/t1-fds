@@ -1,13 +1,13 @@
 package com.fds.siscaa.interfaceAdapters.controller.routes;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
-import java.time.Clock;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Optional;
 
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -38,8 +38,7 @@ class RoutesTest {
         @Autowired
         private JdbcTemplate jdbcTemplate;
 
-        @Mock
-        private CustomLocalDate customLocalDate;
+        private MockedStatic<CustomLocalDate> customLocalDateMock;
 
         @BeforeEach
         void setUp() {
@@ -51,9 +50,18 @@ class RoutesTest {
 
         }
 
+        @BeforeEach
+        public void setup() {
+                customLocalDateMock = Mockito.mockStatic(CustomLocalDate.class);
+        }
+
+        @AfterEach
+        public void tearDown() {
+                customLocalDateMock.close();
+        }
+
         @Test
         void registraPagamentoSemPromocao() {
-                MockedStatic<CustomLocalDate> customLocalDateMock = Mockito.mockStatic(CustomLocalDate.class);
                 customLocalDateMock.when(CustomLocalDate::now).thenReturn(LocalDate.of(2024, 1, 1));
 
                 String sqlApplication = "INSERT INTO Application (name, monthly_fee) VALUES ('Test Application', 10.00)";
@@ -87,7 +95,6 @@ class RoutesTest {
 
         @Test
         void registraPagamentoComPromocao() {
-                MockedStatic<CustomLocalDate> customLocalDateMock = Mockito.mockStatic(CustomLocalDate.class);
                 customLocalDateMock.when(CustomLocalDate::now).thenReturn(LocalDate.of(2024, 1, 1));
 
                 String sqlApplication = "INSERT INTO Application (name, monthly_fee) VALUES ('Test Application', 10.00)";
@@ -121,7 +128,6 @@ class RoutesTest {
 
         @Test
         void registraPagamentoComPromocaoPorParametro() {
-                MockedStatic<CustomLocalDate> customLocalDateMock = Mockito.mockStatic(CustomLocalDate.class);
                 customLocalDateMock.when(CustomLocalDate::now).thenReturn(LocalDate.of(2024, 1, 1));
 
                 String sqlApplication = "INSERT INTO Application (name, monthly_fee) VALUES ('Test Application', 10.00)";
