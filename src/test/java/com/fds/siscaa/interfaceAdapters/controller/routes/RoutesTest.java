@@ -139,9 +139,9 @@ class RoutesTest {
                 String sql = "INSERT INTO Subscription (code, start_date, end_date, client_code, application_code) VALUES (1, '2024-01-01', '2024-02-01', 1, 1)";
                 jdbcTemplate.execute(sql);
 
-                String sqlPromotion = "INSERT INTO Promotion (code, discount_percentage, extra_days, days_required, application_code) VALUES (1, 20.0, 2, 2, 1)";
+                String sqlPromotion = "INSERT INTO Promotion (code, discount_percentage, extra_days, days_required, application_code) VALUES (1, 20.0, 2, 60, 1)";
                 jdbcTemplate.execute(sqlPromotion);
-                sqlPromotion = "INSERT INTO Promotion (code, discount_percentage, extra_days, days_required, application_code) VALUES (2, 50.0, 3, 2, 1)";
+                sqlPromotion = "INSERT INTO Promotion (code, discount_percentage, extra_days, days_required, application_code) VALUES (2, 50.0, 3, 60, 1)";
                 jdbcTemplate.execute(sqlPromotion);
                 sqlPromotion = "INSERT INTO Promotion (code, discount_percentage, extra_days, days_required, application_code) VALUES (3, 30.0, 2, 60, 1)";
                 jdbcTemplate.execute(sqlPromotion);
