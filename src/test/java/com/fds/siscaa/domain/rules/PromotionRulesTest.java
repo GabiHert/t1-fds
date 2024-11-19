@@ -22,7 +22,7 @@ public class PromotionRulesTest {
 
     @Test
     public void testApplyDiscount() {
-        float result = promotionRules.applyDiscount(6, 100.0f, 10.0f);
+        float result = promotionRules.applyDiscount(180, 100.0f, 10.0f);
         assertEquals(540.0f, result);
     }
 
