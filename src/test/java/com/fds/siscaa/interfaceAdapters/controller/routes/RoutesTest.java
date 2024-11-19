@@ -64,16 +64,16 @@ class RoutesTest {
         void registraPagamentoSemPromocao() {
                 customLocalDateMock.when(CustomLocalDate::now).thenReturn(LocalDate.of(2024, 1, 1));
 
-                String sqlApplication = "INSERT INTO Application (name, monthly_fee) VALUES ('Test Application', 10.00)";
+                String sqlApplication = "INSERT INTO Application (code,name, monthly_fee) VALUES (1, 'Test Application', 10.00)";
                 jdbcTemplate.execute(sqlApplication);
 
-                String sqlClient = "INSERT INTO Client (name, email) VALUES ('Test Client', 'testclient@example.com')";
+                String sqlClient = "INSERT INTO Client (code,name, email) VALUES (1, 'Test Client', 'testclient@example.com')";
                 jdbcTemplate.execute(sqlClient);
 
-                String sql = "INSERT INTO Subscription (start_date, end_date, client_code, application_code) VALUES ('2024-01-01', '2024-02-01', 1, 1)";
+                String sql = "INSERT INTO Subscription (code,start_date, end_date, client_code, application_code) VALUES (1, '2024-01-01', '2024-02-01', 1, 1)";
                 jdbcTemplate.execute(sql);
 
-                String sqlPromotion = "INSERT INTO Promotion (discount_percentage, extra_days, days_required, application_code) VALUES (20.0, 30, 12, 1)";
+                String sqlPromotion = "INSERT INTO Promotion (code,discount_percentage, extra_days, days_required, application_code) VALUES (1, 20.0, 30, 12, 1)";
                 jdbcTemplate.execute(sqlPromotion);
 
                 CreatePaymentDto createPaymentDto = new CreatePaymentDto(
@@ -97,16 +97,16 @@ class RoutesTest {
         void registraPagamentoComPromocao() {
                 customLocalDateMock.when(CustomLocalDate::now).thenReturn(LocalDate.of(2024, 1, 1));
 
-                String sqlApplication = "INSERT INTO Application (name, monthly_fee) VALUES ('Test Application', 10.00)";
+                String sqlApplication = "INSERT INTO Application (code, name, monthly_fee) VALUES (1, 'Test Application', 10.00)";
                 jdbcTemplate.execute(sqlApplication);
 
-                String sqlClient = "INSERT INTO Client (name, email) VALUES ('Test Client', 'testclient@example.com')";
+                String sqlClient = "INSERT INTO Client (code, name, email) VALUES (1, 'Test Client', 'testclient@example.com')";
                 jdbcTemplate.execute(sqlClient);
 
-                String sql = "INSERT INTO Subscription (start_date, end_date, client_code, application_code) VALUES ('2024-01-01', '2024-02-01', 1, 1)";
+                String sql = "INSERT INTO Subscription (code, start_date, end_date, client_code, application_code) VALUES (1, '2024-01-01', '2024-02-01', 1, 1)";
                 jdbcTemplate.execute(sql);
 
-                String sqlPromotion = "INSERT INTO Promotion (discount_percentage, extra_days, days_required, application_code) VALUES (50.0, 2, 60, 1)";
+                String sqlPromotion = "INSERT INTO Promotion (code, discount_percentage, extra_days, days_required, application_code) VALUES (1, 50.0, 2, 60, 1)";
                 jdbcTemplate.execute(sqlPromotion);
 
                 CreatePaymentDto createPaymentDto = new CreatePaymentDto(
@@ -130,20 +130,20 @@ class RoutesTest {
         void registraPagamentoComPromocaoPorParametro() {
                 customLocalDateMock.when(CustomLocalDate::now).thenReturn(LocalDate.of(2024, 1, 1));
 
-                String sqlApplication = "INSERT INTO Application (name, monthly_fee) VALUES ('Test Application', 10.00)";
+                String sqlApplication = "INSERT INTO Application (code, name, monthly_fee) VALUES (1, 'Test Application', 10.00)";
                 jdbcTemplate.execute(sqlApplication);
 
-                String sqlClient = "INSERT INTO Client (name, email) VALUES ('Test Client', 'testclient@example.com')";
+                String sqlClient = "INSERT INTO Client (code, name, email) VALUES (1, 'Test Client', 'testclient@example.com')";
                 jdbcTemplate.execute(sqlClient);
 
-                String sql = "INSERT INTO Subscription (start_date, end_date, client_code, application_code) VALUES ('2024-01-01', '2024-02-01', 1, 1)";
+                String sql = "INSERT INTO Subscription (code, start_date, end_date, client_code, application_code) VALUES (1, '2024-01-01', '2024-02-01', 1, 1)";
                 jdbcTemplate.execute(sql);
 
-                String sqlPromotion = "INSERT INTO Promotion (discount_percentage, extra_days, days_required, application_code) VALUES (20.0, 2, 2, 1)";
+                String sqlPromotion = "INSERT INTO Promotion (code, discount_percentage, extra_days, days_required, application_code) VALUES (1, 20.0, 2, 2, 1)";
                 jdbcTemplate.execute(sqlPromotion);
-                sqlPromotion = "INSERT INTO Promotion (discount_percentage, extra_days, days_required, application_code) VALUES (50.0, 3, 2, 1)";
+                sqlPromotion = "INSERT INTO Promotion (code, discount_percentage, extra_days, days_required, application_code) VALUES (2, 50.0, 3, 2, 1)";
                 jdbcTemplate.execute(sqlPromotion);
-                sqlPromotion = "INSERT INTO Promotion (discount_percentage, extra_days, days_required, application_code) VALUES (30.0, 2, 60, 1)";
+                sqlPromotion = "INSERT INTO Promotion (code, discount_percentage, extra_days, days_required, application_code) VALUES (3, 30.0, 2, 60, 1)";
                 jdbcTemplate.execute(sqlPromotion);
 
                 CreatePaymentDto createPaymentDto = new CreatePaymentDto(
