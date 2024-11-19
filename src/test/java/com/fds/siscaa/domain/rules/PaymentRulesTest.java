@@ -17,47 +17,47 @@ public class PaymentRulesTest {
     }
 
     @Test
-    public void testCalculateMonthsToExtend_ExactDivision() {
+    public void testCalculateDaysToExtend_ExactDivision() {
         float monthlyFee = 100.0f;
         float receivedAmount = 300.0f;
-        int expectedMonths = 3;
+        int expectedDays = 90;
 
-        int actualMonths = paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount);
+        int actualDays = paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount);
 
-        assertEquals(expectedMonths, actualMonths);
+        assertEquals(expectedDays, actualDays);
     }
 
     @Test
-    public void testCalculateMonthsToExtend_NotExactDivision() {
+    public void testCalculateDaysToExtend_NotExactDivision() {
         float monthlyFee = 100.0f;
         float receivedAmount = 350.0f;
-        int expectedMonths = 3;
+        int expectedDays = 90;
 
-        int actualMonths = paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount);
+        int actualDays = paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount);
 
-        assertEquals(expectedMonths, actualMonths);
+        assertEquals(expectedDays, actualDays);
     }
 
     @Test
-    public void testCalculateMonthsToExtend_ZeroReceivedAmount() {
+    public void testCalculateDaysToExtend_ZeroReceivedAmount() {
         float monthlyFee = 100.0f;
         float receivedAmount = 0.0f;
-        int expectedMonths = 0;
+        int expectedDays = 0;
 
-        int actualMonths = paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount);
+        int actualDays = paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount);
 
-        assertEquals(expectedMonths, actualMonths);
+        assertEquals(expectedDays, actualDays);
     }
 
     @Test
-    public void testCalculateMonthsToExtend_ReceivedAmountLessThanMonthlyFee() {
+    public void testCalculateDaysToExtend_ReceivedAmountLessThanMonthlyFee() {
         float monthlyFee = 100.0f;
         float receivedAmount = 50.0f;
-        int expectedMonths = 0;
+        int expectedDays = 0;
 
-        int actualMonths = paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount);
+        int actualDays = paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount);
 
-        assertEquals(expectedMonths, actualMonths);
+        assertEquals(expectedDays, actualDays);
     }
 
     @Test
