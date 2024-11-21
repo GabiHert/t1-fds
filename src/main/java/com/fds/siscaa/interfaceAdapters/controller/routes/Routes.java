@@ -3,6 +3,7 @@ package com.fds.siscaa.interfaceAdapters.controller.routes;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fds.siscaa.useCases.useCases.ValidSubscriptionUseCase;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,7 +28,6 @@ import com.fds.siscaa.interfaceAdapters.controller.dto.UpdateCostDto;
 import com.fds.siscaa.useCases.adapters.ClientRepositoryAdapter;
 import com.fds.siscaa.useCases.useCases.CreatePaymentUseCase;
 import com.fds.siscaa.useCases.useCases.CreateSubscriptionUseCase;
-import com.fds.siscaa.useCases.useCases.InvalidSubscriptionUseCase;
 
 import lombok.AllArgsConstructor;
 
@@ -53,7 +53,7 @@ public class Routes {
 
     private final SubscriptionRepositoryAdapter subscriptionRepository;
 
-    private final InvalidSubscriptionUseCase invalidSubscriptionUseCase;
+    private final ValidSubscriptionUseCase validSubscriptionUseCase;
 
     @PostMapping("servcad/assinaturas")
     public ResponseEntity<SubscriptionDto> postSubscription(
@@ -140,7 +140,7 @@ public class Routes {
 
     @GetMapping("assinvalida/{codass}")
     public boolean subscriptionIsValid(@PathVariable Long codass) {
-        return this.invalidSubscriptionUseCase.isInvalid(codass);
+        return this.validSubscriptionUseCase.isValid(codass);
     }
 
 }

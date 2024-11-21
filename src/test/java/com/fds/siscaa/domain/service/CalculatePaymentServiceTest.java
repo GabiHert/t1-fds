@@ -61,6 +61,7 @@ public class CalculatePaymentServiceTest {
                 .thenReturn(180.0f);
         when(paymentRules.calculateRefund(180.0f, receivedAmount)).thenReturn(40.0f);
 
+
         CalculatePaymentResponseEntity response = calculatePaymentService.calculate(subscription, promotions,
                 receivedAmount);
 
