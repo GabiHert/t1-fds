@@ -266,7 +266,7 @@ class RoutesTest {
                 jdbcTemplate.execute(sqlSubscription);
 
                 ResponseEntity<List<SubscriptionDto>> response = testRestTemplate
-                        .exchange("http://localhost:" + port + "/servcad/assinaturas/CANCELADAS", HttpMethod.GET, null, new ParameterizedTypeReference<List<SubscriptionDto>>() {});
+                        .exchange("http://localhost:" + port + "/servcad/assinaturas/ATIVAS", HttpMethod.GET, null, new ParameterizedTypeReference<List<SubscriptionDto>>() {});
 
                 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
               //  assertThat(response.getBody()).isNotEmpty();
