@@ -361,9 +361,15 @@ class RoutesTest {
 
         @Test
         void listSubscriptionsByAppCode() {
-                String sqlApplication = "INSERT INTO Application (code, name, monthly_fee) VALUES (1, 'Test Application', 10.00)";
+                CustomLocalDate.mock(LocalDate.of(2024, 11, 23));
+
+                String sqlApplication = "INSERT INTO Application (code, name, monthly_fee) VALUES (1, 'Test Application', 10.00),(2, 'Test Application', 10.00)";
                 jdbcTemplate.execute(sqlApplication);
-                String sqlSubscription = "INSERT INTO Subscription (code, start_date, end_date, client_code, application_code, status) VALUES (1, '2024-01-01', '2024-02-01', 1, 1, 'ACTIVE')";
+
+                String sqlClient = "INSERT INTO Client (code, name, email) VALUES (1, 'Test Client', 'testclient@example.com')";
+                jdbcTemplate.execute(sqlClient);
+
+                String sqlSubscription = "INSERT INTO Subscription (code, start_date, end_date, client_code, application_code) VALUES (1, '2024-10-25', '2024-11-25', 1, 1),(2, '2022-10-25', '2023-11-25', 1, 1),(3, '2024-10-25', '2024-11-25', 1, 2)";
                 jdbcTemplate.execute(sqlSubscription);
 
                 ResponseEntity<List<SubscriptionDto>> response = testRestTemplate
@@ -373,6 +379,24 @@ class RoutesTest {
 
                 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
                 assertThat(response.getBody()).isNotEmpty();
+                List<SubscriptionDto> subscriptions = response.getBody();
+                assertThat(subscriptions).hasSize(2);
+
+                SubscriptionDto subscription1 = subscriptions.get(0);
+                assertThat(subscription1.getCodigoAssinatura()).isEqualTo(1);
+                assertThat(subscription1.getCodigoCliente()).isEqualTo(1);
+                assertThat(subscription1.getCodigoAplicativo()).isEqualTo(1);
+                assertThat(subscription1.getDataDeInicio()).isEqualTo(LocalDate.of(2024, 10, 25));
+                assertThat(subscription1.getDataDeEncerramento()).isEqualTo(LocalDate.of(2024, 11, 25));
+                assertThat(subscription1.getStatus()).isEqualTo("ATIVA");
+
+                SubscriptionDto subscription2 = subscriptions.get(1);
+                assertThat(subscription2.getCodigoAssinatura()).isEqualTo(2);
+                assertThat(subscription2.getCodigoCliente()).isEqualTo(1);
+                assertThat(subscription2.getCodigoAplicativo()).isEqualTo(1);
+                assertThat(subscription2.getDataDeInicio()).isEqualTo(LocalDate.of(2022, 10, 25));
+                assertThat(subscription2.getDataDeEncerramento()).isEqualTo(LocalDate.of(2023, 11, 25));
+                assertThat(subscription2.getStatus()).isEqualTo("CANCELADA");
         }
 
         @Test
