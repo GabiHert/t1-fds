@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.fds.siscaa.interfaceAdapters.controller.dto.*;
 import org.aspectj.lang.annotation.After;
@@ -27,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.fds.siscaa.domain.enums.PaymentStatus;
+import com.fds.siscaa.domain.enums.SubscriptionType;
 import com.fds.siscaa.domain.utils.CustomLocalDate;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
@@ -174,7 +176,8 @@ class RoutesTest {
                 UpdateCostDto updateCostDto = new UpdateCostDto(20.00f);
 
                 ResponseEntity<ApplicationDto> response = testRestTemplate
-                        .postForEntity("http://localhost:" + port + "/servcad/aplicativos/atualizacusto/1", updateCostDto, ApplicationDto.class);
+                                .postForEntity("http://localhost:" + port + "/servcad/aplicativos/atualizacusto/1",
+                                                updateCostDto, ApplicationDto.class);
 
                 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
                 assertThat(response.getBody()).isNotNull();
@@ -187,7 +190,9 @@ class RoutesTest {
                 jdbcTemplate.execute(sqlClient);
 
                 ResponseEntity<List<ClientDto>> response = testRestTemplate
-                        .exchange("http://localhost:" + port + "/servcad/clientes", HttpMethod.GET, null, new ParameterizedTypeReference<List<ClientDto>>() {});
+                                .exchange("http://localhost:" + port + "/servcad/clientes", HttpMethod.GET, null,
+                                                new ParameterizedTypeReference<List<ClientDto>>() {
+                                                });
 
                 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
                 assertThat(response.getBody()).isNotEmpty();
@@ -207,7 +212,9 @@ class RoutesTest {
                 jdbcTemplate.execute(sqlApplication);
 
                 ResponseEntity<List<ApplicationDto>> response = testRestTemplate
-                        .exchange("http://localhost:" + port + "/servcad/aplicativos", HttpMethod.GET, null, new ParameterizedTypeReference<List<ApplicationDto>>() {});
+                                .exchange("http://localhost:" + port + "/servcad/aplicativos", HttpMethod.GET, null,
+                                                new ParameterizedTypeReference<List<ApplicationDto>>() {
+                                                });
 
                 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
                 assertThat(response.getBody()).isNotEmpty();
@@ -235,7 +242,9 @@ class RoutesTest {
                 jdbcTemplate.execute(sqlSubscription);
 
                 ResponseEntity<List<SubscriptionDto>> response = testRestTemplate
-                        .exchange("http://localhost:" + port + "/servcad/assinaturas/ATIVAS", HttpMethod.GET, null, new ParameterizedTypeReference<List<SubscriptionDto>>() {});
+                                .exchange("http://localhost:" + port + "/servcad/assinaturas/ATIVAS", HttpMethod.GET,
+                                                null, new ParameterizedTypeReference<List<SubscriptionDto>>() {
+                                                });
 
                 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
                 assertThat(response.getBody()).isNotEmpty();
@@ -266,10 +275,12 @@ class RoutesTest {
                 jdbcTemplate.execute(sqlSubscription);
 
                 ResponseEntity<List<SubscriptionDto>> response = testRestTemplate
-                        .exchange("http://localhost:" + port + "/servcad/assinaturas/ATIVAS", HttpMethod.GET, null, new ParameterizedTypeReference<List<SubscriptionDto>>() {});
+                                .exchange("http://localhost:" + port + "/servcad/assinaturas/ATIVAS", HttpMethod.GET,
+                                                null, new ParameterizedTypeReference<List<SubscriptionDto>>() {
+                                                });
 
                 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-              //  assertThat(response.getBody()).isNotEmpty();
+                // assertThat(response.getBody()).isNotEmpty();
 
                 List<SubscriptionDto> subscriptions = response.getBody();
                 assertThat(subscriptions).hasSize(1);
@@ -285,25 +296,57 @@ class RoutesTest {
 
         @Test
         void listSubscriptionsByTypeTODAS() {
-                String sqlSubscription = "INSERT INTO Subscription (code, start_date, end_date, client_code, application_code, status) VALUES (1, '2024-01-01', '2024-02-01', 1, 1, 'TODAS')";
+                customLocalDateMock.when(CustomLocalDate::now).thenReturn(LocalDate.of(2024, 11, 23));
+
+                String sqlApplication = "INSERT INTO Application (code, name, monthly_fee) VALUES (1, 'Test Application', 10.00)";
+                jdbcTemplate.execute(sqlApplication);
+
+                String sqlClient = "INSERT INTO Client (code, name, email) VALUES (1, 'Test Client', 'testclient@example.com')";
+                jdbcTemplate.execute(sqlClient);
+
+                String sqlSubscription = "INSERT INTO Subscription (code, start_date, end_date, client_code, application_code) VALUES (1, '2024-10-25', '2024-11-25', 1, 1),(2, '2022-10-25', '2023-11-25', 1, 1)";
                 jdbcTemplate.execute(sqlSubscription);
 
                 ResponseEntity<List<SubscriptionDto>> response = testRestTemplate
-                        .exchange("http://localhost:" + port + "/servcad/assinaturas/TODAS", HttpMethod.GET, null, new ParameterizedTypeReference<List<SubscriptionDto>>() {});
+                                .exchange("http://localhost:" + port + "/servcad/assinaturas/TODAS", HttpMethod.GET,
+                                                null, new ParameterizedTypeReference<List<SubscriptionDto>>() {
+                                                });
 
                 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
                 assertThat(response.getBody()).isNotEmpty();
 
                 List<SubscriptionDto> subscriptions = response.getBody();
-                assertThat(subscriptions).hasSize(1);
+                assertThat(subscriptions).hasSize(2);
 
-                SubscriptionDto subscription = subscriptions.get(0);
-                assertThat(subscription.getCodigoAssinatura()).isEqualTo(1);
-                assertThat(subscription.getCodigoCliente()).isEqualTo(1);
-                assertThat(subscription.getCodigoAplicativo()).isEqualTo(1);
-                assertThat(subscription.getDataDeInicio()).isEqualTo(LocalDate.of(2024, 1, 1));
-                assertThat(subscription.getDataDeEncerramento()).isEqualTo(LocalDate.of(2024, 2, 1));
-                assertThat(subscription.getStatus()).isEqualTo("TODAS");
+                List<SubscriptionDto> activeSubscriptions = subscriptions.stream()
+                                .filter(subscription -> "ATIVA".equals(subscription.getStatus()))
+                                .collect(Collectors.toList());
+                List<SubscriptionDto> canceledSubscriptions = subscriptions.stream()
+                                .filter(subscription -> "CANCELADA"
+                                                .equals(subscription.getStatus()))
+                                .collect(Collectors.toList());
+
+                assertThat(activeSubscriptions).hasSize(1);
+                assertThat(canceledSubscriptions).hasSize(1);
+
+                canceledSubscriptions.forEach(subscription -> {
+                        assertThat(subscription.getCodigoAssinatura()).isEqualTo(2);
+                        assertThat(subscription.getCodigoCliente()).isEqualTo(1);
+                        assertThat(subscription.getCodigoAplicativo()).isEqualTo(1);
+                        assertThat(subscription.getDataDeInicio()).isEqualTo(LocalDate.of(2022, 10, 25));
+                        assertThat(subscription.getDataDeEncerramento()).isEqualTo(LocalDate.of(2023, 11, 25));
+                        assertThat(subscription.getStatus()).isEqualTo("CANCELADA");
+                });
+
+                activeSubscriptions.forEach(subscription -> {
+                        assertThat(subscription.getCodigoAssinatura()).isEqualTo(1);
+                        assertThat(subscription.getCodigoCliente()).isEqualTo(1);
+                        assertThat(subscription.getCodigoAplicativo()).isEqualTo(1);
+                        assertThat(subscription.getDataDeInicio()).isEqualTo(LocalDate.of(2024, 10, 25));
+                        assertThat(subscription.getDataDeEncerramento()).isEqualTo(LocalDate.of(2024, 11, 25));
+                        assertThat(subscription.getStatus()).isEqualTo("ATIVA");
+                });
+
         }
 
         @Test
@@ -314,7 +357,9 @@ class RoutesTest {
                 jdbcTemplate.execute(sqlSubscription);
 
                 ResponseEntity<List<SubscriptionDto>> response = testRestTemplate
-                        .exchange("http://localhost:" + port + "/servcad/asscli/1", HttpMethod.GET, null, new ParameterizedTypeReference<List<SubscriptionDto>>() {});
+                                .exchange("http://localhost:" + port + "/servcad/asscli/1", HttpMethod.GET, null,
+                                                new ParameterizedTypeReference<List<SubscriptionDto>>() {
+                                                });
 
                 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
                 assertThat(response.getBody()).isNotEmpty();
@@ -328,7 +373,9 @@ class RoutesTest {
                 jdbcTemplate.execute(sqlSubscription);
 
                 ResponseEntity<List<SubscriptionDto>> response = testRestTemplate
-                        .exchange("http://localhost:" + port + "/servcad/assapp/1", HttpMethod.GET, null, new ParameterizedTypeReference<List<SubscriptionDto>>() {});
+                                .exchange("http://localhost:" + port + "/servcad/assapp/1", HttpMethod.GET, null,
+                                                new ParameterizedTypeReference<List<SubscriptionDto>>() {
+                                                });
 
                 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
                 assertThat(response.getBody()).isNotEmpty();
@@ -340,7 +387,7 @@ class RoutesTest {
                 jdbcTemplate.execute(sqlSubscription);
 
                 ResponseEntity<Boolean> response = testRestTemplate
-                        .getForEntity("http://localhost:" + port + "/assinvalida/1", Boolean.class);
+                                .getForEntity("http://localhost:" + port + "/assinvalida/1", Boolean.class);
 
                 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
                 assertThat(response.getBody()).isTrue();
