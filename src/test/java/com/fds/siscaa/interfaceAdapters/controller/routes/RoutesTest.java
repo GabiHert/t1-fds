@@ -157,6 +157,30 @@ class RoutesTest {
         }
 
         @Test
+        void postSubscription() {
+                String sqlClient = "INSERT INTO Client (code, name, email) VALUES (1, 'Test Client', 'testclient@example.com')";
+                jdbcTemplate.execute(sqlClient);
+
+                String sqlApplication = "INSERT INTO Application (code, name, monthly_fee) VALUES (1, 'Test Application', 10.00)";
+                jdbcTemplate.execute(sqlApplication);
+
+                CreateSubscriptionDto createSubscriptionDto = new CreateSubscriptionDto(1, 1);
+
+                ResponseEntity<SubscriptionDto> response = testRestTemplate
+                        .postForEntity("http://localhost:" + port + "/servcad/assinaturas", createSubscriptionDto, SubscriptionDto.class);
+
+                assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+                assertThat(response.getBody()).isNotNull();
+                assertThat(response.getBody().getCodigoCliente()).isEqualTo(1);
+                assertThat(response.getBody().getCodigoAplicativo()).isEqualTo(1);
+                assertThat(response.getBody().getDataDeInicio()).isEqualTo(LocalDate.now());
+                assertThat(response.getBody().getDataDeEncerramento()).isEqualTo(LocalDate.now().plusDays(7));
+                assertThat(response.getBody().getStatus()).isEqualTo("ATIVA");
+                assertThat(response.getBody().getCodigoAssinatura()).isEqualTo(1);
+
+        }
+
+        @Test
         void updateCost() {
                 String sqlApplication = "INSERT INTO Application (code, name, monthly_fee) VALUES (1, 'Test Application', 10.00)";
                 jdbcTemplate.execute(sqlApplication);
