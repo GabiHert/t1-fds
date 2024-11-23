@@ -21,9 +21,16 @@ public interface SubscriptionRepositoryJPA extends CrudRepository<SubscriptionMo
 
     CustomList<SubscriptionModel> findByClientCode(long clientCode);
 
-    CustomList<SubscriptionModel> findByEndDateBefore(LocalDate endDate);
 
-    CustomList<SubscriptionModel> findByEndDateAfter(LocalDate endDate);
+
+    @Query("SELECT s FROM SubscriptionModel s WHERE s.endDate < :endDate")
+    CustomList<SubscriptionModel> findByEndDateBefore(@Param("endDate") LocalDate endDate);
+
+    @Query("SELECT s FROM SubscriptionModel s WHERE s.endDate > :endDate")
+    CustomList<SubscriptionModel> findByEndDateAfter(@Param("endDate") LocalDate endDate);
+
+    @Query("SELECT s FROM SubscriptionModel s WHERE s.endDate <= :endDate")
+    CustomList<SubscriptionModel> findByEndDateBeforeOrEqual(@Param("endDate") LocalDate endDate);
 
     SubscriptionModel findByCode(long code);
 
