@@ -56,7 +56,6 @@ public class SubscriptionRepositoryImpl implements SubscriptionRepositoryAdapter
         CustomList<SubscriptionModel> subscriptionModels_canceladas = subscriptionRepositoryJPA
             .findByEndDateBeforeOrEqual(CustomLocalDate.now());
         return subscriptionModels_canceladas.toEntities(SubscriptionEntity.class);
-      case TODAS:
       default:
         CustomList<SubscriptionModel> subscriptionModels_todas = subscriptionRepositoryJPA.findAll();
         return subscriptionModels_todas.toEntities(SubscriptionEntity.class);

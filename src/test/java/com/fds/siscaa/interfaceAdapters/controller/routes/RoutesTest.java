@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomMapEditor;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -43,8 +44,6 @@ class RoutesTest {
         @Autowired
         private JdbcTemplate jdbcTemplate;
 
-        private MockedStatic<CustomLocalDate> customLocalDateMock;
-
         @BeforeEach
         void setUp() {
                 jdbcTemplate.execute("DELETE FROM Payment");
@@ -53,21 +52,12 @@ class RoutesTest {
                 jdbcTemplate.execute("DELETE FROM Application");
                 jdbcTemplate.execute("DELETE FROM Client");
 
-        }
+                CustomLocalDate.reset();
 
-        @BeforeEach
-        public void setup() {
-                customLocalDateMock = Mockito.mockStatic(CustomLocalDate.class);
-        }
-
-        @AfterEach
-        public void tearDown() {
-                customLocalDateMock.close();
         }
 
         @Test
         void registraPagamentoSemPromocao() {
-                customLocalDateMock.when(CustomLocalDate::now).thenReturn(LocalDate.of(2024, 1, 1));
 
                 String sqlApplication = "INSERT INTO Application (code,name, monthly_fee) VALUES (1, 'Test Application', 10.00)";
                 jdbcTemplate.execute(sqlApplication);
@@ -100,7 +90,6 @@ class RoutesTest {
 
         @Test
         void registraPagamentoComPromocao() {
-                customLocalDateMock.when(CustomLocalDate::now).thenReturn(LocalDate.of(2024, 1, 1));
 
                 String sqlApplication = "INSERT INTO Application (code, name, monthly_fee) VALUES (1, 'Test Application', 10.00)";
                 jdbcTemplate.execute(sqlApplication);
@@ -133,7 +122,6 @@ class RoutesTest {
 
         @Test
         void registraPagamentoComPromocaoPorParametro() {
-                customLocalDateMock.when(CustomLocalDate::now).thenReturn(LocalDate.of(2024, 1, 1));
 
                 String sqlApplication = "INSERT INTO Application (code, name, monthly_fee) VALUES (1, 'Test Application', 10.00)";
                 jdbcTemplate.execute(sqlApplication);
@@ -229,8 +217,7 @@ class RoutesTest {
 
         @Test
         void listSubscriptionsByTypeATIVAS() {
-
-                customLocalDateMock.when(CustomLocalDate::now).thenReturn(LocalDate.of(2024, 11, 23));
+                CustomLocalDate.mock(LocalDate.of(2024, 11, 20));
 
                 String sqlApplication = "INSERT INTO Application (code, name, monthly_fee) VALUES (1, 'Test Application', 10.00)";
                 jdbcTemplate.execute(sqlApplication);
@@ -238,11 +225,12 @@ class RoutesTest {
                 String sqlClient = "INSERT INTO Client (code, name, email) VALUES (1, 'Test Client', 'testclient@example.com')";
                 jdbcTemplate.execute(sqlClient);
 
-                String sqlSubscription = "INSERT INTO Subscription (code, start_date, end_date, client_code, application_code) VALUES (1, '2024-10-25', '2024-11-25', 1, 1)";
+                String sqlSubscription = "INSERT INTO Subscription (code, start_date, end_date, client_code, application_code) VALUES (1, '2024-10-25', '2024-11-21', 1, 1)";
                 jdbcTemplate.execute(sqlSubscription);
 
                 ResponseEntity<List<SubscriptionDto>> response = testRestTemplate
-                                .exchange("http://localhost:" + port + "/servcad/assinaturas/ATIVAS", HttpMethod.GET,
+                                .exchange("http://localhost:" + port + "/servcad/assinaturas/ATIVAS",
+                                                HttpMethod.GET,
                                                 null, new ParameterizedTypeReference<List<SubscriptionDto>>() {
                                                 });
 
@@ -257,13 +245,13 @@ class RoutesTest {
                 assertThat(subscription.getCodigoCliente()).isEqualTo(1);
                 assertThat(subscription.getCodigoAplicativo()).isEqualTo(1);
                 assertThat(subscription.getDataDeInicio()).isEqualTo(LocalDate.of(2024, 10, 25));
-                assertThat(subscription.getDataDeEncerramento()).isEqualTo(LocalDate.of(2024, 11, 25));
+                assertThat(subscription.getDataDeEncerramento()).isEqualTo(LocalDate.of(2024, 11, 21));
                 assertThat(subscription.getStatus()).isEqualTo("ATIVA");
         }
 
         @Test
         void listSubscriptionsByTypeCANCELADAS() {
-                customLocalDateMock.when(CustomLocalDate::now).thenReturn(LocalDate.of(2024, 12, 14));
+                CustomLocalDate.mock(LocalDate.of(2024, 12, 20));
 
                 String sqlApplication = "INSERT INTO Application (code, name, monthly_fee) VALUES (1, 'Test Application', 10.00)";
                 jdbcTemplate.execute(sqlApplication);
@@ -275,12 +263,13 @@ class RoutesTest {
                 jdbcTemplate.execute(sqlSubscription);
 
                 ResponseEntity<List<SubscriptionDto>> response = testRestTemplate
-                                .exchange("http://localhost:" + port + "/servcad/assinaturas/ATIVAS", HttpMethod.GET,
+                                .exchange("http://localhost:" + port + "/servcad/assinaturas/CANCELADAS",
+                                                HttpMethod.GET,
                                                 null, new ParameterizedTypeReference<List<SubscriptionDto>>() {
                                                 });
 
                 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-                // assertThat(response.getBody()).isNotEmpty();
+                assertThat(response.getBody()).isNotEmpty();
 
                 List<SubscriptionDto> subscriptions = response.getBody();
                 assertThat(subscriptions).hasSize(1);
@@ -289,14 +278,13 @@ class RoutesTest {
                 assertThat(subscription.getCodigoAssinatura()).isEqualTo(1);
                 assertThat(subscription.getCodigoCliente()).isEqualTo(1);
                 assertThat(subscription.getCodigoAplicativo()).isEqualTo(1);
-                assertThat(subscription.getDataDeInicio()).isEqualTo(LocalDate.of(2024, 10, 25));
-                assertThat(subscription.getDataDeEncerramento()).isEqualTo(LocalDate.of(2024, 11, 25));
+                assertThat(subscription.getDataDeInicio()).isEqualTo(LocalDate.of(2024, 11, 10));
+                assertThat(subscription.getDataDeEncerramento()).isEqualTo(LocalDate.of(2024, 12, 10));
                 assertThat(subscription.getStatus()).isEqualTo("CANCELADA");
         }
 
         @Test
         void listSubscriptionsByTypeTODAS() {
-                customLocalDateMock.when(CustomLocalDate::now).thenReturn(LocalDate.of(2024, 11, 23));
 
                 String sqlApplication = "INSERT INTO Application (code, name, monthly_fee) VALUES (1, 'Test Application', 10.00)";
                 jdbcTemplate.execute(sqlApplication);
@@ -351,9 +339,15 @@ class RoutesTest {
 
         @Test
         void listSubscriptionsByClientCode() {
+                CustomLocalDate.mock(LocalDate.of(2024, 11, 23));
+
+                String sqlApplication = "INSERT INTO Application (code, name, monthly_fee) VALUES (1, 'Test Application', 10.00)";
+                jdbcTemplate.execute(sqlApplication);
+
                 String sqlClient = "INSERT INTO Client (code, name, email) VALUES (1, 'Test Client', 'testclient@example.com')";
                 jdbcTemplate.execute(sqlClient);
-                String sqlSubscription = "INSERT INTO Subscription (code, start_date, end_date, client_code, application_code, status) VALUES (1, '2024-01-01', '2024-02-01', 1, 1, 'ACTIVE')";
+
+                String sqlSubscription = "INSERT INTO Subscription (code, start_date, end_date, client_code, application_code) VALUES (1, '2024-10-25', '2024-11-25', 1, 1),(2, '2022-10-25', '2023-11-25', 1, 1)";
                 jdbcTemplate.execute(sqlSubscription);
 
                 ResponseEntity<List<SubscriptionDto>> response = testRestTemplate
@@ -383,7 +377,7 @@ class RoutesTest {
 
         @Test
         void subscriptionIsValid() {
-                String sqlSubscription = "INSERT INTO Subscription (code, start_date, end_date, client_code, application_code, status) VALUES (1, '2024-01-01', '2024-02-01', 1, 1, 'ACTIVE')";
+                String sqlSubscription = "INSERT INTO Subscription (code, start_date, end_date, client_code, application_code, status) VALUES (1, '2024-01-01', '2024-02-01', 1, 1)";
                 jdbcTemplate.execute(sqlSubscription);
 
                 ResponseEntity<Boolean> response = testRestTemplate

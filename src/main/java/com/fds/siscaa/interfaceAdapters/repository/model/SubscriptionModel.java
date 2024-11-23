@@ -44,17 +44,9 @@ public class SubscriptionModel {
     }
 
     public SubscriptionEntity toEntity() {
-        String status = null;
-
-        if (endDate.isBefore(CustomLocalDate.now())) {
-            status = "CANCELADA";
-        } else {
-            status = "ATIVA";
-        }
-
         return new SubscriptionEntity(
                 code, client.toEntity(),
                 startDate, endDate,
-                application.toEntity(), status);
+                application.toEntity());
     }
 }
