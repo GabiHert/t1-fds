@@ -400,8 +400,16 @@ class RoutesTest {
         }
 
         @Test
-        void subscriptionIsValid() {
-                String sqlSubscription = "INSERT INTO Subscription (code, start_date, end_date, client_code, application_code, status) VALUES (1, '2024-01-01', '2024-02-01', 1, 1)";
+        void subscriptionIsValidReturnsTrue() {
+                CustomLocalDate.mock(LocalDate.of(2024, 11, 23));
+
+                String sqlApplication = "INSERT INTO Application (code, name, monthly_fee) VALUES (1, 'Test Application', 10.00),(2, 'Test Application', 10.00)";
+                jdbcTemplate.execute(sqlApplication);
+
+                String sqlClient = "INSERT INTO Client (code, name, email) VALUES (1, 'Test Client', 'testclient@example.com')";
+                jdbcTemplate.execute(sqlClient);
+
+                String sqlSubscription = "INSERT INTO Subscription (code, start_date, end_date, client_code, application_code) VALUES (1, '2024-10-25', '2024-11-25', 1, 1),(2, '2022-10-25', '2023-11-25', 1, 1),(3, '2024-10-25', '2024-11-25', 1, 2)";
                 jdbcTemplate.execute(sqlSubscription);
 
                 ResponseEntity<Boolean> response = testRestTemplate
@@ -409,5 +417,25 @@ class RoutesTest {
 
                 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
                 assertThat(response.getBody()).isTrue();
+        }
+
+        @Test
+        void subscriptionIsValidReturnsFalse() {
+                CustomLocalDate.mock(LocalDate.of(2024, 11, 23));
+
+                String sqlApplication = "INSERT INTO Application (code, name, monthly_fee) VALUES (1, 'Test Application', 10.00),(2, 'Test Application', 10.00)";
+                jdbcTemplate.execute(sqlApplication);
+
+                String sqlClient = "INSERT INTO Client (code, name, email) VALUES (1, 'Test Client', 'testclient@example.com')";
+                jdbcTemplate.execute(sqlClient);
+
+                String sqlSubscription = "INSERT INTO Subscription (code, start_date, end_date, client_code, application_code) VALUES (1, '2023-10-25', '2024-01-25', 1, 1),(2, '2022-10-25', '2023-11-25', 1, 1),(3, '2024-10-25', '2024-11-25', 1, 2)";
+                jdbcTemplate.execute(sqlSubscription);
+
+                ResponseEntity<Boolean> response = testRestTemplate
+                                .getForEntity("http://localhost:" + port + "/assinvalida/1", Boolean.class);
+
+                assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+                assertThat(response.getBody()).isFalse();
         }
 }
