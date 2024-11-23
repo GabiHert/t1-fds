@@ -42,7 +42,7 @@ public class CalculatePaymentService {
                 if (validPromotion.isPresent()) {
                         daysToExtend = promotionRules.applyExtraDays(daysToExtend,
                                         validPromotion.get().getExtraDays());
-                        monthlyFee = promotionRules.applyDiscount(daysToExtend, monthlyFee,
+                        receivedAmount += promotionRules.applyDiscount(daysToExtend, monthlyFee,
                                         validPromotion.get().getDiscountPercentage());
                 }
 
@@ -52,7 +52,7 @@ public class CalculatePaymentService {
                                 paymentStatus,
                                 subscription.getEndDate().plusDays(daysToExtend),
                                 refundValue,
-                                receivedAmount - refundValue,
+                                refundValue,
                                 validPromotion);
         }
 
