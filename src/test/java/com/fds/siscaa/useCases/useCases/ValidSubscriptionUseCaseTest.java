@@ -47,4 +47,49 @@ public class ValidSubscriptionUseCaseTest {
 
         assertFalse(result);
     }
+
+    @Test
+    public void testIsValidWithSubscriptionEndingToday() {
+        long subscriptionCode = 1;
+        SubscriptionEntity subscriptionEntity = new SubscriptionEntity(subscriptionCode, null, CustomLocalDate.now().minusDays(10), CustomLocalDate.now(), null, null);
+        when(subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode)).thenReturn(subscriptionEntity);
+
+        boolean result = validSubscriptionUseCase.isValid(subscriptionCode);
+
+        assertFalse(result);
+    }
+
+    @Test
+    public void testIsValidWithFutureSubscription() {
+        long subscriptionCode = 1;
+        SubscriptionEntity subscriptionEntity = new SubscriptionEntity(subscriptionCode, null, CustomLocalDate.now().plusDays(10), CustomLocalDate.now().plusDays(20), null, null);
+        when(subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode)).thenReturn(subscriptionEntity);
+
+        boolean result = validSubscriptionUseCase.isValid(subscriptionCode);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void testIsValidWithNullEndDate() {
+        long subscriptionCode = 1;
+        SubscriptionEntity subscriptionEntity = new SubscriptionEntity(subscriptionCode, null, CustomLocalDate.now(), null, null, null);
+        when(subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode)).thenReturn(subscriptionEntity);
+
+        boolean result = validSubscriptionUseCase.isValid(subscriptionCode);
+
+        assertFalse(result);
+    }
+
+    @Test
+    public void testIsValidWithNullStartDate() {
+        long subscriptionCode = 1;
+        SubscriptionEntity subscriptionEntity = new SubscriptionEntity(subscriptionCode, null, null, CustomLocalDate.now().plusDays(10), null, null);
+        when(subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode)).thenReturn(subscriptionEntity);
+
+        boolean result = validSubscriptionUseCase.isValid(subscriptionCode);
+
+        assertTrue(result);
+    }
+
 }

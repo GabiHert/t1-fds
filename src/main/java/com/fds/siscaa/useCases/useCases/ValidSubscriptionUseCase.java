@@ -15,10 +15,13 @@ public class ValidSubscriptionUseCase {
 
     public boolean isValid(long subscriptionCode) {
         SubscriptionEntity subscriptionEntity = subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode);
-        if (subscriptionEntity.getEndDate().isAfter(CustomLocalDate.now())) {
-            return true;
+        try {
+            if (subscriptionEntity.getEndDate().isAfter(CustomLocalDate.now())) {
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
         }
         return false;
     }
-
 }
