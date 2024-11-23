@@ -77,7 +77,6 @@ public class CreatePaymentUseCaseTest {
                 assertEquals(LocalDate.now().plusDays(30), result.getNewEndDate());
                 assertEquals(Optional.of(promotion), result.getPromotion());
         }
-
         @Test
         public void createPaymentWithInvalidAmount() {
                 LocalDate paymentDate = LocalDate.now();
@@ -103,6 +102,66 @@ public class CreatePaymentUseCaseTest {
                 assertEquals(0.0f, result.getRefundedValue());
                 assertEquals(0.0f, result.getPaidValue());
                 assertEquals(LocalDate.now(), result.getNewEndDate());
+                assertEquals(Optional.empty(), result.getPromotion());
+        }
+
+        @Test
+        public void createPaymentWithNoPromotion() {
+                LocalDate paymentDate = LocalDate.now();
+                int subscriptionCode = 1;
+                float receivedAmount = 100.0f;
+                Optional<Long> promotionCode = Optional.empty();
+
+                SubscriptionEntity subscription = mock(SubscriptionEntity.class);
+                ApplicationEntity application = mock(ApplicationEntity.class);
+                when(subscription.getApplication()).thenReturn(application);
+                when(application.getCode()).thenReturn(1L);
+                when(subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode)).thenReturn(subscription);
+
+                CustomList<PromotionEntity> promotionEntities = new CustomList<>();
+                when(promotionRepositoryAdapter.listByApplicationCode(1L)).thenReturn(promotionEntities);
+
+                CalculatePaymentResponseEntity responseEntity = new CalculatePaymentResponseEntity(
+                        PaymentStatus.PAGAMENTO_OK, LocalDate.now().plusDays(30), 0.0f, receivedAmount, Optional.empty());
+                when(calculatePaymentService.calculate(any(SubscriptionEntity.class), any(CustomList.class), eq(receivedAmount))).thenReturn(responseEntity);
+
+                CalculatePaymentResponseEntity result = createPaymentUseCase.create(paymentDate, subscriptionCode, receivedAmount, promotionCode);
+
+                assertEquals(PaymentStatus.PAGAMENTO_OK, result.getStatus());
+                assertEquals(0.0f, result.getRefundedValue());
+                assertEquals(receivedAmount, result.getPaidValue());
+                assertEquals(LocalDate.now().plusDays(30), result.getNewEndDate());
+                assertEquals(Optional.empty(), result.getPromotion());
+        }
+
+        @Test
+        public void createPaymentWithInvalidPromotion() {
+                LocalDate paymentDate = LocalDate.now();
+                int subscriptionCode = 1;
+                float receivedAmount = 100.0f;
+                Optional<Long> promotionCode = Optional.of(999L); // Invalid promotion code
+
+                SubscriptionEntity subscription = mock(SubscriptionEntity.class);
+                ApplicationEntity application = mock(ApplicationEntity.class);
+                when(subscription.getApplication()).thenReturn(application);
+                when(application.getCode()).thenReturn(1L);
+                when(subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode)).thenReturn(subscription);
+
+                when(promotionRepositoryAdapter.getByCode(999L)).thenReturn(null); // Invalid promotion
+
+                CustomList<PromotionEntity> promotionEntities = new CustomList<>();
+                when(promotionRepositoryAdapter.listByApplicationCode(1L)).thenReturn(promotionEntities);
+
+                CalculatePaymentResponseEntity responseEntity = new CalculatePaymentResponseEntity(
+                        PaymentStatus.PAGAMENTO_OK, LocalDate.now().plusDays(30), 0.0f, receivedAmount, Optional.empty());
+                when(calculatePaymentService.calculate(any(SubscriptionEntity.class), any(CustomList.class), eq(receivedAmount))).thenReturn(responseEntity);
+
+                CalculatePaymentResponseEntity result = createPaymentUseCase.create(paymentDate, subscriptionCode, receivedAmount, promotionCode);
+
+                assertEquals(PaymentStatus.PAGAMENTO_OK, result.getStatus());
+                assertEquals(0.0f, result.getRefundedValue());
+                assertEquals(receivedAmount, result.getPaidValue());
+                assertEquals(LocalDate.now().plusDays(30), result.getNewEndDate());
                 assertEquals(Optional.empty(), result.getPromotion());
         }
 }
