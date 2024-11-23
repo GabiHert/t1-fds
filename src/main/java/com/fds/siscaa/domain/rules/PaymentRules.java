@@ -7,12 +7,8 @@ import com.fds.siscaa.domain.enums.PaymentStatus;
 @Component
 public class PaymentRules {
 
-    public float calculateRefund(float monthlyFee, float receivedAmount) {
-        return receivedAmount - monthlyFee;
-    }
-
-    public float getAmountToBePaid(float monthlyFee, int monthsToExtend) {
-        return monthlyFee * monthsToExtend;
+    public float calculateRefund(float monthlyFee, float receivedAmount, int daysToExtend) {
+        return receivedAmount - ((daysToExtend/30) * monthlyFee);
     }
 
     public int calculateDaysToExtend(

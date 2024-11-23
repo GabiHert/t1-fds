@@ -46,7 +46,7 @@ public class CalculatePaymentService {
                                         validPromotion.get().getDiscountPercentage());
                 }
 
-                float refundValue = paymentRules.calculateRefund(monthlyFee, receivedAmount);
+                float refundValue = paymentRules.calculateRefund(monthlyFee, receivedAmount, daysToExtend);
 
                 return new CalculatePaymentResponseEntity(
                                 paymentStatus,

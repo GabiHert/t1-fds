@@ -59,7 +59,7 @@ public class CalculatePaymentServiceTest {
                 .thenReturn((daysToExtend) + promotion.getExtraDays());
         when(promotionRules.applyDiscount(daysToExtend, monthlyFee, promotion.getDiscountPercentage()))
                 .thenReturn(180.0f);
-        when(paymentRules.calculateRefund(180.0f, receivedAmount)).thenReturn(40.0f);
+        when(paymentRules.calculateRefund(180.0f, receivedAmount, daysToExtend)).thenReturn(40.0f);
 
 
         CalculatePaymentResponseEntity response = calculatePaymentService.calculate(subscription, promotions,
@@ -79,11 +79,11 @@ public class CalculatePaymentServiceTest {
         CustomList<PromotionEntity> promotions = new CustomList<>();
         float receivedAmount = 150.0f;
         float monthlyFee = 200.0f;
-        int monthsToExtend = 0;
+        int daysToExtend = 0;
         PaymentStatus paymentStatus = PaymentStatus.VALOR_INCORRETO;
 
         when(application.getMonthlyFee()).thenReturn(monthlyFee);
-        when(paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount)).thenReturn(monthsToExtend);
+        when(paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount)).thenReturn(daysToExtend);
         when(paymentRules.calculatePaymentStatus(monthlyFee, receivedAmount)).thenReturn(paymentStatus);
 
         CalculatePaymentResponseEntity response = calculatePaymentService.calculate(subscription, promotions,
@@ -103,14 +103,14 @@ public class CalculatePaymentServiceTest {
         CustomList<PromotionEntity> promotions = new CustomList<>();
         float receivedAmount = 200.0f;
         float monthlyFee = 200.0f;
-        int monthsToExtend = 1;
+        int daysToExtend = 30;
         PaymentStatus paymentStatus = PaymentStatus.PAGAMENTO_OK;
 
         when(application.getMonthlyFee()).thenReturn(monthlyFee);
-        when(paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount)).thenReturn(monthsToExtend);
+        when(paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount)).thenReturn(daysToExtend);
         when(paymentRules.calculatePaymentStatus(monthlyFee, receivedAmount)).thenReturn(paymentStatus);
-        when(promotionRules.getValidPromotion(monthsToExtend, promotions)).thenReturn(Optional.empty());
-        when(paymentRules.calculateRefund(monthlyFee, receivedAmount)).thenReturn(0.0f);
+        when(promotionRules.getValidPromotion(daysToExtend, promotions)).thenReturn(Optional.empty());
+        when(paymentRules.calculateRefund(monthlyFee, receivedAmount, daysToExtend)).thenReturn(0.0f);
 
         CalculatePaymentResponseEntity response = calculatePaymentService.calculate(subscription, promotions,
                 receivedAmount);
