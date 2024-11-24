@@ -2,8 +2,12 @@ package com.fds.siscaa.domain.rules;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import com.fds.siscaa.domain.enums.PaymentStatus;
 
@@ -16,81 +20,34 @@ public class PaymentRulesTest {
         paymentRules = new PaymentRules();
     }
 
-    @Test
-    public void testCalculateDaysToExtend_ExactDivision() {
-        float monthlyFee = 100.0f;
-        float receivedAmount = 300.0f;
-        int expectedDays = 90;
-
+    @ParameterizedTest
+    @MethodSource("provideDaysToExtendData")
+    public void testCalculateDaysToExtend(float monthlyFee, float receivedAmount, int expectedDays) {
         int actualDays = paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount);
-
         assertEquals(expectedDays, actualDays);
     }
 
-    @Test
-    public void testCalculateDaysToExtend_NotExactDivision() {
-        float monthlyFee = 100.0f;
-        float receivedAmount = 350.0f;
-        int expectedDays = 90;
-
-        int actualDays = paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount);
-
-        assertEquals(expectedDays, actualDays);
+    private static Stream<Arguments> provideDaysToExtendData() {
+        return Stream.of(
+                Arguments.of(100.0f, 300.0f, 90),
+                Arguments.of(100.0f, 350.0f, 90),
+                Arguments.of(100.0f, 0.0f, 0),
+                Arguments.of(100.0f, 50.0f, 0)
+        );
     }
 
-    @Test
-    public void testCalculateDaysToExtend_ZeroReceivedAmount() {
-        float monthlyFee = 100.0f;
-        float receivedAmount = 0.0f;
-        int expectedDays = 0;
-
-        int actualDays = paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount);
-
-        assertEquals(expectedDays, actualDays);
-    }
-
-    @Test
-    public void testCalculateDaysToExtend_ReceivedAmountLessThanMonthlyFee() {
-        float monthlyFee = 100.0f;
-        float receivedAmount = 50.0f;
-        int expectedDays = 0;
-
-        int actualDays = paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount);
-
-        assertEquals(expectedDays, actualDays);
-    }
-
-    @Test
-    public void testCalculatePaymentStatus_ReceivedAmountLessThanMonthlyFee() {
-        float monthlyFee = 100.0f;
-        float receivedAmount = 50.0f;
-        PaymentStatus expectedStatus = PaymentStatus.VALOR_INCORRETO;
-
+    @ParameterizedTest
+    @MethodSource("providePaymentStatusData")
+    public void testCalculatePaymentStatus(float monthlyFee, float receivedAmount, PaymentStatus expectedStatus) {
         PaymentStatus actualStatus = paymentRules.calculatePaymentStatus(monthlyFee, receivedAmount);
-
         assertEquals(expectedStatus, actualStatus);
     }
 
-    @Test
-    public void testCalculatePaymentStatus_ReceivedAmountEqualToMonthlyFee() {
-        float monthlyFee = 100.0f;
-        float receivedAmount = 100.0f;
-        PaymentStatus expectedStatus = PaymentStatus.PAGAMENTO_OK;
-
-        PaymentStatus actualStatus = paymentRules.calculatePaymentStatus(monthlyFee, receivedAmount);
-
-        assertEquals(expectedStatus, actualStatus);
+    private static Stream<Arguments> providePaymentStatusData() {
+        return Stream.of(
+                Arguments.of(100.0f, 50.0f, PaymentStatus.VALOR_INCORRETO),
+                Arguments.of(100.0f, 100.0f, PaymentStatus.PAGAMENTO_OK),
+                Arguments.of(100.0f, 150.0f, PaymentStatus.PAGAMENTO_OK)
+        );
     }
-
-    @Test
-    public void testCalculatePaymentStatus_ReceivedAmountGreaterThanMonthlyFee() {
-        float monthlyFee = 100.0f;
-        float receivedAmount = 150.0f;
-        PaymentStatus expectedStatus = PaymentStatus.PAGAMENTO_OK;
-
-        PaymentStatus actualStatus = paymentRules.calculatePaymentStatus(monthlyFee, receivedAmount);
-
-        assertEquals(expectedStatus, actualStatus);
-    }
-
 }

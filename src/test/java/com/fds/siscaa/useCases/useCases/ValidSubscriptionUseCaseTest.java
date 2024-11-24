@@ -1,14 +1,18 @@
 package com.fds.siscaa.useCases.useCases;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
+
+import java.time.LocalDate;
+import java.util.stream.Stream;
 
 import com.fds.siscaa.domain.entity.SubscriptionEntity;
 import com.fds.siscaa.domain.utils.CustomLocalDate;
 import com.fds.siscaa.useCases.adapters.SubscriptionRepositoryAdapter;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -26,70 +30,25 @@ public class ValidSubscriptionUseCaseTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    public void testIsValidWithValidSubscription() {
-        long subscriptionCode = 1;
-        SubscriptionEntity subscriptionEntity = new SubscriptionEntity(subscriptionCode, null, CustomLocalDate.now(), CustomLocalDate.now().plusDays(10), null, null);
+    @ParameterizedTest
+    @MethodSource("provideSubscriptionData")
+    public void testIsValid(long subscriptionCode, LocalDate startDate, LocalDate endDate, boolean expectedResult) {
+        SubscriptionEntity subscriptionEntity = new SubscriptionEntity(subscriptionCode, null, startDate, endDate, null, null);
         when(subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode)).thenReturn(subscriptionEntity);
 
         boolean result = validSubscriptionUseCase.isValid(subscriptionCode);
 
-        assertTrue(result);
+        assertEquals(expectedResult, result);
     }
 
-    @Test
-    public void testIsValidWithExpiredSubscription() {
-        long subscriptionCode = 1;
-        SubscriptionEntity subscriptionEntity = new SubscriptionEntity(subscriptionCode, null, CustomLocalDate.now().minusDays(20), CustomLocalDate.now().minusDays(10), null, null);
-        when(subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode)).thenReturn(subscriptionEntity);
-
-        boolean result = validSubscriptionUseCase.isValid(subscriptionCode);
-
-        assertFalse(result);
+    private static Stream<Arguments> provideSubscriptionData() {
+        return Stream.of(
+                Arguments.of(1L, CustomLocalDate.now(), CustomLocalDate.now().plusDays(10), true),
+                Arguments.of(1L, CustomLocalDate.now().minusDays(20), CustomLocalDate.now().minusDays(10), false),
+                Arguments.of(1L, CustomLocalDate.now().minusDays(10), CustomLocalDate.now(), false),
+                Arguments.of(1L, CustomLocalDate.now().plusDays(10), CustomLocalDate.now().plusDays(20), true),
+                Arguments.of(1L, CustomLocalDate.now(), null, false),
+                Arguments.of(1L, null, CustomLocalDate.now().plusDays(10), true)
+        );
     }
-
-    @Test
-    public void testIsValidWithSubscriptionEndingToday() {
-        long subscriptionCode = 1;
-        SubscriptionEntity subscriptionEntity = new SubscriptionEntity(subscriptionCode, null, CustomLocalDate.now().minusDays(10), CustomLocalDate.now(), null, null);
-        when(subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode)).thenReturn(subscriptionEntity);
-
-        boolean result = validSubscriptionUseCase.isValid(subscriptionCode);
-
-        assertFalse(result);
-    }
-
-    @Test
-    public void testIsValidWithFutureSubscription() {
-        long subscriptionCode = 1;
-        SubscriptionEntity subscriptionEntity = new SubscriptionEntity(subscriptionCode, null, CustomLocalDate.now().plusDays(10), CustomLocalDate.now().plusDays(20), null, null);
-        when(subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode)).thenReturn(subscriptionEntity);
-
-        boolean result = validSubscriptionUseCase.isValid(subscriptionCode);
-
-        assertTrue(result);
-    }
-
-    @Test
-    public void testIsValidWithNullEndDate() {
-        long subscriptionCode = 1;
-        SubscriptionEntity subscriptionEntity = new SubscriptionEntity(subscriptionCode, null, CustomLocalDate.now(), null, null, null);
-        when(subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode)).thenReturn(subscriptionEntity);
-
-        boolean result = validSubscriptionUseCase.isValid(subscriptionCode);
-
-        assertFalse(result);
-    }
-
-    @Test
-    public void testIsValidWithNullStartDate() {
-        long subscriptionCode = 1;
-        SubscriptionEntity subscriptionEntity = new SubscriptionEntity(subscriptionCode, null, null, CustomLocalDate.now().plusDays(10), null, null);
-        when(subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode)).thenReturn(subscriptionEntity);
-
-        boolean result = validSubscriptionUseCase.isValid(subscriptionCode);
-
-        assertTrue(result);
-    }
-
 }

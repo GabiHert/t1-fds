@@ -5,9 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import com.fds.siscaa.domain.entity.PromotionEntity;
 import com.fds.siscaa.domain.utils.CustomList;
@@ -21,107 +24,58 @@ public class PromotionRulesTest {
         promotionRules = new PromotionRules();
     }
 
-    @Test
-    public void testApplyDiscount_PositiveValues() {
-        float result = promotionRules.applyDiscount(180, 100.0f, 10.0f);
-        assertEquals(540.0f, result);
+    @ParameterizedTest
+    @MethodSource("provideDiscountData")
+    public void testApplyDiscount(int daysToExtend, float monthlyFee, float discountPercentage, float expectedResult) {
+        float result = promotionRules.applyDiscount(daysToExtend, monthlyFee, discountPercentage);
+        assertEquals(expectedResult, result);
     }
 
-    @Test
-    public void testApplyDiscount_ZeroDiscount() {
-        float result = promotionRules.applyDiscount(180, 100.0f, 0.0f);
-        assertEquals(600.0f, result);
+    private static Stream<Arguments> provideDiscountData() {
+        return Stream.of(
+                Arguments.of(180, 100.0f, 10.0f, 540.0f),
+                Arguments.of(180, 100.0f, 0.0f, 600.0f),
+                Arguments.of(0, 100.0f, 10.0f, 0.0f),
+                Arguments.of(180, 100.0f, -10.0f, 660.0f),
+                Arguments.of(-180, 100.0f, 10.0f, -540.0f)
+        );
     }
 
-    @Test
-    public void testApplyDiscount_ZeroDaysToExtend() {
-        float result = promotionRules.applyDiscount(0, 100.0f, 10.0f);
-        assertEquals(0.0f, result);
+    @ParameterizedTest
+    @MethodSource("provideExtraDaysData")
+    public void testApplyExtraDays(int daysToExtend, int extraDays, int expectedResult) {
+        int result = promotionRules.applyExtraDays(daysToExtend, extraDays);
+        assertEquals(expectedResult, result);
     }
 
-    @Test
-    public void testApplyDiscount_NegativeDiscount() {
-        float result = promotionRules.applyDiscount(180, 100.0f, -10.0f);
-        assertEquals(660.0f, result);
+    private static Stream<Arguments> provideExtraDaysData() {
+        return Stream.of(
+                Arguments.of(30, 5, 35),
+                Arguments.of(30, 0, 30),
+                Arguments.of(0, 5, 5),
+                Arguments.of(30, -5, 25),
+                Arguments.of(-30, 5, -25)
+        );
     }
 
-    @Test
-    public void testApplyDiscount_NegativeDaysToExtend() {
-        float result = promotionRules.applyDiscount(-180, 100.0f, 10.0f);
-        assertEquals(-540.0f, result);
+    @ParameterizedTest
+    @MethodSource("provideValidPromotionData")
+    public void testGetValidPromotion(int monthsToExtend, CustomList<PromotionEntity> promotions, boolean expectedResult) {
+        Optional<PromotionEntity> result = promotionRules.getValidPromotion(monthsToExtend, promotions);
+        assertEquals(expectedResult, result.isPresent());
     }
 
-    @Test
-    public void testApplyExtraDays_PositiveValues() {
-        int result = promotionRules.applyExtraDays(30, 5);
-        assertEquals(35, result);
-    }
-
-    @Test
-    public void testApplyExtraDays_ZeroExtraDays() {
-        int result = promotionRules.applyExtraDays(30, 0);
-        assertEquals(30, result);
-    }
-
-    @Test
-    public void testApplyExtraDays_ZeroDaysToExtend() {
-        int result = promotionRules.applyExtraDays(0, 5);
-        assertEquals(5, result);
-    }
-
-    @Test
-    public void testApplyExtraDays_NegativeExtraDays() {
-        int result = promotionRules.applyExtraDays(30, -5);
-        assertEquals(25, result);
-    }
-
-    @Test
-    public void testApplyExtraDays_NegativeDaysToExtend() {
-        int result = promotionRules.applyExtraDays(-30, 5);
-        assertEquals(-25, result);
-    }
-
-    @Test
-    public void testGetValidPromotion_ValidPromotion() {
+    private static Stream<Arguments> provideValidPromotionData() {
         CustomList<PromotionEntity> promotions = new CustomList<>();
         PromotionEntity promotion = new PromotionEntity();
         promotion.setRequiredDays(6);
         promotions.add(promotion);
 
-        Optional<PromotionEntity> result = promotionRules.getValidPromotion(6, promotions);
-        assertTrue(result.isPresent());
-    }
-
-    @Test
-    public void testGetValidPromotion_NoValidPromotion() {
-        CustomList<PromotionEntity> promotions = new CustomList<>();
-        PromotionEntity promotion = new PromotionEntity();
-        promotion.setRequiredDays(6);
-        promotions.add(promotion);
-
-        Optional<PromotionEntity> result = promotionRules.getValidPromotion(5, promotions);
-        assertFalse(result.isPresent());
-    }
-
-    @Test
-    public void testGetValidPromotion_ZeroMonthsToExtend() {
-        CustomList<PromotionEntity> promotions = new CustomList<>();
-        PromotionEntity promotion = new PromotionEntity();
-        promotion.setRequiredDays(6);
-        promotions.add(promotion);
-
-        Optional<PromotionEntity> result = promotionRules.getValidPromotion(0, promotions);
-        assertFalse(result.isPresent());
-    }
-
-    @Test
-    public void testGetValidPromotion_NegativeMonthsToExtend() {
-        CustomList<PromotionEntity> promotions = new CustomList<>();
-        PromotionEntity promotion = new PromotionEntity();
-        promotion.setRequiredDays(6);
-        promotions.add(promotion);
-
-        Optional<PromotionEntity> result = promotionRules.getValidPromotion(-6, promotions);
-        assertFalse(result.isPresent());
+        return Stream.of(
+                Arguments.of(6, promotions, true),
+                Arguments.of(5, promotions, false),
+                Arguments.of(0, promotions, false),
+                Arguments.of(-6, promotions, false)
+        );
     }
 }
