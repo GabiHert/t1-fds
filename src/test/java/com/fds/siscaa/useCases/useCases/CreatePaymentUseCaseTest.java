@@ -10,7 +10,6 @@ import java.util.Optional;
 
 import com.fds.siscaa.domain.entity.ApplicationEntity;
 import com.fds.siscaa.domain.entity.CalculatePaymentResponseEntity;
-import com.fds.siscaa.domain.entity.PaymentEntity;
 import com.fds.siscaa.domain.entity.PromotionEntity;
 import com.fds.siscaa.domain.entity.SubscriptionEntity;
 import com.fds.siscaa.domain.enums.PaymentStatus;

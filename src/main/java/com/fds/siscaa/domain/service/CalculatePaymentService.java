@@ -52,7 +52,7 @@ public class CalculatePaymentService {
                                 paymentStatus,
                                 subscription.getEndDate().plusDays(daysToExtend),
                                 refundValue,
-                                refundValue,
+                                receivedAmount - refundValue,
                                 validPromotion);
         }
 

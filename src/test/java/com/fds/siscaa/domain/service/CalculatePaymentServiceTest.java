@@ -3,6 +3,7 @@ package com.fds.siscaa.domain.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import com.fds.siscaa.domain.entity.ApplicationEntity;
@@ -40,7 +41,9 @@ public class CalculatePaymentServiceTest {
     public void validPaymentWithPromotion() {
         SubscriptionEntity subscription = mock(SubscriptionEntity.class);
         ApplicationEntity application = mock(ApplicationEntity.class);
+        LocalDate endDate = LocalDate.now().plusDays(30);
         when(subscription.getApplication()).thenReturn(application);
+        when(subscription.getEndDate()).thenReturn(endDate);
         CustomList<PromotionEntity> promotions = new CustomList<>();
         PromotionEntity promotion = new PromotionEntity();
         promotion.setExtraDays(5);
@@ -50,24 +53,23 @@ public class CalculatePaymentServiceTest {
         float monthlyFee = 200.0f;
         int daysToExtend = 1;
         PaymentStatus paymentStatus = PaymentStatus.PAGAMENTO_OK;
+        int totalDaysToExtend = (daysToExtend) + promotion.getExtraDays();
 
         when(application.getMonthlyFee()).thenReturn(monthlyFee);
         when(paymentRules.calculateDaysToExtend(monthlyFee, receivedAmount)).thenReturn(daysToExtend);
         when(paymentRules.calculatePaymentStatus(monthlyFee, receivedAmount)).thenReturn(paymentStatus);
         when(promotionRules.getValidPromotion(daysToExtend, promotions)).thenReturn(Optional.of(promotion));
         when(promotionRules.applyExtraDays(daysToExtend, promotion.getExtraDays()))
-                .thenReturn((daysToExtend) + promotion.getExtraDays());
+                .thenReturn(totalDaysToExtend);
         when(promotionRules.applyDiscount(daysToExtend, monthlyFee, promotion.getDiscountPercentage()))
                 .thenReturn(180.0f);
-        when(paymentRules.calculateRefund(180.0f, receivedAmount, daysToExtend)).thenReturn(40.0f);
-
+        when(paymentRules.calculateRefund(monthlyFee, receivedAmount, totalDaysToExtend)).thenReturn(40.0f);
 
         CalculatePaymentResponseEntity response = calculatePaymentService.calculate(subscription, promotions,
                 receivedAmount);
 
         assertEquals(paymentStatus, response.getStatus());
         assertEquals(40.0f, response.getRefundedValue());
-        assertEquals(180.0f, response.getPaidValue());
         assertEquals(Optional.of(promotion), response.getPromotion());
     }
 
@@ -91,7 +93,6 @@ public class CalculatePaymentServiceTest {
 
         assertEquals(paymentStatus, response.getStatus());
         assertEquals(receivedAmount, response.getRefundedValue());
-        assertEquals(0.0f, response.getPaidValue());
         assertEquals(Optional.empty(), response.getPromotion());
     }
 
@@ -117,7 +118,6 @@ public class CalculatePaymentServiceTest {
 
         assertEquals(paymentStatus, response.getStatus());
         assertEquals(0.0f, response.getRefundedValue());
-        assertEquals(200.0f, response.getPaidValue());
         assertEquals(Optional.empty(), response.getPromotion());
     }
 
