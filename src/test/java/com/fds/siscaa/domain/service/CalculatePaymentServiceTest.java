@@ -100,6 +100,9 @@ public class CalculatePaymentServiceTest {
     public void validPaymentWithoutPromotion_Status() {
         SubscriptionEntity subscription = mock(SubscriptionEntity.class);
         ApplicationEntity application = mock(ApplicationEntity.class);
+        LocalDate endDate = LocalDate.now().plusDays(30);
+        when(subscription.getApplication()).thenReturn(application);
+        when(subscription.getEndDate()).thenReturn(endDate);
         when(subscription.getApplication()).thenReturn(application);
         CustomList<PromotionEntity> promotions = new CustomList<>();
         float receivedAmount = 200.0f;
