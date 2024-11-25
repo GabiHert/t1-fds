@@ -36,8 +36,9 @@ public class PromotionRulesTest {
                 Arguments.of(180, 100.0f, 10.0f, 540.0f),
                 Arguments.of(180, 100.0f, 0.0f, 600.0f),
                 Arguments.of(0, 100.0f, 10.0f, 0.0f),
-                Arguments.of(180, 100.0f, -10.0f, 660.0f),
-                Arguments.of(-180, 100.0f, 10.0f, -540.0f)
+                Arguments.of(180, 100.0f, -10.0f, 600.0f),
+                Arguments.of(180, -100.0f, 10.0f, 0.0f),
+                Arguments.of(-180, 100.0f, 10.0f, 0.0f)
         );
     }
 

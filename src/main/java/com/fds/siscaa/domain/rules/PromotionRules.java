@@ -10,6 +10,13 @@ import com.fds.siscaa.domain.utils.CustomList;
 @Component
 public class PromotionRules {
     public float applyDiscount(int daysToExtend, float monthlyFee, float discountPercentage) {
+
+        if(discountPercentage < 0)
+            return (monthlyFee * (daysToExtend/30));
+
+        if(daysToExtend < 0 || monthlyFee < 0)
+            return 0;
+
         return (monthlyFee * (daysToExtend / 30)) - ((monthlyFee * (daysToExtend / 30)) * discountPercentage / 100);
     }
 

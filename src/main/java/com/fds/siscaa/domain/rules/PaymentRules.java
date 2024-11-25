@@ -8,6 +8,15 @@ import com.fds.siscaa.domain.enums.PaymentStatus;
 public class PaymentRules {
 
     public float calculateRefund(float monthlyFee, float receivedAmount, int daysToExtend) {
+
+        if(receivedAmount <= 0) {
+            return 0;
+        }
+
+        if(receivedAmount < monthlyFee ||  monthlyFee <= 0) {
+            return receivedAmount;
+        }
+
         return receivedAmount - ((daysToExtend/30) * monthlyFee);
     }
 
@@ -20,7 +29,7 @@ public class PaymentRules {
     }
 
     public PaymentStatus calculatePaymentStatus(float monthlyFee, float receivedAmount) {
-        if (receivedAmount < monthlyFee) {
+        if (receivedAmount < monthlyFee || monthlyFee <= 0 || receivedAmount <= 0) {
             return PaymentStatus.VALOR_INCORRETO;
         }
 

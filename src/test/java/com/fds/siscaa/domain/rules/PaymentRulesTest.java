@@ -32,7 +32,9 @@ public class PaymentRulesTest {
                 Arguments.of(100.0f, 300.0f, 90),
                 Arguments.of(100.0f, 350.0f, 90),
                 Arguments.of(100.0f, 0.0f, 0),
-                Arguments.of(100.0f, 50.0f, 0)
+                Arguments.of(100.0f, 50.0f, 0),
+                Arguments.of(-100.0f, 50.0f, 0),
+                Arguments.of(-100.0f, -50.0f, 0)
         );
     }
 
@@ -47,7 +49,9 @@ public class PaymentRulesTest {
         return Stream.of(
                 Arguments.of(100.0f, 50.0f, PaymentStatus.VALOR_INCORRETO),
                 Arguments.of(100.0f, 100.0f, PaymentStatus.PAGAMENTO_OK),
-                Arguments.of(100.0f, 150.0f, PaymentStatus.PAGAMENTO_OK)
+                Arguments.of(100.0f, 150.0f, PaymentStatus.PAGAMENTO_OK),
+                Arguments.of(-100.0f, 150.0f, PaymentStatus.VALOR_INCORRETO),
+                Arguments.of(100.0f, -150.0f, PaymentStatus.VALOR_INCORRETO)
         );
     }
 
@@ -63,7 +67,9 @@ public class PaymentRulesTest {
                 Arguments.of(100.0f, 300.0f, 90, 0.0f),
                 Arguments.of(100.0f, 350.0f, 90, 50.0f),
                 Arguments.of(100.0f, 0.0f, 0, 0.0f),
-                Arguments.of(100.0f, 50.0f, 0, 50.0f)
+                Arguments.of(100.0f, 50.0f, 0, 50.0f),
+                Arguments.of(-100.0f, 100.0f, 0, 100.0f),
+                Arguments.of(100.0f, -50.0f, 0, 0.0f)
         );
     }
 }
