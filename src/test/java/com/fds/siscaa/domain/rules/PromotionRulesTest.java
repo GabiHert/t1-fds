@@ -54,8 +54,8 @@ public class PromotionRulesTest {
                 Arguments.of(30, 5, 35),
                 Arguments.of(30, 0, 30),
                 Arguments.of(0, 5, 5),
-                Arguments.of(30, -5, 25),
-                Arguments.of(-30, 5, -25)
+                Arguments.of(30, -5, 0),
+                Arguments.of(-30, 5, 0)
         );
     }
 

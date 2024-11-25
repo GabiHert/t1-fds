@@ -21,6 +21,8 @@ public class PromotionRules {
     }
 
     public int applyExtraDays(int daysToExtend, int extraDays) {
+        if(daysToExtend < 0 || extraDays < 0)
+            return 0;
         return daysToExtend + extraDays;
     }
 
