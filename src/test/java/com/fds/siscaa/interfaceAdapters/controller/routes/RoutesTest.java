@@ -6,12 +6,15 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.fds.siscaa.interfaceAdapters.controller.dto.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -179,6 +182,7 @@ class RoutesTest {
                 assertThat(json.read("$.refundedValue", Float.class)).isEqualTo(10.0f);
         }
 
+
         @Test
         void postSubscription() {
                 String sqlClient = "INSERT INTO Client (code, name, email) VALUES (1, 'Test Client', 'testclient@example.com')";
@@ -203,6 +207,7 @@ class RoutesTest {
                 assertThat(response.getBody().getCodigoAssinatura()).isEqualTo(1);
 
         }
+
 
         @Test
         void updateCost() {
@@ -466,9 +471,14 @@ class RoutesTest {
                 assertThat(subscription2.getStatus()).isEqualTo("CANCELADA");
         }
 
-        @Test
-        void subscriptionIsValidReturnsTrue() {
-                CustomLocalDate.mock(LocalDate.of(2024, 11, 23));
+
+        @ParameterizedTest
+        @CsvSource({
+                "2024-11-23, 1, '2024-10-25', '2024-11-25', 1, 1, 1, 1, true",
+                "2024-11-23, 1, '2023-10-25', '2024-01-25', 1, 1, 1, 1, false"
+        })
+        void subscriptionIsValidTest(String mockDate, long subscriptionCode, String startDate1, String endDate1, long clientCode1, long appCode1, long clientCode2, long appCode2, boolean expectedValidity) {
+                CustomLocalDate.mock(LocalDate.parse(mockDate));
 
                 String sqlApplication = "INSERT INTO Application (code, name, monthly_fee) VALUES (1, 'Test Application', 10.00),(2, 'Test Application', 10.00)";
                 jdbcTemplate.execute(sqlApplication);
@@ -476,33 +486,14 @@ class RoutesTest {
                 String sqlClient = "INSERT INTO Client (code, name, email) VALUES (1, 'Test Client', 'testclient@example.com')";
                 jdbcTemplate.execute(sqlClient);
 
-                String sqlSubscription = "INSERT INTO Subscription (code, start_date, end_date, client_code, application_code) VALUES (1, '2024-10-25', '2024-11-25', 1, 1),(2, '2022-10-25', '2023-11-25', 1, 1),(3, '2024-10-25', '2024-11-25', 1, 2)";
+                String sqlSubscription = String.format("INSERT INTO Subscription (code, start_date, end_date, client_code, application_code) VALUES (%d, '%s', '%s', %d, %d),(2, '2022-10-25', '2023-11-25', %d, %d),(3, '2024-10-25', '2024-11-25', %d, %d)",
+                        subscriptionCode, startDate1, endDate1, clientCode1, appCode1, clientCode2, appCode2, clientCode1, appCode2);
                 jdbcTemplate.execute(sqlSubscription);
 
                 ResponseEntity<Boolean> response = testRestTemplate
-                                .getForEntity("http://localhost:" + port + "/assinvalida/1", Boolean.class);
+                        .getForEntity("http://localhost:" + port + "/assinvalida/" + subscriptionCode, Boolean.class);
 
                 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-                assertThat(response.getBody()).isTrue();
-        }
-
-        @Test
-        void subscriptionIsValidReturnsFalse() {
-                CustomLocalDate.mock(LocalDate.of(2024, 11, 23));
-
-                String sqlApplication = "INSERT INTO Application (code, name, monthly_fee) VALUES (1, 'Test Application', 10.00),(2, 'Test Application', 10.00)";
-                jdbcTemplate.execute(sqlApplication);
-
-                String sqlClient = "INSERT INTO Client (code, name, email) VALUES (1, 'Test Client', 'testclient@example.com')";
-                jdbcTemplate.execute(sqlClient);
-
-                String sqlSubscription = "INSERT INTO Subscription (code, start_date, end_date, client_code, application_code) VALUES (1, '2023-10-25', '2024-01-25', 1, 1),(2, '2022-10-25', '2023-11-25', 1, 1),(3, '2024-10-25', '2024-11-25', 1, 2)";
-                jdbcTemplate.execute(sqlSubscription);
-
-                ResponseEntity<Boolean> response = testRestTemplate
-                                .getForEntity("http://localhost:" + port + "/assinvalida/1", Boolean.class);
-
-                assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-                assertThat(response.getBody()).isFalse();
+                assertThat(response.getBody()).isEqualTo(expectedValidity);
         }
 }

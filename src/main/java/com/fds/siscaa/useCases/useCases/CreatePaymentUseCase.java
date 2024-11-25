@@ -36,7 +36,7 @@ public class CreatePaymentUseCase {
                 SubscriptionEntity subscription = subscriptionRepository.getSubscriptionEntityByCode(subscriptionCode);
 
                 CustomList<PromotionEntity> promotionEntities = new CustomList<>();
-                if (promotionCode.isPresent()) {
+                if (promotionCode!= null && promotionCode.isPresent()) {
                         promotionEntities.add(promotionRepositoryAdapter.getByCode(promotionCode.get()));
                 } else {
                         promotionEntities = promotionRepositoryAdapter
