@@ -50,4 +50,20 @@ public class PaymentRulesTest {
                 Arguments.of(100.0f, 150.0f, PaymentStatus.PAGAMENTO_OK)
         );
     }
+
+    @ParameterizedTest
+    @MethodSource("provideRefundData")
+    public void testCalculateRefund(float monthlyFee, float receivedAmount, int daysToExtend, float expectedRefund) {
+        float actualRefund = paymentRules.calculateRefund(monthlyFee, receivedAmount, daysToExtend);
+        assertEquals(expectedRefund, actualRefund);
+    }
+
+    private static Stream<Arguments> provideRefundData() {
+        return Stream.of(
+                Arguments.of(100.0f, 300.0f, 90, 0.0f),
+                Arguments.of(100.0f, 350.0f, 90, 50.0f),
+                Arguments.of(100.0f, 0.0f, 0, 0.0f),
+                Arguments.of(100.0f, 50.0f, 0, 50.0f)
+        );
+    }
 }
