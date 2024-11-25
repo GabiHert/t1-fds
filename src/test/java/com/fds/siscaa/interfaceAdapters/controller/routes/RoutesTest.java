@@ -8,16 +8,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.fds.siscaa.interfaceAdapters.controller.dto.*;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomMapEditor;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -29,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.fds.siscaa.domain.enums.PaymentStatus;
-import com.fds.siscaa.domain.enums.SubscriptionType;
 import com.fds.siscaa.domain.utils.CustomLocalDate;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
@@ -54,6 +48,35 @@ class RoutesTest {
 
                 CustomLocalDate.reset();
 
+        }
+
+        @ParameterizedTest
+        @CsvSource({
+                        "0, 1, 2024, 1, 10, 'day' deve ser maior que 0, day",
+                        "33, 1, 2024, 1, 10, 'day' deve ser menor que 32,day",
+                        "1, 0, 2024, 1, 10, 'month' deve ser maior que 0,month",
+                        "1, 15, 2024, 1, 10, 'month' deve ser menor que 13,month",
+                        "1, 1, 2023, 1, 10, 'year' deve ser maior que 2024,year",
+                        "1, 1, 2024, -1, 10, 'codass' deve ser positivo,codass",
+                        "1, 1, 2024, 1, -10, 'valorPago' deve ser positivo,valorPago"
+        })
+
+        void registraPagamentoComErrosDeValidacao(Integer day, Integer month, Integer year, Integer codass,
+                        Float valorPago, String expectedErrorMessage, String key) {
+
+                CreatePaymentDto createPaymentDto = new CreatePaymentDto(
+                                day, month, year, codass, valorPago,
+                                Optional.empty());
+
+                ResponseEntity<String> response = testRestTemplate
+                                .postForEntity("http://localhost:" + port + "/registrarpagamento", createPaymentDto,
+                                                String.class);
+
+                assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+                assertThat(response.getBody()).isNotBlank();
+
+                DocumentContext json = JsonPath.parse(response.getBody());
+                assertThat(json.read("$." + key, String.class)).isEqualTo(expectedErrorMessage);
         }
 
         @Test
@@ -167,7 +190,8 @@ class RoutesTest {
                 CreateSubscriptionDto createSubscriptionDto = new CreateSubscriptionDto(1, 1);
 
                 ResponseEntity<SubscriptionDto> response = testRestTemplate
-                        .postForEntity("http://localhost:" + port + "/servcad/assinaturas", createSubscriptionDto, SubscriptionDto.class);
+                                .postForEntity("http://localhost:" + port + "/servcad/assinaturas",
+                                                createSubscriptionDto, SubscriptionDto.class);
 
                 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
                 assertThat(response.getBody()).isNotNull();
@@ -194,6 +218,25 @@ class RoutesTest {
                 assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
                 assertThat(response.getBody()).isNotNull();
                 assertThat(response.getBody().getCustoMensal()).isEqualTo(20.00f);
+        }
+
+        @ParameterizedTest
+        @CsvSource({
+                        "-10, 'custo' deve ser um valor positivo",
+                        "0, 'custo' deve ser um valor positivo",
+        })
+        void updateCostComErrosDeValidacao(Float custo, String expectedErrorMessage) {
+
+                UpdateCostDto updateCostDto = new UpdateCostDto(custo);
+
+                ResponseEntity<String> response = testRestTemplate
+                                .postForEntity("http://localhost:" + port + "/servcad/aplicativos/atualizacusto/1",
+                                                updateCostDto, String.class);
+
+                assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+
+                DocumentContext json = JsonPath.parse(response.getBody());
+                assertThat(json.read("$.custo", String.class)).isEqualTo(expectedErrorMessage);
         }
 
         @Test
